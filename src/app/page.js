@@ -73,15 +73,6 @@ export default function Home() {
           videoId="4wEZdI7zthU"
           title="Anirudh Venkatesh"
           thumbnail="/bach_thumbnail.png"
-          overlay={
-            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", paddingLeft: 28, pointerEvents: "none" }}>
-              <h1 className="hero-title" style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 72, lineHeight: 0.9, letterSpacing: 2, margin: 0, width: "20%" }}>
-                <span style={{ color: "#111", display: "block", textShadow: "0 0 8px rgba(255,255,255,0.9), 0 0 8px rgba(255,255,255,0.5)" }}>TRI</span>
-                <span style={{ color: "#E8473F", display: "block", textShadow: "0 0 4px rgba(232,71,63,0.95), 0 0 1px rgba(232,71,63,0.6)" }}>ANGLE</span>
-                <span style={{ color: "#111", display: "block", textShadow: "0 0 8px rgba(255,255,255,0.9), 0 0 8px rgba(255,255,255,0.5)" }}>HEAD</span>
-              </h1>
-            </div>
-          }
         />
       </div>
 
