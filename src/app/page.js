@@ -45,8 +45,8 @@ export default function Home() {
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 24px", background: "#111" }}>
         <span style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 32, letterSpacing: 2, lineHeight: 1 }}>
           <span style={{ color: "#F5C842" }}>TRI</span>
-          <span style={{ color: "#fff" }}>ANGLE</span>
-          <span style={{ color: "#E8F0FF" }}>HEAD</span>
+          <span style={{ color: "#E8F0FF" }}>ANGLE</span>
+          <span style={{ color: "#F5C842" }}>HEAD</span>
         </span>
         <div style={{ display: "flex", gap: 20 }}>
           {navLinks.map((item) => (
@@ -71,10 +71,8 @@ export default function Home() {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: "3px solid #111" }}>
         <div style={{ padding: "32px 28px 28px", borderRight: "3px solid #111", background: "#F5F2EB" }}>
           <h1 style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 80, lineHeight: 0.9, letterSpacing: 2, margin: 0 }}>
-            <span style={{ display: "block" }}>
-              <span style={{ color: "#111" }}>TRI</span>
-              <span style={{ color: "#E8473F" }}>ANGLE</span>
-            </span>
+            <span style={{ color: "#111", display: "block" }}>TRI</span>
+            <span style={{ color: "#E8473F", display: "block" }}>ANGLE</span>
             <span style={{ color: "#111", display: "block" }}>HEAD</span>
           </h1>
         </div>
