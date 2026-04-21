@@ -173,7 +173,7 @@ export default function Home() {
         </div>
         <div className="founder-right" style={{ padding: "22px 28px", background: "#F5F2EB" }}>
           <p style={{ fontFamily: "Georgia, serif", fontSize: 13, color: "#444", lineHeight: 1.6, margin: "0 0 14px" }}>
-            Music learner, educator, and creator — exploring connections in the vast network of musical traditions.
+            Music learner and educator — exploring connections in the vast network of musical traditions.
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {socialLinks.map((s) => (
