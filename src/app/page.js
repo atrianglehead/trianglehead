@@ -32,7 +32,7 @@ const socialLinks = [
 const navLinks = [
   { label: "Music", href: "#music" },
   { label: "Sound Insight", href: "#sound-insight" },
-  { label: "Learn", href: "#learn" },
+  { label: "Lessons", href: "#learn" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -85,7 +85,7 @@ export default function Home() {
             <a href="https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#EEE8D0", border: "2px solid #EEE8D0", display: "block" }}>
               Book a lesson
             </a>
-            <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#888", border: "2px solid #444", display: "block" }}>
+            <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#EEE8D0", border: "2px solid #EEE8D0", display: "block" }}>
               Browse music
             </a>
           </div>
@@ -95,18 +95,10 @@ export default function Home() {
       {/* Music */}
       <div id="music" style={{ borderBottom: "3px solid #111", padding: "22px 28px", background: "#111" }}>
         <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 2, marginBottom: 6, color: "#F5C842" }}>Music</div>
-        <p style={{ fontFamily: "Georgia, serif", fontSize: 12, lineHeight: 1.6, color: "#aaa", margin: "0 0 20px" }}>Videos, audio and live recordings across musical traditions. Watch, listen, explore.</p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+        <div style={{ marginBottom: 16 }}>
           <iframe
             src="https://www.youtube.com/embed/4wEZdI7zthU"
             title="Anirudh Venkatesh"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            style={{ width: "100%", aspectRatio: "16/9", border: "none" }}
-          />
-          <iframe
-            src="https://www.youtube.com/embed/h7yzzWFrJK0"
-            title="Trianglehead"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             style={{ width: "100%", aspectRatio: "16/9", border: "none" }}
@@ -121,7 +113,7 @@ export default function Home() {
       <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", borderBottom: "3px solid #111" }}>
         <div id="sound-insight" style={{ padding: "28px", borderRight: "3px solid #111" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#E8473F", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
-            Sound Insight
+            Sound Insight: The Music Guide
             <span style={{ flex: 1, height: 2, background: "#111", display: "block" }} />
           </div>
           <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#E8473F", marginBottom: 12 }}>Top Articles</div>
@@ -175,7 +167,7 @@ export default function Home() {
 
         <div id="learn" style={{ padding: "28px 24px", background: "#EDEAE0" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#111", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
-            Learn
+            Lessons
             <span style={{ flex: 1, height: 2, background: "#111", display: "block" }} />
           </div>
           {[
