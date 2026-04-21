@@ -67,43 +67,39 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Hero */}
-      <div className="hero-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: "3px solid #111" }}>
-        <div className="hero-left" style={{ padding: "32px 28px 28px", borderRight: "3px solid #111", background: "#F5F2EB" }}>
-          <h1 className="hero-title" style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 80, lineHeight: 0.9, letterSpacing: 2, margin: 0 }}>
-            <span style={{ color: "#111", display: "block" }}>TRI</span>
-            <span style={{ color: "#E8473F", display: "block" }}>ANGLE</span>
-            <span style={{ color: "#111", display: "block" }}>HEAD</span>
-          </h1>
-        </div>
-        <div className="hero-right" style={{ padding: "32px 28px 28px", background: "#111" }}>
-          <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#F5C842", marginBottom: 10 }}>Intention</div>
-          <p style={{ fontFamily: "Georgia, serif", fontSize: 16, fontStyle: "italic", color: "#EEE8D0", lineHeight: 1.6, margin: "0 0 28px" }}>
-            Discovering music through people, and people through music.
-          </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", display: "block" }}>
-              Sound Insight: The Music Guide
-            </a>
-            <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#C8B99A", border: "2px solid #C8B99A", display: "block" }}>
-              Trianglehead on YouTube
-            </a>
-            <a href="https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#EEE8D0", border: "2px solid #EEE8D0", display: "block" }}>
-              Book a lesson
-            </a>
-          </div>
-        </div>
+      {/* Hero: full-width thumbnail with title overlay */}
+      <div id="music" style={{ borderBottom: "3px solid #111" }}>
+        <YouTubeEmbed
+          videoId="4wEZdI7zthU"
+          title="Anirudh Venkatesh"
+          thumbnail="/bach_thumbnail.png"
+          overlay={
+            <h1 className="hero-title" style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 80, lineHeight: 0.9, letterSpacing: 2, margin: 0, padding: "32px 28px 28px" }}>
+              <span style={{ color: "#F5F2EB", display: "block", textShadow: "0 2px 12px rgba(0,0,0,0.85)" }}>TRI</span>
+              <span style={{ color: "#E8473F", display: "block", textShadow: "0 2px 12px rgba(0,0,0,0.85)" }}>ANGLE</span>
+              <span style={{ color: "#F5F2EB", display: "block", textShadow: "0 2px 12px rgba(0,0,0,0.85)" }}>HEAD</span>
+            </h1>
+          }
+        />
       </div>
 
-      {/* Music */}
-      <div id="music" className="music-section" style={{ borderBottom: "3px solid #111", padding: "22px 28px", background: "#111" }}>
-        <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 2, marginBottom: 6, color: "#F5C842" }}>Music</div>
-        <div style={{ marginBottom: 16 }}>
-          <YouTubeEmbed videoId="4wEZdI7zthU" title="Anirudh Venkatesh" thumbnail="/bach_thumbnail.png" />
+      {/* Intention + CTAs */}
+      <div className="hero-right" style={{ padding: "28px", background: "#111", borderBottom: "3px solid #111" }}>
+        <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#F5C842", marginBottom: 10 }}>Intention</div>
+        <p style={{ fontFamily: "Georgia, serif", fontSize: 16, fontStyle: "italic", color: "#EEE8D0", lineHeight: 1.6, margin: "0 0 20px" }}>
+          Discovering music through people, and people through music.
+        </p>
+        <div className="cta-row" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111" }}>
+            Sound Insight: The Music Guide
+          </a>
+          <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#C8B99A", border: "2px solid #C8B99A" }}>
+            Trianglehead on YouTube
+          </a>
+          <a href="https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#EEE8D0", border: "2px solid #EEE8D0" }}>
+            Book a lesson
+          </a>
         </div>
-        <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#F5C842", textDecoration: "none", borderBottom: "2px solid #F5C842", paddingBottom: 1 }}>
-          Listen to more →
-        </a>
       </div>
 
       {/* Main: Sound Insight + Lessons */}

@@ -20,19 +20,12 @@
   }
 
   /* Hero */
-  .hero-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .hero-left {
-    border-right: none !important;
-    border-bottom: 3px solid #111;
-    padding: 24px 16px !important;
+  .hero-title {
+    font-size: 52px !important;
+    padding: 20px 16px !important;
   }
   .hero-right {
-    padding: 24px 16px !important;
-  }
-  .hero-title {
-    font-size: 64px !important;
+    padding: 20px 16px !important;
   }
 
   /* Sound Insight + Lessons */
