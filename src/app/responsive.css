@@ -20,6 +20,10 @@
   }
 
   /* Hero */
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    align-items: unset !important;
+  }
   .hero-title {
     font-size: 52px !important;
   }
