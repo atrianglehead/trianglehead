@@ -29,6 +29,13 @@ const socialLinks = [
   },
 ];
 
+const navLinks = [
+  { label: "Music", href: "#music" },
+  { label: "Sound Insight", href: "#sound-insight" },
+  { label: "Learn", href: "#learn" },
+  { label: "Contact", href: "#contact" },
+];
+
 export default function Home() {
   return (
     <div style={{ maxWidth: 860, margin: "0 auto", background: "#F5F2EB", fontFamily: "var(--font-space-mono), monospace", border: "3px solid #111" }}>
@@ -40,9 +47,9 @@ export default function Home() {
           <span style={{ color: "#E8F0FF" }}>HEAD</span>
         </span>
         <div style={{ display: "flex", gap: 20 }}>
-          {["Music", "Sound Insight", "Learn", "Contact"].map((item) => (
-            <a key={item} href="#" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, color: "#aaa", textDecoration: "none", letterSpacing: 1.5, textTransform: "uppercase" }}>
-              {item}
+          {navLinks.map((item) => (
+            <a key={item.label} href={item.href} style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, color: "#aaa", textDecoration: "none", letterSpacing: 1.5, textTransform: "uppercase" }}>
+              {item.label}
             </a>
           ))}
         </div>
@@ -50,7 +57,7 @@ export default function Home() {
 
       {/* Issue bar */}
       <div style={{ background: "#F5C842", padding: "5px 24px", display: "flex", alignItems: "center", gap: 16, borderBottom: "2px solid #111" }}>
-        {["A place to discover musical thought", "Est. 2026", "trianglehead.in"].map((text, i) => (
+        {["One musical day at a time", "Est. 2015", "trianglehead.in"].map((text, i) => (
           <span key={i} style={{ display: "flex", alignItems: "center", gap: 16 }}>
             {i > 0 && <span style={{ width: 4, height: 4, background: "#111", borderRadius: "50%", display: "inline-block" }} />}
             <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#111" }}>{text}</span>
@@ -85,9 +92,34 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Music */}
+      <div id="music" style={{ borderBottom: "3px solid #111", padding: "22px 28px", background: "#111" }}>
+        <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 2, marginBottom: 6, color: "#F5C842" }}>Music</div>
+        <p style={{ fontFamily: "Georgia, serif", fontSize: 12, lineHeight: 1.6, color: "#aaa", margin: "0 0 20px" }}>Videos, audio and live recordings across musical traditions. Watch, listen, explore.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+          <iframe
+            src="https://www.youtube.com/embed/4wEZdI7zthU"
+            title="Anirudh Venkatesh"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{ width: "100%", aspectRatio: "16/9", border: "none" }}
+          />
+          <iframe
+            src="https://www.youtube.com/embed/h7yzzWFrJK0"
+            title="Trianglehead"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{ width: "100%", aspectRatio: "16/9", border: "none" }}
+          />
+        </div>
+        <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#F5C842", textDecoration: "none", borderBottom: "2px solid #F5C842", paddingBottom: 1 }}>
+          Listen to more →
+        </a>
+      </div>
+
       {/* Main: Sound Insight + Learn */}
       <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", borderBottom: "3px solid #111" }}>
-        <div style={{ padding: "28px", borderRight: "3px solid #111" }}>
+        <div id="sound-insight" style={{ padding: "28px", borderRight: "3px solid #111" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#E8473F", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Sound Insight
             <span style={{ flex: 1, height: 2, background: "#111", display: "block" }} />
@@ -141,7 +173,7 @@ export default function Home() {
           </a>
         </div>
 
-        <div style={{ padding: "28px 24px", background: "#EDEAE0" }}>
+        <div id="learn" style={{ padding: "28px 24px", background: "#EDEAE0" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#111", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Learn
             <span style={{ flex: 1, height: 2, background: "#111", display: "block" }} />
@@ -159,33 +191,8 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Music — full width */}
-      <div style={{ borderBottom: "3px solid #111", padding: "22px 28px", background: "#111" }}>
-        <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 2, marginBottom: 6, color: "#F5C842" }}>Music</div>
-        <p style={{ fontFamily: "Georgia, serif", fontSize: 12, lineHeight: 1.6, color: "#aaa", margin: "0 0 20px" }}>Videos, audio and live recordings across musical traditions. Watch, listen, explore.</p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
-          <iframe
-            src="https://www.youtube.com/embed/4wEZdI7zthU"
-            title="Anirudh Venkatesh"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            style={{ width: "100%", aspectRatio: "16/9", border: "none" }}
-          />
-          <iframe
-            src="https://www.youtube.com/embed/h7yzzWFrJK0"
-            title="Trianglehead"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            style={{ width: "100%", aspectRatio: "16/9", border: "none" }}
-          />
-        </div>
-        <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#F5C842", textDecoration: "none", borderBottom: "2px solid #F5C842", paddingBottom: 1 }}>
-          Listen to more →
-        </a>
-      </div>
-
       {/* Founder */}
-      <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", borderBottom: "3px solid #111" }}>
+      <div id="contact" style={{ display: "grid", gridTemplateColumns: "auto 1fr", borderBottom: "3px solid #111" }}>
         <div style={{ background: "#E8473F", padding: "24px 20px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, borderRight: "3px solid #111", minWidth: 80 }}>
           <div style={{ width: 52, height: 52, borderRadius: "50%", background: "#F5F2EB", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, color: "#E8473F", border: "2px solid #111" }}>AV</div>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 11, letterSpacing: 2, color: "#fff", textAlign: "center", lineHeight: 1.2 }}>Anirudh<br />Venkatesh</div>
