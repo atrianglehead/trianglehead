@@ -97,7 +97,7 @@ export default function Home() {
       <div id="music" style={{ borderBottom: "3px solid #111", padding: "22px 28px", background: "#111" }}>
         <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 2, marginBottom: 6, color: "#F5C842" }}>Music</div>
         <div style={{ marginBottom: 16 }}>
-          <YouTubeEmbed videoId="4wEZdI7zthU" title="Anirudh Venkatesh" />
+          <YouTubeEmbed videoId="4wEZdI7zthU" title="Anirudh Venkatesh" thumbnail="/bach_thumbnail.png" />
         </div>
         <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#F5C842", textDecoration: "none", borderBottom: "2px solid #F5C842", paddingBottom: 1 }}>
           Listen to more →

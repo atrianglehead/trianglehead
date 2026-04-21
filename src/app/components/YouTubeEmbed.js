@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 
-export default function YouTubeEmbed({ videoId, title }) {
+export default function YouTubeEmbed({ videoId, title, thumbnail }) {
   const [active, setActive] = useState(false);
 
   if (active) {
@@ -21,16 +21,16 @@ export default function YouTubeEmbed({ videoId, title }) {
   return (
     <button
       onClick={() => setActive(true)}
-      style={{ position: "relative", width: "100%", aspectRatio: "16/9", display: "block", padding: 0, border: "none", cursor: "pointer", background: "#000" }}
       aria-label={`Play ${title}`}
+      style={{ position: "relative", width: "100%", display: "block", padding: 0, border: "none", cursor: "pointer", background: "#000" }}
     >
       <Image
-        src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+        src={thumbnail}
         alt={title}
-        fill
-        style={{ objectFit: "cover" }}
+        width={800}
+        height={450}
+        style={{ width: "100%", height: "auto", display: "block" }}
       />
-      {/* Play button */}
       <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <div style={{ width: 0, height: 0, borderTop: "14px solid transparent", borderBottom: "14px solid transparent", borderLeft: "24px solid #fff", marginLeft: 5 }} />
