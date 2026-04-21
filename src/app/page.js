@@ -163,14 +163,7 @@ export default function Home() {
       <div style={{ borderBottom: "3px solid #111", padding: "22px 28px", background: "#111" }}>
         <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 2, marginBottom: 6, color: "#F5C842" }}>Music</div>
         <p style={{ fontFamily: "Georgia, serif", fontSize: 12, lineHeight: 1.6, color: "#aaa", margin: "0 0 20px" }}>Videos, audio and live recordings across musical traditions. Watch, listen, explore.</p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-          <iframe
-            src="https://www.youtube.com/embed/h7yzzWFrJK0"
-            title="Trianglehead"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            style={{ width: "100%", aspectRatio: "16/9", border: "none" }}
-          />
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
           <iframe
             src="https://www.youtube.com/embed/4wEZdI7zthU"
             title="Anirudh Venkatesh"
@@ -178,7 +171,17 @@ export default function Home() {
             allowFullScreen
             style={{ width: "100%", aspectRatio: "16/9", border: "none" }}
           />
+          <iframe
+            src="https://www.youtube.com/embed/h7yzzWFrJK0"
+            title="Trianglehead"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{ width: "100%", aspectRatio: "16/9", border: "none" }}
+          />
         </div>
+        <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#F5C842", textDecoration: "none", borderBottom: "2px solid #F5C842", paddingBottom: 1 }}>
+          Listen to more →
+        </a>
       </div>
 
       {/* Founder */}
