@@ -68,7 +68,7 @@ export default function Home() {
       </div>
 
       {/* Hero: thumbnail 2/3 + CTAs 1/3 */}
-      <div className="hero-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr", borderBottom: "3px solid #111" }}>
+      <div className="hero-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr", borderBottom: "3px solid #111", alignItems: "start" }}>
         <div id="music" className="hero-left" style={{ borderRight: "3px solid #111", aspectRatio: "16/9", overflow: "hidden", position: "relative" }}>
           <YouTubeEmbed
             videoId="4wEZdI7zthU"
@@ -76,7 +76,7 @@ export default function Home() {
             thumbnail="/bach_thumbnail.png"
           />
         </div>
-        <div className="hero-right" style={{ padding: "28px", background: "#111", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <div className="hero-right" style={{ padding: "28px", background: "#111", display: "flex", flexDirection: "column", justifyContent: "center", aspectRatio: "8/9", overflow: "hidden", boxSizing: "border-box" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", display: "block" }}>
               Music Guide
