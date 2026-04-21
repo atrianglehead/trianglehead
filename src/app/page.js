@@ -162,7 +162,23 @@ export default function Home() {
       {/* Music — full width */}
       <div style={{ borderBottom: "3px solid #111", padding: "22px 28px", background: "#111" }}>
         <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 2, marginBottom: 6, color: "#F5C842" }}>Music</div>
-        <p style={{ fontFamily: "Georgia, serif", fontSize: 12, lineHeight: 1.6, color: "#aaa", margin: 0 }}>Videos, audio and live recordings across musical traditions. Watch, listen, explore.</p>
+        <p style={{ fontFamily: "Georgia, serif", fontSize: 12, lineHeight: 1.6, color: "#aaa", margin: "0 0 20px" }}>Videos, audio and live recordings across musical traditions. Watch, listen, explore.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <iframe
+            src="https://www.youtube.com/embed/h7yzzWFrJK0"
+            title="Trianglehead"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{ width: "100%", aspectRatio: "16/9", border: "none" }}
+          />
+          <iframe
+            src="https://www.youtube.com/embed/4wEZdI7zthU"
+            title="Anirudh Venkatesh"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{ width: "100%", aspectRatio: "16/9", border: "none" }}
+          />
+        </div>
       </div>
 
       {/* Founder */}
