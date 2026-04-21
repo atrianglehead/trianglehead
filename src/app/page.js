@@ -44,7 +44,8 @@ export default function Home() {
       {/* Nav */}
       <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 24px", background: "#111" }}>
         <span style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 32, letterSpacing: 2, lineHeight: 1 }}>
-          <span style={{ color: "#F5C842" }}>TRIANGLE</span>
+          <span style={{ color: "#F5C842" }}>TRI</span>
+          <span style={{ color: "#fff" }}>ANGLE</span>
           <span style={{ color: "#E8F0FF" }}>HEAD</span>
         </span>
         <div style={{ display: "flex", gap: 20 }}>
@@ -70,8 +71,11 @@ export default function Home() {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: "3px solid #111" }}>
         <div style={{ padding: "32px 28px 28px", borderRight: "3px solid #111", background: "#F5F2EB" }}>
           <h1 style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 80, lineHeight: 0.9, letterSpacing: 2, margin: 0 }}>
-            <span style={{ color: "#111", display: "block" }}>TRIANGLE</span>
-            <span style={{ color: "#E8473F", display: "block" }}>HEAD</span>
+            <span style={{ display: "block" }}>
+              <span style={{ color: "#111" }}>TRI</span>
+              <span style={{ color: "#E8473F" }}>ANGLE</span>
+            </span>
+            <span style={{ color: "#111", display: "block" }}>HEAD</span>
           </h1>
         </div>
         <div style={{ padding: "32px 28px 28px", background: "#111" }}>
@@ -86,7 +90,7 @@ export default function Home() {
             <a href="https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#EEE8D0", border: "2px solid #EEE8D0", display: "block" }}>
               Book a lesson
             </a>
-            <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#EEE8D0", border: "2px solid #EEE8D0", display: "block" }}>
+            <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#C8B99A", border: "2px solid #C8B99A", display: "block" }}>
               Browse music
             </a>
           </div>
@@ -200,7 +204,11 @@ export default function Home() {
 
       {/* Footer */}
       <div style={{ background: "#111", padding: "12px 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 14, letterSpacing: 2, color: "#555" }}>TRIANGLEHEAD</span>
+        <span style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 14, letterSpacing: 2 }}>
+          <span style={{ color: "#555" }}>TRI</span>
+          <span style={{ color: "#444" }}>ANGLE</span>
+          <span style={{ color: "#555" }}>HEAD</span>
+        </span>
         <span style={{ fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: "#444" }}>© 2026 · Built with intention</span>
       </div>
 
