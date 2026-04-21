@@ -59,7 +59,7 @@ export default function Home() {
 
       {/* Issue bar */}
       <div className="issue-bar" style={{ background: "#F5C842", padding: "5px 24px", display: "flex", alignItems: "center", gap: 16, borderBottom: "2px solid #111" }}>
-        {["One musical day at a time", "Est. 2015", "trianglehead.in"].map((text, i) => (
+        {["Discovering music through people, and people through music.", "Est. 2015", "trianglehead.in"].map((text, i) => (
           <span key={i} style={{ display: "flex", alignItems: "center", gap: 16 }}>
             {i > 0 && <span style={{ width: 4, height: 4, background: "#111", borderRadius: "50%", display: "inline-block" }} />}
             <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#111" }}>{text}</span>
@@ -77,16 +77,12 @@ export default function Home() {
           />
         </div>
         <div className="hero-right" style={{ padding: "28px", background: "#111" }}>
-          <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#F5C842", marginBottom: 10 }}>Intention</div>
-          <p style={{ fontFamily: "Georgia, serif", fontSize: 16, fontStyle: "italic", color: "#EEE8D0", lineHeight: 1.6, margin: "0 0 20px" }}>
-            Discovering music through people, and people through music.
-          </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", display: "block" }}>
-              Sound Insight: The Music Guide
+              Music Guide
             </a>
             <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#C8B99A", border: "2px solid #C8B99A", display: "block" }}>
-              Trianglehead on YouTube
+              YouTube
             </a>
             <a href="https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#EEE8D0", border: "2px solid #EEE8D0", display: "block" }}>
               Book a lesson
