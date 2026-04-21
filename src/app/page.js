@@ -74,11 +74,13 @@ export default function Home() {
           title="Anirudh Venkatesh"
           thumbnail="/bach_thumbnail.png"
           overlay={
-            <h1 className="hero-title" style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 80, lineHeight: 0.9, letterSpacing: 2, margin: 0, padding: "32px 28px 28px" }}>
-              <span style={{ color: "#F5F2EB", display: "block", textShadow: "0 2px 12px rgba(0,0,0,0.85)" }}>TRI</span>
-              <span style={{ color: "#E8473F", display: "block", textShadow: "0 2px 12px rgba(0,0,0,0.85)" }}>ANGLE</span>
-              <span style={{ color: "#F5F2EB", display: "block", textShadow: "0 2px 12px rgba(0,0,0,0.85)" }}>HEAD</span>
-            </h1>
+            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", padding: "0 28px", pointerEvents: "none" }}>
+              <h1 className="hero-title" style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 80, lineHeight: 0.9, letterSpacing: 2, margin: 0 }}>
+                <span style={{ color: "#111", display: "block" }}>TRI</span>
+                <span style={{ color: "#E8473F", display: "block", textShadow: "0 2px 8px rgba(255,255,255,0.3)" }}>ANGLE</span>
+                <span style={{ color: "#111", display: "block" }}>HEAD</span>
+              </h1>
+            </div>
           }
         />
       </div>
