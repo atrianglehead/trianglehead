@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: var(--font-space-mono);
+  --font-display: var(--font-bebas-neue);
+}
+
+body {
+  background: #F5F2EB;
+  color: #111;
+  font-family: var(--font-space-mono), monospace;
+}
