@@ -59,7 +59,7 @@ export default function Home() {
 
       {/* Issue bar */}
       <div className="issue-bar" style={{ background: "#F5C842", padding: "5px 24px", display: "flex", alignItems: "center", gap: 16, borderBottom: "2px solid #111" }}>
-        {["Music through people. People through music.", "Est. 2015"].map((text, i) => (
+        {["Anirudh Venkatesh", "Music", "Words", "Lessons"].map((text, i) => (
           <span key={i} style={{ display: "flex", alignItems: "center", gap: 16 }}>
             {i > 0 && <span style={{ width: 4, height: 4, background: "#111", borderRadius: "50%", display: "inline-block" }} />}
             <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#111" }}>{text}</span>
