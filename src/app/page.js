@@ -79,10 +79,10 @@ export default function Home() {
         <div className="hero-right" style={{ padding: "28px", background: "#1C1C1C", display: "flex", flexDirection: "column", justifyContent: "center", aspectRatio: "8/9", overflow: "hidden", boxSizing: "border-box" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", display: "block" }}>
-              Music Guide
+              Read Sound Insight
             </a>
             <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#C8B99A", border: "2px solid #C8B99A", display: "block" }}>
-              YouTube
+              Watch Music Videos
             </a>
             <a href="https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#EEE8D0", border: "2px solid #EEE8D0", display: "block" }}>
               Book a lesson
