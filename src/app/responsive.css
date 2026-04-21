@@ -1,0 +1,79 @@
+.site-wrapper {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+@media (max-width: 620px) {
+  .nav-bar {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    padding: 12px 16px !important;
+  }
+  .nav-links {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+  .issue-bar {
+    flex-wrap: wrap !important;
+    row-gap: 4px !important;
+    padding: 6px 16px !important;
+  }
+
+  /* Hero */
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .hero-left {
+    border-right: none !important;
+    border-bottom: 3px solid #111;
+    padding: 24px 16px !important;
+  }
+  .hero-right {
+    padding: 24px 16px !important;
+  }
+  .hero-title {
+    font-size: 64px !important;
+  }
+
+  /* Sound Insight + Lessons */
+  .main-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .main-left {
+    border-right: none !important;
+    border-bottom: 3px solid #111;
+    padding: 20px 16px !important;
+  }
+  .main-right {
+    padding: 20px 16px !important;
+  }
+
+  /* Music */
+  .music-section {
+    padding: 18px 16px !important;
+  }
+
+  /* Founder */
+  .founder-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .founder-left {
+    border-right: none !important;
+    border-bottom: 3px solid #111;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    min-width: auto !important;
+    padding: 16px !important;
+  }
+  .founder-right {
+    padding: 18px 16px !important;
+  }
+
+  /* Footer */
+  .footer-bar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+    padding: 14px 16px !important;
+  }
+}

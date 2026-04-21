@@ -39,16 +39,16 @@ const navLinks = [
 
 export default function Home() {
   return (
-    <div style={{ maxWidth: 860, margin: "0 auto", background: "#F5F2EB", fontFamily: "var(--font-space-mono), monospace", border: "3px solid #111" }}>
+    <div className="site-wrapper" style={{ maxWidth: 860, margin: "0 auto", background: "#F5F2EB", fontFamily: "var(--font-space-mono), monospace", border: "3px solid #111" }}>
 
       {/* Nav */}
-      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 24px", background: "#111" }}>
+      <nav className="nav-bar" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 24px", background: "#111" }}>
         <span style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 32, letterSpacing: 2, lineHeight: 1 }}>
           <span style={{ color: "#F5C842" }}>TRI</span>
           <span style={{ color: "#E8F0FF" }}>ANGLE</span>
           <span style={{ color: "#F5C842" }}>HEAD</span>
         </span>
-        <div style={{ display: "flex", gap: 20 }}>
+        <div className="nav-links" style={{ display: "flex", gap: 20 }}>
           {navLinks.map((item) => (
             <a key={item.label} href={item.href} style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, color: "#aaa", textDecoration: "none", letterSpacing: 1.5, textTransform: "uppercase" }}>
               {item.label}
@@ -58,7 +58,7 @@ export default function Home() {
       </nav>
 
       {/* Issue bar */}
-      <div style={{ background: "#F5C842", padding: "5px 24px", display: "flex", alignItems: "center", gap: 16, borderBottom: "2px solid #111" }}>
+      <div className="issue-bar" style={{ background: "#F5C842", padding: "5px 24px", display: "flex", alignItems: "center", gap: 16, borderBottom: "2px solid #111" }}>
         {["One musical day at a time", "Est. 2015", "trianglehead.in"].map((text, i) => (
           <span key={i} style={{ display: "flex", alignItems: "center", gap: 16 }}>
             {i > 0 && <span style={{ width: 4, height: 4, background: "#111", borderRadius: "50%", display: "inline-block" }} />}
@@ -68,15 +68,15 @@ export default function Home() {
       </div>
 
       {/* Hero */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: "3px solid #111" }}>
-        <div style={{ padding: "32px 28px 28px", borderRight: "3px solid #111", background: "#F5F2EB" }}>
-          <h1 style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 80, lineHeight: 0.9, letterSpacing: 2, margin: 0 }}>
+      <div className="hero-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: "3px solid #111" }}>
+        <div className="hero-left" style={{ padding: "32px 28px 28px", borderRight: "3px solid #111", background: "#F5F2EB" }}>
+          <h1 className="hero-title" style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 80, lineHeight: 0.9, letterSpacing: 2, margin: 0 }}>
             <span style={{ color: "#111", display: "block" }}>TRI</span>
             <span style={{ color: "#E8473F", display: "block" }}>ANGLE</span>
             <span style={{ color: "#111", display: "block" }}>HEAD</span>
           </h1>
         </div>
-        <div style={{ padding: "32px 28px 28px", background: "#111" }}>
+        <div className="hero-right" style={{ padding: "32px 28px 28px", background: "#111" }}>
           <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#F5C842", marginBottom: 10 }}>Intention</div>
           <p style={{ fontFamily: "Georgia, serif", fontSize: 16, fontStyle: "italic", color: "#EEE8D0", lineHeight: 1.6, margin: "0 0 28px" }}>
             Discovering music through people, and people through music.
@@ -96,7 +96,7 @@ export default function Home() {
       </div>
 
       {/* Music */}
-      <div id="music" style={{ borderBottom: "3px solid #111", padding: "22px 28px", background: "#111" }}>
+      <div id="music" className="music-section" style={{ borderBottom: "3px solid #111", padding: "22px 28px", background: "#111" }}>
         <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 2, marginBottom: 6, color: "#F5C842" }}>Music</div>
         <div style={{ marginBottom: 16 }}>
           <YouTubeEmbed videoId="4wEZdI7zthU" title="Anirudh Venkatesh" thumbnail="/bach_thumbnail.png" />
@@ -106,9 +106,9 @@ export default function Home() {
         </a>
       </div>
 
-      {/* Main: Sound Insight + Learn */}
-      <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", borderBottom: "3px solid #111" }}>
-        <div id="sound-insight" style={{ padding: "28px", borderRight: "3px solid #111" }}>
+      {/* Main: Sound Insight + Lessons */}
+      <div className="main-grid" style={{ display: "grid", gridTemplateColumns: "3fr 2fr", borderBottom: "3px solid #111" }}>
+        <div id="sound-insight" className="main-left" style={{ padding: "28px", borderRight: "3px solid #111" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#E8473F", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Sound Insight: The Music Guide
             <span style={{ flex: 1, height: 2, background: "#111", display: "block" }} />
@@ -162,7 +162,7 @@ export default function Home() {
           </a>
         </div>
 
-        <div id="learn" style={{ padding: "28px 24px", background: "#EDEAE0" }}>
+        <div id="learn" className="main-right" style={{ padding: "28px 24px", background: "#EDEAE0" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#111", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Lessons
             <span style={{ flex: 1, height: 2, background: "#111", display: "block" }} />
@@ -181,12 +181,12 @@ export default function Home() {
       </div>
 
       {/* Founder */}
-      <div id="contact" style={{ display: "grid", gridTemplateColumns: "auto 1fr", borderBottom: "3px solid #111" }}>
-        <div style={{ background: "#E8473F", padding: "24px 20px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, borderRight: "3px solid #111", minWidth: 80 }}>
+      <div id="contact" className="founder-grid" style={{ display: "grid", gridTemplateColumns: "auto 1fr", borderBottom: "3px solid #111" }}>
+        <div className="founder-left" style={{ background: "#E8473F", padding: "24px 20px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, borderRight: "3px solid #111", minWidth: 80 }}>
           <div style={{ width: 52, height: 52, borderRadius: "50%", background: "#F5F2EB", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, color: "#E8473F", border: "2px solid #111" }}>AV</div>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 11, letterSpacing: 2, color: "#fff", textAlign: "center", lineHeight: 1.2 }}>Anirudh<br />Venkatesh</div>
         </div>
-        <div style={{ padding: "22px 28px", background: "#F5F2EB" }}>
+        <div className="founder-right" style={{ padding: "22px 28px", background: "#F5F2EB" }}>
           <p style={{ fontFamily: "Georgia, serif", fontSize: 13, color: "#444", lineHeight: 1.6, margin: "0 0 14px" }}>
             Music learner, educator, and creator — exploring connections in the vast network of musical traditions.
           </p>
@@ -201,7 +201,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <div style={{ background: "#111", padding: "12px 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div className="footer-bar" style={{ background: "#111", padding: "12px 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 14, letterSpacing: 2 }}>
           <span style={{ color: "#555" }}>TRI</span>
           <span style={{ color: "#444" }}>ANGLE</span>

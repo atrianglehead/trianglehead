@@ -1,5 +1,6 @@
 import { Space_Mono, Bebas_Neue } from "next/font/google";
 import "./globals.css";
+import "./responsive.css";
 
 const spaceMono = Space_Mono({
   variable: "--font-space-mono",
