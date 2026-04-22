@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const navItems = [
   { label: "Home", href: "/" },
   { label: "About", href: "/bio" },
+  { label: "Tools", href: "/tools" },
   { label: "Articles", href: "https://soundinsight.substack.com/" },
   { label: "Music", href: "https://www.youtube.com/@trianglehead" },
   { label: "Lessons", href: "https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" },
@@ -49,7 +50,7 @@ export default function StickyNav() {
           .sticky-nav-links.open {
             display: flex !important;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: flex-end;
             gap: 14px;
             padding: 14px 16px;
             background: #F5C842;

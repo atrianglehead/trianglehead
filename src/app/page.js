@@ -43,9 +43,9 @@ export default function Home() {
           />
         </div>
         <div className="hero-right" style={{ padding: "28px", background: "#1C1C1C", display: "flex", flexDirection: "column", justifyContent: "center", aspectRatio: "8/9", overflow: "hidden", boxSizing: "border-box" }}>
-          <p style={{ fontFamily: "Georgia, serif", fontSize: 20, color: "#EEE8D0", lineHeight: 1.5, margin: "0 0 24px", fontStyle: "italic" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1, marginBottom: 24, textShadow: "0 2px 12px rgba(0,0,0,0.5)" }}>
             Trianglehead, aka Anirudh Venkatesh, is an explorer of musical traditions...
-          </p>
+          </div>
           <a href="/bio" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block", alignSelf: "flex-start" }}>
             Read full bio →
           </a>
@@ -67,7 +67,7 @@ export default function Home() {
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 52, letterSpacing: 4, color: "#EEE8D0", lineHeight: 1, marginBottom: 18, textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}>
             and instruments...
           </div>
-          <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#F5C842", textDecoration: "none", borderBottom: "2px solid #F5C842", paddingBottom: 2 }}>
+          <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block" }}>
             Trianglehead on YouTube →
           </a>
         </div>
@@ -81,6 +81,11 @@ export default function Home() {
           </p>
         </div>
         <MelodyMatch />
+        <div style={{ padding: "0 28px 24px" }}>
+          <a href="/tools" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#111", border: "2px solid #111", display: "inline-block" }}>
+            Explore Tools →
+          </a>
+        </div>
       </div>
 
       {/* Main: Sound Insight + Lessons */}
