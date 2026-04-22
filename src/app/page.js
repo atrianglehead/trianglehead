@@ -38,9 +38,9 @@ export default function Home() {
         {/* Text above video */}
         <div style={{ padding: "20px 24px 16px", textAlign: "center" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1 }}>
-            Trianglehead,{" "}
+            Hi! I'm Anirudh,{" "}
             <span style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 14, letterSpacing: 2, fontWeight: 700 }}>aka</span>
-            {" "}Anirudh Venkatesh...
+            {" "}Trianglehead ...
           </div>
         </div>
 
