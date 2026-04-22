@@ -33,10 +33,17 @@ const socialLinks = [
 export default function Home() {
   return (
     <>
-      {/* Hero: full-width YouTube embed with text overlays */}
-      <div id="music" style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden" }}>
-        {/* Video fills the entire container */}
-        <div style={{ position: "absolute", inset: 0 }}>
+      {/* Hero */}
+      <div id="music" style={{ background: "#1C1C1C", borderBottom: "3px solid #111" }}>
+        {/* Text above video */}
+        <div style={{ padding: "20px 24px 16px", textAlign: "center" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1 }}>
+            Trianglehead, aka Anirudh Venkatesh,
+          </div>
+        </div>
+
+        {/* Full-width video */}
+        <div style={{ aspectRatio: "16/9", overflow: "hidden", position: "relative" }}>
           <YouTubeEmbed
             videoId="4wEZdI7zthU"
             title="Anirudh Venkatesh"
@@ -44,26 +51,15 @@ export default function Home() {
           />
         </div>
 
-        {/* Left text overlay — always on top, even while playing */}
-        <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "33%", background: "linear-gradient(to right, rgba(0,0,0,0.78) 55%, transparent)", display: "flex", flexDirection: "column", justifyContent: "center", padding: "20px 28px 20px 20px", zIndex: 2, pointerEvents: "none" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 26, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.15, textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}>
-            Trianglehead, aka Anirudh Venkatesh,
-          </div>
-        </div>
-
-        {/* Right text overlay */}
-        <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "33%", background: "linear-gradient(to left, rgba(0,0,0,0.78) 55%, transparent)", display: "flex", flexDirection: "column", justifyContent: "center", padding: "20px 20px 20px 28px", zIndex: 2, pointerEvents: "none" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 26, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.15, textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}>
+        {/* Text below video + My Story button */}
+        <div style={{ padding: "16px 24px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1 }}>
             explores musical fluency...
           </div>
+          <a href="/bio" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block" }}>
+            My Story →
+          </a>
         </div>
-      </div>
-
-      {/* My Story button — below the video */}
-      <div style={{ background: "#1C1C1C", borderBottom: "3px solid #111", padding: "18px 24px" }}>
-        <a href="/bio" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block" }}>
-          My Story →
-        </a>
       </div>
 
       {/* Music background video section */}
@@ -95,7 +91,7 @@ export default function Home() {
           </div>
         </div>
         <MelodyMatch />
-        <div style={{ padding: "0 28px 24px" }}>
+        <div style={{ padding: "0 28px 24px", textAlign: "center" }}>
           <a href="/explorations" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#111", border: "2px solid #111", display: "inline-block" }}>
             Explorations →
           </a>
@@ -105,9 +101,9 @@ export default function Home() {
       {/* Main: Sound Insight + Lessons */}
       <div className="main-grid" style={{ display: "grid", gridTemplateColumns: "3fr 2fr", borderBottom: "3px solid #111" }}>
         <div id="sound-insight" className="main-left" style={{ padding: "28px", borderRight: "3px solid #111" }}>
-          <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#555", lineHeight: 1.65, margin: "0 0 20px", borderBottom: "1.5px solid #DDD9CE", paddingBottom: 16 }}>
-            ... and writes <strong>articles</strong> about music theory, practice, and the spaces between traditions.
-          </p>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid #DDD9CE", paddingBottom: 16 }}>
+            ... and writes articles about music theory, practice, and the spaces between traditions.
+          </div>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#E8473F", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Sound Insight: The Music Guide
             <span style={{ flex: 1, height: 2, background: "#111", display: "block" }} />
@@ -162,9 +158,9 @@ export default function Home() {
         </div>
 
         <div id="learn" className="main-right" style={{ padding: "28px 24px", background: "#EDEAE0" }}>
-          <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#666", lineHeight: 1.65, margin: "0 0 20px", borderBottom: "1.5px solid #CCC8BC", paddingBottom: 16 }}>
-            ... and offers <strong>one-on-one coaching</strong> for those who want to go deeper.
-          </p>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid #CCC8BC", paddingBottom: 16 }}>
+            ... and offers one-on-one coaching for those who want to go deeper.
+          </div>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#111", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Lessons
             <span style={{ flex: 1, height: 2, background: "#111", display: "block" }} />
