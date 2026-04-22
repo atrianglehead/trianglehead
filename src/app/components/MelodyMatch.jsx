@@ -528,8 +528,8 @@ export default function MelodyMatch() {
       {/* Banner */}
       <div style={S.banner}>
         <div>
-          <div style={S.bannerText}>Here&apos;s your first lesson.</div>
-          <div style={S.bannerSub}>Can you match the melody? Two ways to try.</div>
+          <div style={S.bannerText}>Melody Match</div>
+          <div style={S.bannerSub}>Listen to the goal melody, then match it — by pitch, or by rhythm.</div>
         </div>
       </div>
 
