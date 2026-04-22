@@ -1,7 +1,6 @@
 import Image from "next/image";
 import YouTubeEmbed from "./components/YouTubeEmbed";
 import MelodyMatch from "./components/MelodyMatch";
-import StickyNav from "./components/StickyNav";
 
 const socialLinks = [
   {
@@ -33,23 +32,7 @@ const socialLinks = [
 
 export default function Home() {
   return (
-    <div className="site-wrapper" style={{ maxWidth: 860, margin: "0 auto", background: "#F5F2EB", fontFamily: "var(--font-space-mono), monospace", border: "3px solid #111" }}>
-
-      {/* Nav */}
-      <nav className="nav-bar" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 24px", background: "#111" }}>
-        <span style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 32, letterSpacing: 2, lineHeight: 1 }}>
-          <span style={{ color: "#F5C842" }}>TRI</span>
-          <span style={{ color: "#E8F0FF" }}>ANGLE</span>
-          <span style={{ color: "#F5C842" }}>HEAD</span>
-        </span>
-        <span style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, color: "#aaa", letterSpacing: 1.5 }}>
-          aka Anirudh Venkatesh
-        </span>
-      </nav>
-
-      {/* Sticky external link bar */}
-      <StickyNav />
-
+    <>
       {/* Hero: thumbnail 2/3 + bio 1/3 */}
       <div className="hero-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr", borderBottom: "3px solid #111", alignItems: "start" }}>
         <div id="music" className="hero-left" style={{ borderRight: "3px solid #F5C842", aspectRatio: "16/9", overflow: "hidden", position: "relative" }}>
@@ -60,8 +43,8 @@ export default function Home() {
           />
         </div>
         <div className="hero-right" style={{ padding: "28px", background: "#1C1C1C", display: "flex", flexDirection: "column", justifyContent: "center", aspectRatio: "8/9", overflow: "hidden", boxSizing: "border-box" }}>
-          <p style={{ fontFamily: "Georgia, serif", fontSize: 13, color: "#C8B99A", lineHeight: 1.65, margin: "0 0 20px" }}>
-            Trianglehead, aka <strong style={{ color: "#EEE8D0" }}>Anirudh Venkatesh</strong>, is a musician and educator exploring connections across musical traditions — from Carnatic to Western, from rhythm to harmony.
+          <p style={{ fontFamily: "Georgia, serif", fontSize: 20, color: "#EEE8D0", lineHeight: 1.5, margin: "0 0 24px", fontStyle: "italic" }}>
+            Trianglehead, aka Anirudh Venkatesh, is an explorer of musical traditions...
           </p>
           <a href="/bio" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block", alignSelf: "flex-start" }}>
             Read full bio →
@@ -78,7 +61,6 @@ export default function Home() {
           playsInline
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.45 }}
         >
-          {/* Replace with actual video file in /public once available */}
           <source src="/instruments_bg.mp4" type="video/mp4" />
         </video>
         <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "40px 28px" }}>
@@ -236,17 +218,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-      <div className="footer-bar" style={{ background: "#111", padding: "12px 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 14, letterSpacing: 2 }}>
-          <span style={{ color: "#555" }}>TRI</span>
-          <span style={{ color: "#444" }}>ANGLE</span>
-          <span style={{ color: "#555" }}>HEAD</span>
-        </span>
-        <span style={{ fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: "#444" }}>© 2026 · Built with intention</span>
-      </div>
-
-    </div>
+    </>
   );
 }

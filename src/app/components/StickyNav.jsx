@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 const navItems = [
+  { label: "Home", href: "/" },
   { label: "About", href: "/bio" },
   { label: "Articles", href: "https://soundinsight.substack.com/" },
   { label: "Music", href: "https://www.youtube.com/@trianglehead" },
@@ -12,19 +14,28 @@ const navItems = [
 
 export default function StickyNav() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
-  const linkStyle = {
-    fontFamily: "var(--font-space-mono), monospace",
-    fontSize: 10,
-    fontWeight: 700,
-    letterSpacing: 1.5,
-    textTransform: "uppercase",
-    color: "#111",
-    textDecoration: "none",
-    padding: "0 2px",
-    borderBottom: "2px solid transparent",
-    transition: "border-color 0.15s",
-  };
+  function isActive(href) {
+    if (href.startsWith("http")) return false;
+    return pathname === href;
+  }
+
+  function linkStyle(href) {
+    const active = isActive(href);
+    return {
+      fontFamily: "var(--font-space-mono), monospace",
+      fontSize: 10,
+      fontWeight: 700,
+      letterSpacing: 1.5,
+      textTransform: "uppercase",
+      color: "#111",
+      textDecoration: "none",
+      paddingBottom: 2,
+      borderBottom: active ? "2px solid #111" : "2px solid transparent",
+      transition: "border-color 0.15s",
+    };
+  }
 
   return (
     <>
@@ -35,7 +46,20 @@ export default function StickyNav() {
         @media (max-width: 620px) {
           .hamburger-btn { display: flex !important; }
           .sticky-nav-links { display: none !important; }
-          .sticky-nav-links.open { display: flex !important; flex-direction: column; align-items: flex-start; gap: 14px; padding: 14px 16px; background: #F5C842; border-top: 2px solid #111; position: absolute; top: 100%; right: 0; left: 0; z-index: 100; }
+          .sticky-nav-links.open {
+            display: flex !important;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 16px;
+            background: #F5C842;
+            border-top: 2px solid #111;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            left: 0;
+            z-index: 100;
+          }
         }
       `}</style>
       <div
@@ -47,15 +71,10 @@ export default function StickyNav() {
           borderBottom: "2px solid #111",
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           padding: "8px 24px",
         }}
       >
-        {/* Left label */}
-        <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#111" }}>
-          trianglehead.in
-        </span>
-
         {/* Desktop links */}
         <nav className={`sticky-nav-links${open ? " open" : ""}`}>
           {navItems.map((item) => {
@@ -67,7 +86,7 @@ export default function StickyNav() {
                 className="sticky-nav-link"
                 target={isExternal ? "_blank" : undefined}
                 rel={isExternal ? "noopener noreferrer" : undefined}
-                style={linkStyle}
+                style={linkStyle(item.href)}
                 onClick={() => setOpen(false)}
               >
                 {item.label}
@@ -86,7 +105,7 @@ export default function StickyNav() {
             border: "none",
             cursor: "pointer",
             padding: 4,
-            display: "none", // overridden by CSS above
+            display: "none",
             flexDirection: "column",
             gap: 5,
           }}
