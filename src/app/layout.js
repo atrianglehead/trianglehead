@@ -18,7 +18,7 @@ const bebasNeue = Bebas_Neue({
 
 export const metadata = {
   title: "Trianglehead",
-  description: "Discovering music through people, and people through music.",
+  description: "Exploring musical fluency.",
 };
 
 export default function RootLayout({ children }) {

@@ -44,10 +44,10 @@ export default function Home() {
         </div>
         <div className="hero-right" style={{ padding: "28px", background: "#1C1C1C", display: "flex", flexDirection: "column", justifyContent: "center", aspectRatio: "8/9", overflow: "hidden", boxSizing: "border-box" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1, marginBottom: 24, textShadow: "0 2px 12px rgba(0,0,0,0.5)" }}>
-            Trianglehead, aka Anirudh Venkatesh, is an explorer of musical traditions...
+            Trianglehead, aka Anirudh Venkatesh, explores musical fluency...
           </div>
           <a href="/bio" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block", alignSelf: "flex-start" }}>
-            Read full bio →
+            My Story →
           </a>
         </div>
       </div>
@@ -65,10 +65,10 @@ export default function Home() {
         </video>
         <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "40px 28px" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 52, letterSpacing: 4, color: "#EEE8D0", lineHeight: 1, marginBottom: 18, textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}>
-            and instruments...
+            through voice and instruments...
           </div>
           <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block" }}>
-            Trianglehead on YouTube →
+            Look ma - I'm on YouTube! →
           </a>
         </div>
       </div>
@@ -77,7 +77,7 @@ export default function Home() {
       <div style={{ borderBottom: "3px solid #111", background: "#F5F2EB" }}>
         <div style={{ padding: "24px 28px 0", borderBottom: "1px solid #DDD9CE" }}>
           <p style={{ fontFamily: "Georgia, serif", fontSize: 13, color: "#555", lineHeight: 1.65, margin: 0 }}>
-            ... who teaches how to develop <strong>musical fluency</strong> through interactive tools — like this one:
+            ... and teaches through interactive experiences, ...
           </p>
         </div>
         <MelodyMatch />
