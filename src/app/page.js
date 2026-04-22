@@ -56,7 +56,7 @@ export default function Home() {
         {/* Text + button below video */}
         <div style={{ padding: "16px 24px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1 }}>
-            explores musical fluency...
+            ... and I'm on a quest for musical fluency.
           </div>
           <a href="/bio" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block" }}>
             My Story →
@@ -77,7 +77,7 @@ export default function Home() {
         </video>
         <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "40px 28px" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1, marginBottom: 18, textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}>
-            through voice and instruments...
+            I use multiple voices to speak the language of music.
           </div>
           <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block" }}>
             Look ma - I'm on YouTube! →
@@ -89,7 +89,7 @@ export default function Home() {
       <div style={{ borderBottom: "3px solid #111", background: "#F5F2EB" }}>
         <div style={{ padding: "24px 28px 0", borderBottom: "1px solid #DDD9CE" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1 }}>
-            ... and teaches through interactive explorations, ...
+            Sometimes I design interactive explorations for music learners.
           </div>
         </div>
         <MelodyMatch />
@@ -104,7 +104,7 @@ export default function Home() {
       <div className="main-grid" style={{ display: "grid", gridTemplateColumns: "3fr 2fr", borderBottom: "3px solid #111" }}>
         <div id="sound-insight" className="main-left" style={{ padding: "28px", borderRight: "3px solid #111", background: "#E8473F" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#fff", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)", paddingBottom: 16 }}>
-            ... audio-visual articles, ...
+            And other times, I write audio-visual articles around a musical concept.
           </div>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#fff", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Sound Insight: The Music Guide
@@ -161,7 +161,7 @@ export default function Home() {
 
         <div id="learn" className="main-right" style={{ padding: "28px 24px", background: "#1C1C1C" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.15)", paddingBottom: 16 }}>
-            ... and one-on-one coaching.
+            But most of the time, I help others through one-on-one coaching.
           </div>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#EEE8D0", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Lessons
@@ -223,9 +223,6 @@ export default function Home() {
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 11, letterSpacing: 2, color: "#fff", textAlign: "center", lineHeight: 1.2 }}>Anirudh<br />Venkatesh</div>
         </div>
         <div className="founder-right" style={{ padding: "22px 28px", background: "#F5F2EB" }}>
-          <p style={{ fontFamily: "Georgia, serif", fontSize: 13, color: "#444", lineHeight: 1.6, margin: "0 0 14px" }}>
-            Music learner and educator — exploring connections in the vast network of musical traditions.
-          </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {socialLinks.map((s) => (
               <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", padding: "4px 10px", border: "1.5px solid #111", color: "#111", background: "transparent", textDecoration: "none" }}>
