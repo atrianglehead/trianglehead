@@ -102,13 +102,13 @@ export default function Home() {
 
       {/* Main: Sound Insight + Lessons */}
       <div className="main-grid" style={{ display: "grid", gridTemplateColumns: "3fr 2fr", borderBottom: "3px solid #111" }}>
-        <div id="sound-insight" className="main-left" style={{ padding: "28px", borderRight: "3px solid #111", background: "#E8473F" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#fff", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)", paddingBottom: 16 }}>
+        <div id="sound-insight" className="main-left" style={{ padding: "28px", borderRight: "3px solid #111", background: "#1C1C1C" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.15)", paddingBottom: 16 }}>
             And other times, I write audio-visual articles around a musical concept.
           </div>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#fff", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#EEE8D0", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Sound Insight: The Music Guide
-            <span style={{ flex: 1, height: 2, background: "#fff", display: "block" }} />
+            <span style={{ flex: 1, height: 2, background: "#EEE8D0", display: "block" }} />
           </div>
           <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#EEE8D0", marginBottom: 12 }}>Top Articles</div>
 
@@ -154,27 +154,27 @@ export default function Home() {
             </div>
           </a>
 
-          <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#fff", textDecoration: "none", border: "2px solid #fff", padding: "9px 16px", display: "inline-block" }}>
+          <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#EEE8D0", textDecoration: "none", border: "2px solid #EEE8D0", padding: "9px 16px", display: "inline-block" }}>
             All articles →
           </a>
         </div>
 
-        <div id="learn" className="main-right" style={{ padding: "28px 24px", background: "#1C1C1C" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.15)", paddingBottom: 16 }}>
+        <div id="learn" className="main-right" style={{ padding: "28px 24px", background: "#E8473F" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#fff", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)", paddingBottom: 16 }}>
             But most of the time, I help others through one-on-one coaching.
           </div>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#EEE8D0", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#fff", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Lessons
-            <span style={{ flex: 1, height: 2, background: "#EEE8D0", display: "block" }} />
+            <span style={{ flex: 1, height: 2, background: "#fff", display: "block" }} />
           </div>
           {[
             { title: "Free Your Voice", desc: "Learn to sing freely.", link: "https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html", label: "Book a session →" },
             { title: "Guitar & Composition", desc: "Learn music like a language.", link: "https://www.superprof.co.in/learn-how-use-music-like-language-from-full-time-musician.html", label: "Book a session →" },
           ].map((item) => (
-            <div key={item.title} style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.15)" }}>
-              <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, letterSpacing: 1, color: "#EEE8D0", marginBottom: 5 }}>{item.title}</div>
-              <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#C8B99A", margin: "0 0 8px", lineHeight: 1.5 }}>{item.desc}</p>
-              <a href={item.link} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#EEE8D0", textDecoration: "none", border: "2px solid #EEE8D0", padding: "9px 16px", display: "inline-block" }}>{item.label}</a>
+            <div key={item.title} style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)" }}>
+              <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, letterSpacing: 1, color: "#fff", marginBottom: 5 }}>{item.title}</div>
+              <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#EEE8D0", margin: "0 0 8px", lineHeight: 1.5 }}>{item.desc}</p>
+              <a href={item.link} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#fff", textDecoration: "none", border: "2px solid #fff", padding: "9px 16px", display: "inline-block" }}>{item.label}</a>
             </div>
           ))}
         </div>
