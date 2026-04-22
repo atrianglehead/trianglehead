@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import YouTubeEmbed from "./components/YouTubeEmbed";
+import MelodyMatch from "./components/MelodyMatch";
 
 const socialLinks = [
   {
@@ -90,6 +91,8 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      <MelodyMatch />
 
       {/* Main: Sound Insight + Lessons */}
       <div className="main-grid" style={{ display: "grid", gridTemplateColumns: "3fr 2fr", borderBottom: "3px solid #111" }}>
