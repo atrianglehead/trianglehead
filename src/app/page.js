@@ -40,7 +40,7 @@ export default function Home() {
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1 }}>
             Hi! I'm Anirudh,{" "}
             <span style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 14, letterSpacing: 2, fontWeight: 700 }}>aka</span>
-            {" "}Trianglehead ...
+            {" "}Trianglehead
           </div>
         </div>
 
