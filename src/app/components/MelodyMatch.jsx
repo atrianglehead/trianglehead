@@ -534,9 +534,6 @@ export default function MelodyMatch() {
       </div>
 
       <div style={S.inner}>
-        <div style={S.gameTitle}>Melody Match</div>
-        <div style={S.gameDesc}>Listen to the goal melody, then match it — by pitch, or by rhythm.</div>
-
         {/* Tabs + Hints */}
         <div style={S.tabsRow}>
           <div style={S.tabs}>
