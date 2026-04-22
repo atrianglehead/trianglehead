@@ -87,30 +87,30 @@ export default function Home() {
 
       {/* MelodyMatch intro + component */}
       <div style={{ borderBottom: "3px solid #111", background: "#F5F2EB" }}>
-        <div style={{ padding: "24px 28px 0", borderBottom: "1px solid #DDD9CE" }}>
+        <div style={{ padding: "24px 28px 16px" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1 }}>
             Sometimes I design interactive explorations for music learners.
           </div>
         </div>
         <MelodyMatch />
-        <div style={{ padding: "0 28px 24px", textAlign: "center" }}>
+        <div style={{ padding: "16px 28px 24px", textAlign: "center" }}>
           <a href="/tools" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#111", border: "2px solid #111", display: "inline-block" }}>
-            Explore Tools →
+            More Explorations →
           </a>
         </div>
       </div>
 
       {/* Main: Sound Insight + Lessons */}
       <div className="main-grid" style={{ display: "grid", gridTemplateColumns: "3fr 2fr", borderBottom: "3px solid #111" }}>
-        <div id="sound-insight" className="main-left" style={{ padding: "28px", borderRight: "3px solid #111", background: "#1C1C1C" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.15)", paddingBottom: 16 }}>
+        <div id="sound-insight" className="main-left" style={{ padding: "28px", borderRight: "3px solid #111", background: "#EDEAE0" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid #CCC8BC", paddingBottom: 16 }}>
             And other times, I write audio-visual articles around a musical concept.
           </div>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#EEE8D0", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#111", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Sound Insight: The Music Guide
-            <span style={{ flex: 1, height: 2, background: "#EEE8D0", display: "block" }} />
+            <span style={{ flex: 1, height: 2, background: "#111", display: "block" }} />
           </div>
-          <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#EEE8D0", marginBottom: 12 }}>Top Articles</div>
+          <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#888", marginBottom: 12 }}>Top Articles</div>
 
           {/* Decoding Melody */}
           <a href="https://soundinsight.substack.com/p/decoding-melody" target="_blank" rel="noopener noreferrer" style={{ display: "flex", gap: 16, textDecoration: "none", border: "2px solid #111", background: "#fff", padding: 14, marginBottom: 18 }}>
@@ -154,7 +154,7 @@ export default function Home() {
             </div>
           </a>
 
-          <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#EEE8D0", textDecoration: "none", border: "2px solid #EEE8D0", padding: "9px 16px", display: "inline-block" }}>
+          <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block" }}>
             All articles →
           </a>
         </div>
