@@ -38,7 +38,9 @@ export default function Home() {
         {/* Text above video */}
         <div style={{ padding: "20px 24px 16px", textAlign: "center" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1 }}>
-            Trianglehead, aka Anirudh Venkatesh,
+            Trianglehead,{" "}
+            <span style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 14, letterSpacing: 2, fontWeight: 700 }}>aka</span>
+            {" "}Anirudh Venkatesh...
           </div>
         </div>
 
@@ -74,7 +76,7 @@ export default function Home() {
           <source src="/instruments_bg.mp4" type="video/mp4" />
         </video>
         <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "40px 28px" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 52, letterSpacing: 4, color: "#EEE8D0", lineHeight: 1, marginBottom: 18, textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1, marginBottom: 18, textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}>
             through voice and instruments...
           </div>
           <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block" }}>
@@ -100,15 +102,15 @@ export default function Home() {
 
       {/* Main: Sound Insight + Lessons */}
       <div className="main-grid" style={{ display: "grid", gridTemplateColumns: "3fr 2fr", borderBottom: "3px solid #111" }}>
-        <div id="sound-insight" className="main-left" style={{ padding: "28px", borderRight: "3px solid #111" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid #DDD9CE", paddingBottom: 16 }}>
+        <div id="sound-insight" className="main-left" style={{ padding: "28px", borderRight: "3px solid #111", background: "#E8473F" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#fff", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)", paddingBottom: 16 }}>
             ... audio-visual articles, ...
           </div>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#E8473F", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#fff", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Sound Insight: The Music Guide
-            <span style={{ flex: 1, height: 2, background: "#111", display: "block" }} />
+            <span style={{ flex: 1, height: 2, background: "#fff", display: "block" }} />
           </div>
-          <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#E8473F", marginBottom: 12 }}>Top Articles</div>
+          <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#EEE8D0", marginBottom: 12 }}>Top Articles</div>
 
           {/* Decoding Melody */}
           <a href="https://soundinsight.substack.com/p/decoding-melody" target="_blank" rel="noopener noreferrer" style={{ display: "flex", gap: 16, textDecoration: "none", border: "2px solid #111", background: "#fff", padding: 14, marginBottom: 18 }}>
@@ -152,7 +154,7 @@ export default function Home() {
             </div>
           </a>
 
-          <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", color: "#E8473F", textDecoration: "none", borderBottom: "2px solid #E8473F", paddingBottom: 1 }}>
+          <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#fff", textDecoration: "none", border: "2px solid #fff", padding: "9px 16px", display: "inline-block" }}>
             All articles →
           </a>
         </div>
@@ -172,7 +174,7 @@ export default function Home() {
             <div key={item.title} style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "1.5px solid #CCC8BC" }}>
               <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, letterSpacing: 1, color: "#111", marginBottom: 5 }}>{item.title}</div>
               <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#666", margin: "0 0 8px", lineHeight: 1.5 }}>{item.desc}</p>
-              <a href={item.link} target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", borderBottom: "1.5px solid #111", paddingBottom: 1 }}>{item.label}</a>
+              <a href={item.link} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block" }}>{item.label}</a>
             </div>
           ))}
         </div>
