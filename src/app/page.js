@@ -54,11 +54,11 @@ export default function Home() {
         </div>
 
         {/* Text + button below video */}
-        <div style={{ padding: "16px 24px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1 }}>
+        <div style={{ padding: "16px 24px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16, background: "#E8473F" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#fff", lineHeight: 1.1 }}>
             explores musical fluency...
           </div>
-          <a href="/bio" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block" }}>
+          <a href="/bio" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#fff", border: "2px solid #fff", display: "inline-block" }}>
             My Story →
           </a>
         </div>
@@ -159,33 +159,33 @@ export default function Home() {
           </a>
         </div>
 
-        <div id="learn" className="main-right" style={{ padding: "28px 24px", background: "#EDEAE0" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid #CCC8BC", paddingBottom: 16 }}>
+        <div id="learn" className="main-right" style={{ padding: "28px 24px", background: "#1C1C1C" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.15)", paddingBottom: 16 }}>
             ... and one-on-one coaching.
           </div>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#111", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#EEE8D0", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Lessons
-            <span style={{ flex: 1, height: 2, background: "#111", display: "block" }} />
+            <span style={{ flex: 1, height: 2, background: "#EEE8D0", display: "block" }} />
           </div>
           {[
             { title: "Free Your Voice", desc: "Learn to sing freely.", link: "https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html", label: "Book a session →" },
             { title: "Guitar & Composition", desc: "Learn music like a language.", link: "https://www.superprof.co.in/learn-how-use-music-like-language-from-full-time-musician.html", label: "Book a session →" },
           ].map((item) => (
-            <div key={item.title} style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "1.5px solid #CCC8BC" }}>
-              <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, letterSpacing: 1, color: "#111", marginBottom: 5 }}>{item.title}</div>
-              <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#666", margin: "0 0 8px", lineHeight: 1.5 }}>{item.desc}</p>
-              <a href={item.link} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block" }}>{item.label}</a>
+            <div key={item.title} style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.15)" }}>
+              <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, letterSpacing: 1, color: "#EEE8D0", marginBottom: 5 }}>{item.title}</div>
+              <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#C8B99A", margin: "0 0 8px", lineHeight: 1.5 }}>{item.desc}</p>
+              <a href={item.link} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#EEE8D0", textDecoration: "none", border: "2px solid #EEE8D0", padding: "9px 16px", display: "inline-block" }}>{item.label}</a>
             </div>
           ))}
         </div>
       </div>
 
       {/* Mailing list */}
-      <div className="mailing-section" style={{ borderBottom: "3px solid #111", background: "#1C1C1C", padding: "32px 28px" }}>
-        <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#F5C842", marginBottom: 8 }}>
+      <div className="mailing-section" style={{ borderBottom: "3px solid #111", background: "#F5F2EB", padding: "32px 28px" }}>
+        <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#111", marginBottom: 8 }}>
           Stay in the loop
         </div>
-        <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#C8B99A", lineHeight: 1.6, margin: "0 0 20px" }}>
+        <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#555", lineHeight: 1.6, margin: "0 0 20px" }}>
           New articles, tools, and music — delivered to your inbox.
         </p>
         <form
@@ -198,18 +198,18 @@ export default function Home() {
             type="text"
             name="first_name"
             placeholder="Your name"
-            style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 14px", border: "2px solid #555", background: "#111", color: "#EEE8D0", outline: "none", flex: "1 1 160px", minWidth: 0 }}
+            style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 14px", border: "2px solid #CCC8BC", background: "#fff", color: "#111", outline: "none", flex: "1 1 160px", minWidth: 0 }}
           />
           <input
             type="email"
             name="email"
             placeholder="your@email.com"
             required
-            style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 14px", border: "2px solid #555", background: "#111", color: "#EEE8D0", outline: "none", flex: "2 1 200px", minWidth: 0 }}
+            style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 14px", border: "2px solid #CCC8BC", background: "#fff", color: "#111", outline: "none", flex: "2 1 200px", minWidth: 0 }}
           />
           <button
             type="submit"
-            style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 18px", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #F5C842", cursor: "pointer", whiteSpace: "nowrap" }}
+            style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 18px", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#111", color: "#F5C842", border: "2px solid #111", cursor: "pointer", whiteSpace: "nowrap" }}
           >
             Subscribe
           </button>
