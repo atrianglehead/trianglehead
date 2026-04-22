@@ -33,23 +33,37 @@ const socialLinks = [
 export default function Home() {
   return (
     <>
-      {/* Hero: thumbnail 2/3 + bio 1/3 */}
-      <div className="hero-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr", borderBottom: "3px solid #111", alignItems: "start" }}>
-        <div id="music" className="hero-left" style={{ borderRight: "3px solid #F5C842", aspectRatio: "16/9", overflow: "hidden", position: "relative" }}>
+      {/* Hero: full-width YouTube embed with text overlays */}
+      <div id="music" style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden" }}>
+        {/* Video fills the entire container */}
+        <div style={{ position: "absolute", inset: 0 }}>
           <YouTubeEmbed
             videoId="4wEZdI7zthU"
             title="Anirudh Venkatesh"
             thumbnail="/bach_thumbnail.png"
           />
         </div>
-        <div className="hero-right" style={{ padding: "28px", background: "#1C1C1C", display: "flex", flexDirection: "column", justifyContent: "center", aspectRatio: "8/9", overflow: "hidden", boxSizing: "border-box" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1, marginBottom: 24, textShadow: "0 2px 12px rgba(0,0,0,0.5)" }}>
-            Trianglehead, aka Anirudh Venkatesh, explores musical fluency...
+
+        {/* Left text overlay — always on top, even while playing */}
+        <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "33%", background: "linear-gradient(to right, rgba(0,0,0,0.78) 55%, transparent)", display: "flex", flexDirection: "column", justifyContent: "center", padding: "20px 28px 20px 20px", zIndex: 2, pointerEvents: "none" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 26, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.15, textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}>
+            Trianglehead, aka Anirudh Venkatesh,
           </div>
-          <a href="/bio" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block", alignSelf: "flex-start" }}>
-            My Story →
-          </a>
         </div>
+
+        {/* Right text overlay */}
+        <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "33%", background: "linear-gradient(to left, rgba(0,0,0,0.78) 55%, transparent)", display: "flex", flexDirection: "column", justifyContent: "center", padding: "20px 20px 20px 28px", zIndex: 2, pointerEvents: "none" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 26, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.15, textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}>
+            explores musical fluency...
+          </div>
+        </div>
+      </div>
+
+      {/* My Story button — below the video */}
+      <div style={{ background: "#1C1C1C", borderBottom: "3px solid #111", padding: "18px 24px" }}>
+        <a href="/bio" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block" }}>
+          My Story →
+        </a>
       </div>
 
       {/* Music background video section */}
