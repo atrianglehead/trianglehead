@@ -1,7 +1,7 @@
-import Link from "next/link";
 import Image from "next/image";
 import YouTubeEmbed from "./components/YouTubeEmbed";
 import MelodyMatch from "./components/MelodyMatch";
+import StickyNav from "./components/StickyNav";
 
 const socialLinks = [
   {
@@ -31,13 +31,6 @@ const socialLinks = [
   },
 ];
 
-const navLinks = [
-  { label: "Sound Insight", href: "#sound-insight" },
-  { label: "Music", href: "#music" },
-  { label: "Lessons", href: "#learn" },
-  { label: "Contact", href: "#contact" },
-];
-
 export default function Home() {
   return (
     <div className="site-wrapper" style={{ maxWidth: 860, margin: "0 auto", background: "#F5F2EB", fontFamily: "var(--font-space-mono), monospace", border: "3px solid #111" }}>
@@ -49,26 +42,15 @@ export default function Home() {
           <span style={{ color: "#E8F0FF" }}>ANGLE</span>
           <span style={{ color: "#F5C842" }}>HEAD</span>
         </span>
-        <div className="nav-links" style={{ display: "flex", gap: 20 }}>
-          {navLinks.map((item) => (
-            <a key={item.label} href={item.href} style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, color: "#aaa", textDecoration: "none", letterSpacing: 1.5, textTransform: "uppercase" }}>
-              {item.label}
-            </a>
-          ))}
-        </div>
+        <span style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, color: "#aaa", letterSpacing: 1.5 }}>
+          aka Anirudh Venkatesh
+        </span>
       </nav>
 
-      {/* Issue bar */}
-      <div className="issue-bar" style={{ background: "#F5C842", padding: "5px 24px", display: "flex", alignItems: "center", gap: 16, borderBottom: "2px solid #111" }}>
-        {["Anirudh Venkatesh", "Music", "Articles", "Lessons"].map((text, i) => (
-          <span key={i} style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            {i > 0 && <span style={{ width: 4, height: 4, background: "#111", borderRadius: "50%", display: "inline-block" }} />}
-            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#111" }}>{text}</span>
-          </span>
-        ))}
-      </div>
+      {/* Sticky external link bar */}
+      <StickyNav />
 
-      {/* Hero: thumbnail 2/3 + CTAs 1/3 */}
+      {/* Hero: thumbnail 2/3 + bio 1/3 */}
       <div className="hero-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr", borderBottom: "3px solid #111", alignItems: "start" }}>
         <div id="music" className="hero-left" style={{ borderRight: "3px solid #F5C842", aspectRatio: "16/9", overflow: "hidden", position: "relative" }}>
           <YouTubeEmbed
@@ -78,25 +60,53 @@ export default function Home() {
           />
         </div>
         <div className="hero-right" style={{ padding: "28px", background: "#1C1C1C", display: "flex", flexDirection: "column", justifyContent: "center", aspectRatio: "8/9", overflow: "hidden", boxSizing: "border-box" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", display: "block" }}>
-              Read Sound Insight
-            </a>
-            <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#C8B99A", border: "2px solid #C8B99A", display: "block" }}>
-              Watch Music Videos
-            </a>
-            <a href="https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "10px 18px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#EEE8D0", border: "2px solid #EEE8D0", display: "block" }}>
-              Book a lesson
-            </a>
-          </div>
+          <p style={{ fontFamily: "Georgia, serif", fontSize: 13, color: "#C8B99A", lineHeight: 1.65, margin: "0 0 20px" }}>
+            Trianglehead, aka <strong style={{ color: "#EEE8D0" }}>Anirudh Venkatesh</strong>, is a musician and educator exploring connections across musical traditions — from Carnatic to Western, from rhythm to harmony.
+          </p>
+          <a href="/bio" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block", alignSelf: "flex-start" }}>
+            Read full bio →
+          </a>
         </div>
       </div>
 
-      <MelodyMatch />
+      {/* Music background video section */}
+      <div className="music-video-section" style={{ position: "relative", borderBottom: "3px solid #111", overflow: "hidden", background: "#111", minHeight: 200, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.45 }}
+        >
+          {/* Replace with actual video file in /public once available */}
+          <source src="/instruments_bg.mp4" type="video/mp4" />
+        </video>
+        <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "40px 28px" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 52, letterSpacing: 4, color: "#EEE8D0", lineHeight: 1, marginBottom: 18, textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}>
+            and instruments...
+          </div>
+          <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: "#F5C842", textDecoration: "none", borderBottom: "2px solid #F5C842", paddingBottom: 2 }}>
+            Trianglehead on YouTube →
+          </a>
+        </div>
+      </div>
+
+      {/* MelodyMatch intro + component */}
+      <div style={{ borderBottom: "3px solid #111", background: "#F5F2EB" }}>
+        <div style={{ padding: "24px 28px 0", borderBottom: "1px solid #DDD9CE" }}>
+          <p style={{ fontFamily: "Georgia, serif", fontSize: 13, color: "#555", lineHeight: 1.65, margin: 0 }}>
+            ... who teaches how to develop <strong>musical fluency</strong> through interactive tools — like this one:
+          </p>
+        </div>
+        <MelodyMatch />
+      </div>
 
       {/* Main: Sound Insight + Lessons */}
       <div className="main-grid" style={{ display: "grid", gridTemplateColumns: "3fr 2fr", borderBottom: "3px solid #111" }}>
         <div id="sound-insight" className="main-left" style={{ padding: "28px", borderRight: "3px solid #111" }}>
+          <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#555", lineHeight: 1.65, margin: "0 0 20px", borderBottom: "1.5px solid #DDD9CE", paddingBottom: 16 }}>
+            ... and writes <strong>articles</strong> about music theory, practice, and the spaces between traditions.
+          </p>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#E8473F", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Sound Insight: The Music Guide
             <span style={{ flex: 1, height: 2, background: "#111", display: "block" }} />
@@ -151,6 +161,9 @@ export default function Home() {
         </div>
 
         <div id="learn" className="main-right" style={{ padding: "28px 24px", background: "#EDEAE0" }}>
+          <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#666", lineHeight: 1.65, margin: "0 0 20px", borderBottom: "1.5px solid #CCC8BC", paddingBottom: 16 }}>
+            ... and offers <strong>one-on-one coaching</strong> for those who want to go deeper.
+          </p>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#111", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Lessons
             <span style={{ flex: 1, height: 2, background: "#111", display: "block" }} />
@@ -166,6 +179,42 @@ export default function Home() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Mailing list */}
+      <div className="mailing-section" style={{ borderBottom: "3px solid #111", background: "#1C1C1C", padding: "32px 28px" }}>
+        <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#F5C842", marginBottom: 8 }}>
+          Stay in the loop
+        </div>
+        <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#C8B99A", lineHeight: 1.6, margin: "0 0 20px" }}>
+          New articles, tools, and music — delivered to your inbox.
+        </p>
+        <form
+          action="https://soundinsight.substack.com/subscribe"
+          method="get"
+          target="_blank"
+          style={{ display: "flex", flexWrap: "wrap", gap: 10 }}
+        >
+          <input
+            type="text"
+            name="first_name"
+            placeholder="Your name"
+            style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 14px", border: "2px solid #555", background: "#111", color: "#EEE8D0", outline: "none", flex: "1 1 160px", minWidth: 0 }}
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="your@email.com"
+            required
+            style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 14px", border: "2px solid #555", background: "#111", color: "#EEE8D0", outline: "none", flex: "2 1 200px", minWidth: 0 }}
+          />
+          <button
+            type="submit"
+            style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 18px", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #F5C842", cursor: "pointer", whiteSpace: "nowrap" }}
+          >
+            Subscribe
+          </button>
+        </form>
       </div>
 
       {/* Founder */}

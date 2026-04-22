@@ -77,4 +77,17 @@
     gap: 4px !important;
     padding: 14px 16px !important;
   }
+
+  /* Music video section */
+  .music-video-section {
+    min-height: 160px !important;
+  }
+  .music-video-section div[style] {
+    padding: 28px 16px !important;
+  }
+
+  /* Mailing list */
+  .mailing-section {
+    padding: 24px 16px !important;
+  }
 }
