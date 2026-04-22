@@ -76,14 +76,14 @@ export default function Home() {
       {/* MelodyMatch intro + component */}
       <div style={{ borderBottom: "3px solid #111", background: "#F5F2EB" }}>
         <div style={{ padding: "24px 28px 0", borderBottom: "1px solid #DDD9CE" }}>
-          <p style={{ fontFamily: "Georgia, serif", fontSize: 13, color: "#555", lineHeight: 1.65, margin: 0 }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 36, letterSpacing: 3, color: "#111", lineHeight: 1.1 }}>
             ... and teaches through interactive experiences, ...
-          </p>
+          </div>
         </div>
         <MelodyMatch />
         <div style={{ padding: "0 28px 24px" }}>
-          <a href="/tools" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#111", border: "2px solid #111", display: "inline-block" }}>
-            Explore Tools →
+          <a href="/explorations" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#111", border: "2px solid #111", display: "inline-block" }}>
+            Explorations →
           </a>
         </div>
       </div>
