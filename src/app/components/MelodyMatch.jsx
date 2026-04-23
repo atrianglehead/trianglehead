@@ -52,12 +52,74 @@ const NOTE_COUNT = NOTES.length;
 const ROW_H = 36;
 const GRAPH_H = NOTE_COUNT * ROW_H;
 
+// ── Helpers ─────────────────────────────────────────────────────────────────
+
 function computeBeatStarts(melody) {
   return melody.reduce((acc, g, i) => {
     acc.push(i === 0 ? 0 : acc[i - 1] + melody[i - 1].beats);
     return acc;
   }, []);
 }
+
+/** Pitch tab initial state: all blocks at Sa (index 7) */
+function initPitchPositions(goal) {
+  return goal.map(() => 7);
+}
+
+/**
+ * Rhythm tab initial order: ascending pitch (Sa first, then Re, Ga… Sa').
+ * noteIdx 7 = Sa (lowest), so descending noteIdx = ascending pitch.
+ * Multiple notes of the same pitch keep their original melody order.
+ */
+function initRhythmOrder(goal) {
+  const indices = goal.map((_, i) => i);
+  indices.sort((a, b) => {
+    const pitchDiff = goal[b].noteIdx - goal[a].noteIdx; // descending noteIdx = ascending pitch
+    return pitchDiff !== 0 ? pitchDiff : a - b;
+  });
+  return indices;
+}
+
+/** Pack blocks sequentially according to given order, returning beat-start array. */
+function computeBeatsFromOrder(order, goal) {
+  const result = new Array(goal.length).fill(0);
+  let cursor = 0;
+  order.forEach(i => {
+    result[i] = cursor;
+    cursor += goal[i].beats;
+  });
+  return result;
+}
+
+function initRhythmBeats(goal) {
+  return computeBeatsFromOrder(initRhythmOrder(goal), goal);
+}
+
+/**
+ * Given current beat-starts, a dragged block index, and where it's being dragged,
+ * return a new packed beat-start array that reflects reordering.
+ * Uses centre-of-block comparison to determine insertion position among others.
+ */
+function getDraggedOrder(origBeats, goal, dragIdx, dragBeat) {
+  const others = goal.map((_, i) => i).filter(i => i !== dragIdx);
+  others.sort((a, b) => origBeats[a] - origBeats[b]);
+
+  const dragCenter = dragBeat + goal[dragIdx].beats / 2;
+
+  let cursor = 0;
+  let insertPos = others.length;
+  for (let p = 0; p < others.length; p++) {
+    const center = cursor + goal[others[p]].beats / 2;
+    if (dragCenter < center) { insertPos = p; break; }
+    cursor += goal[others[p]].beats;
+  }
+
+  const newOrder = [...others];
+  newOrder.splice(insertPos, 0, dragIdx);
+  return newOrder;
+}
+
+// ── Component ────────────────────────────────────────────────────────────────
 
 export default function MelodyMatch() {
   const canvasRef = useRef(null);
@@ -73,16 +135,25 @@ export default function MelodyMatch() {
   const [melodyIdx, setMelodyIdx] = useState(0);
   const [currentTab, setCurrentTab] = useState('pitch');
   const [hintsOn, setHintsOn] = useState(false);
-  const [userPitches, setUserPitches] = useState([]);
-  const [userBeats, setUserBeats] = useState([]);
+
+  // Per-tab arrangement state
+  const [pitchPositions, setPitchPositions] = useState(() => initPitchPositions(MELODIES[0]));
+  const [rhythmBeats, setRhythmBeats] = useState(() => initRhythmBeats(MELODIES[0]));
+
+  // Per-tab undo history (stack of snapshots)
+  const [pitchHistory, setPitchHistory] = useState([]);
+  const [rhythmHistory, setRhythmHistory] = useState([]);
+
   const [matchResult, setMatchResult] = useState(null);
-  const [status, setStatus] = useState('Tap note names on the left to begin');
+  const [status, setStatus] = useState('Press ▶ Goal to hear the melody');
   const [goalPlaying, setGoalPlaying] = useState(false);
   const [minePlaying, setMinePlaying] = useState(false);
   const [playheadX, setPlayheadX] = useState(-1);
 
   const GOAL = MELODIES[melodyIdx];
   const GOAL_BEAT_STARTS = computeBeatStarts(GOAL);
+
+  // ── Audio ──────────────────────────────────────────────────────────────────
 
   function getAudio() {
     if (!audioCtxRef.current) {
@@ -94,12 +165,6 @@ export default function MelodyMatch() {
   function getPxPerBeat() {
     if (!wrapRef.current) return 40;
     return Math.floor(wrapRef.current.clientWidth / TOTAL_BEATS);
-  }
-
-  function getRhythmDuration(i, beats) {
-    if (i < beats.length - 1) return beats[i + 1] - beats[i];
-    if (beats.length === GOAL.length) return TOTAL_BEATS - beats[i];
-    return 1;
   }
 
   function stopNodes(nodes) {
@@ -181,7 +246,8 @@ export default function MelodyMatch() {
     playheadRafRef.current = requestAnimationFrame(step);
   }
 
-  // ── GOAL PLAY/STOP ──────────────────────────────────────────
+  // ── Goal play/stop ─────────────────────────────────────────────────────────
+
   function toggleGoal() {
     if (goalPlaying) {
       stopNodes(goalNodesRef.current);
@@ -205,8 +271,9 @@ export default function MelodyMatch() {
     }
   }
 
-  // ── MINE PLAY/STOP ──────────────────────────────────────────
-  function toggleMine(tab, pitches, beats) {
+  // ── Mine play/stop ─────────────────────────────────────────────────────────
+
+  function toggleMine() {
     if (minePlaying) {
       stopNodes(mineNodesRef.current);
       stopPlayhead();
@@ -223,87 +290,76 @@ export default function MelodyMatch() {
     const ppb = getPxPerBeat();
     let items = [];
 
-    if (tab === 'pitch') {
-      if (pitches.length === 0) { setStatus('Add some notes first!'); return; }
-      items = pitches.map((ni, i) => ({
-        freq: NOTES[ni].freq,
-        beats: GOAL[i] ? GOAL[i].beats : 1,
+    if (currentTab === 'pitch') {
+      items = pitchPositions.map((noteIdx, i) => ({
+        freq: NOTES[noteIdx].freq,
+        beats: GOAL[i].beats,
         xPx: GOAL_BEAT_STARTS[i] * ppb,
       }));
     } else {
-      if (beats.length === 0) { setStatus('Tap some beats first!'); return; }
-      const beatMap = {};
-      beats.forEach((b, i) => { beatMap[b] = i; });
-      const lastIdx = beats.length - 1;
-      const lastEnd = beats[lastIdx] + getRhythmDuration(lastIdx, beats);
-      let b = 0;
-      while (b < lastEnd) {
-        if (beatMap[b] !== undefined) {
-          const i = beatMap[b];
-          const dur = getRhythmDuration(i, beats);
-          items.push({ freq: NOTES[GOAL[i].noteIdx].freq, beats: dur, xPx: b * ppb });
-          b += dur;
-        } else {
-          items.push({ freq: 0, beats: 1, xPx: b * ppb });
-          b++;
-        }
-      }
+      // Play in beat order
+      const sorted = rhythmBeats
+        .map((b, i) => ({ idx: i, beat: b }))
+        .sort((a, b) => a.beat - b.beat);
+      items = sorted.map(({ idx }) => ({
+        freq: NOTES[GOAL[idx].noteIdx].freq,
+        beats: GOAL[idx].beats,
+        xPx: rhythmBeats[idx] * ppb,
+      }));
     }
 
     const { startTime, timeline, endTime } = scheduleItems(items, mineNodesRef.current);
     startPlayheadAnim(startTime, timeline, endTime);
     setMinePlaying(true);
-    const totalMs = items.reduce((s, item) => s + item.beats * BEAT_MS, 0);
+    const totalMs = items.reduce((s, it) => s + it.beats * BEAT_MS, 0);
     mineStopRef.current = setTimeout(() => {
       setMinePlaying(false);
       setPlayheadX(-1);
     }, totalMs + 150);
   }
 
-  // ── NEXT MELODY ─────────────────────────────────────────────
+  // ── Next melody ────────────────────────────────────────────────────────────
+
   function nextMelody() {
     stopAll();
     clearTimeout(goalStopRef.current);
     clearTimeout(mineStopRef.current);
     setGoalPlaying(false);
     setMinePlaying(false);
-    setUserPitches([]);
-    setUserBeats([]);
     setMatchResult(null);
-    setStatus('New melody — press Goal to hear it');
     const nextIdx = (melodyIdx + 1) % MELODIES.length;
+    const nextGoal = MELODIES[nextIdx];
+    setPitchPositions(initPitchPositions(nextGoal));
+    setRhythmBeats(initRhythmBeats(nextGoal));
+    setPitchHistory([]);
+    setRhythmHistory([]);
+    setStatus('New melody — press ▶ Goal to hear it');
     setMelodyIdx(nextIdx);
   }
 
-  // Auto-play goal when melody changes (except on first load)
+  // Auto-play goal when melody changes (not on first load)
   const isFirstRender = useRef(true);
   useEffect(() => {
     if (isFirstRender.current) { isFirstRender.current = false; return; }
-    // Small delay to let state settle
     const t = setTimeout(() => {
       const goal = MELODIES[melodyIdx];
       const starts = computeBeatStarts(goal);
       const ppb = getPxPerBeat();
-      const items = goal.map((g, i) => ({
-        freq: NOTES[g.noteIdx].freq, beats: g.beats, xPx: starts[i] * ppb,
-      }));
       const ctx = getAudio();
       const startTime = ctx.currentTime + 0.05;
       let t2 = startTime;
-      items.forEach(item => {
-        const dur = item.beats * (BEAT_MS / 1000);
-        if (item.freq > 0) {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.connect(gain); gain.connect(ctx.destination);
-          osc.type = 'sine'; osc.frequency.value = item.freq;
-          gain.gain.setValueAtTime(0, t2);
-          gain.gain.linearRampToValueAtTime(0.35, t2 + 0.02);
-          gain.gain.setValueAtTime(0.35, t2 + dur - 0.05);
-          gain.gain.linearRampToValueAtTime(0, t2 + dur);
-          osc.start(t2); osc.stop(t2 + dur);
-          goalNodesRef.current.push(osc);
-        }
+      goal.forEach((g, i) => {
+        const dur = g.beats * (BEAT_MS / 1000);
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = 'sine'; osc.frequency.value = NOTES[g.noteIdx].freq;
+        gain.gain.setValueAtTime(0, t2);
+        gain.gain.linearRampToValueAtTime(0.35, t2 + 0.02);
+        gain.gain.setValueAtTime(0.35, t2 + dur - 0.05);
+        gain.gain.linearRampToValueAtTime(0, t2 + dur);
+        osc.start(t2); osc.stop(t2 + dur);
+        goalNodesRef.current.push(osc);
         t2 += dur;
       });
       setGoalPlaying(true);
@@ -313,7 +369,8 @@ export default function MelodyMatch() {
     return () => clearTimeout(t);
   }, [melodyIdx]);
 
-  // ── DRAW CANVAS ─────────────────────────────────────────────
+  // ── Draw canvas ────────────────────────────────────────────────────────────
+
   const drawCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -328,6 +385,10 @@ export default function MelodyMatch() {
     ctx.fillStyle = '#F5F2EB';
     ctx.fillRect(0, 0, W, GRAPH_H);
 
+    // Subtle Sa-row tint
+    ctx.fillStyle = 'rgba(232,71,63,0.05)';
+    ctx.fillRect(0, 7 * ROW_H, W, ROW_H);
+
     // Grid
     ctx.strokeStyle = '#DDD9CE'; ctx.lineWidth = 1;
     for (let i = 0; i <= NOTE_COUNT; i++) {
@@ -337,7 +398,7 @@ export default function MelodyMatch() {
       ctx.beginPath(); ctx.moveTo(b * ppb, 0); ctx.lineTo(b * ppb, GRAPH_H); ctx.stroke();
     }
 
-    // Hints
+    // Hints: show goal outline
     if (hintsOn) {
       ctx.save();
       ctx.setLineDash([4, 4]);
@@ -351,11 +412,11 @@ export default function MelodyMatch() {
       ctx.restore();
     }
 
-    // User blocks
+    // Draw a block
     const drawBlock = (x, y, w, label, colorIdx) => {
       let blockColor = '#111';
       let textColor = '#EEE8D0';
-      if (matchResult && colorIdx < matchResult.length) {
+      if (matchResult && colorIdx !== undefined && colorIdx < matchResult.length) {
         blockColor = matchResult[colorIdx] ? '#4CAF76' : '#E8473F';
         textColor = '#fff';
       }
@@ -365,41 +426,43 @@ export default function MelodyMatch() {
       ctx.font = `bold ${w < 36 ? 8 : 11}px 'Space Mono', monospace`;
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText(label, x + w / 2, y + ROW_H / 2);
-      if (matchResult && colorIdx < matchResult.length) {
-        ctx.font = `bold 11px 'Space Mono', monospace`;
+      if (matchResult && colorIdx !== undefined && colorIdx < matchResult.length) {
+        ctx.font = 'bold 11px \'Space Mono\', monospace';
         ctx.fillText(matchResult[colorIdx] ? '✓' : '✗', x + w - 9, y + 10);
       }
     };
 
     if (currentTab === 'pitch') {
-      userPitches.forEach((noteIdx, i) => {
-        if (i >= GOAL.length) return;
-        drawBlock(GOAL_BEAT_STARTS[i] * ppb, noteIdx * ROW_H, GOAL[i].beats * ppb, NOTES[noteIdx].name, i);
+      pitchPositions.forEach((noteIdx, i) => {
+        drawBlock(
+          GOAL_BEAT_STARTS[i] * ppb,
+          noteIdx * ROW_H,
+          GOAL[i].beats * ppb,
+          NOTES[noteIdx].name,
+          i,
+        );
       });
     } else {
-      userBeats.forEach((beatStart, i) => {
-        if (i >= GOAL.length) return;
-        const dur = getRhythmDuration(i, userBeats);
-        drawBlock(beatStart * ppb, GOAL[i].noteIdx * ROW_H, dur * ppb, NOTES[GOAL[i].noteIdx].name, i);
+      rhythmBeats.forEach((beatStart, i) => {
+        drawBlock(
+          beatStart * ppb,
+          GOAL[i].noteIdx * ROW_H,
+          GOAL[i].beats * ppb,
+          NOTES[GOAL[i].noteIdx].name,
+          i,
+        );
       });
     }
 
-    // Empty state
-    const isEmpty = currentTab === 'pitch' ? userPitches.length === 0 : userBeats.length === 0;
-    if (isEmpty) {
-      ctx.fillStyle = '#B8B4A4';
-      const fontSize = Math.max(14, Math.min(22, GRAPH_H / 6));
-      ctx.font = `bold ${fontSize}px 'Space Mono', monospace`;
-      ctx.textBaseline = 'middle';
-      if (currentTab === 'pitch') {
-        ctx.textAlign = 'left';
-        ctx.fillText('← tap a note', 14, GRAPH_H / 2 - fontSize * 0.75);
-        ctx.fillText('name to begin', 14, GRAPH_H / 2 + fontSize * 0.75);
-      } else {
-        ctx.textAlign = 'center';
-        ctx.fillText('tap a beat number', W / 2, GRAPH_H / 2 - fontSize * 0.75);
-        ctx.fillText('below to begin ↓', W / 2, GRAPH_H / 2 + fontSize * 0.75);
-      }
+    // Canvas help text (only before check)
+    if (!matchResult) {
+      ctx.fillStyle = 'rgba(0,0,0,0.2)';
+      ctx.font = 'bold 9px \'Space Mono\', monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+      const helpText = currentTab === 'pitch'
+        ? 'drag blocks up/down to recreate the goal melody'
+        : 'drag blocks left/right to recreate the goal melody';
+      ctx.fillText(helpText, W / 2, GRAPH_H - 4);
     }
 
     // Playhead
@@ -411,7 +474,7 @@ export default function MelodyMatch() {
       ctx.moveTo(playheadX - 5, 0); ctx.lineTo(playheadX + 5, 0); ctx.lineTo(playheadX, 8);
       ctx.fill();
     }
-  }, [currentTab, hintsOn, userPitches, userBeats, matchResult, playheadX, melodyIdx]);
+  }, [currentTab, hintsOn, pitchPositions, rhythmBeats, matchResult, playheadX, melodyIdx]);
 
   useEffect(() => { drawCanvas(); }, [drawCanvas]);
   useEffect(() => {
@@ -420,79 +483,65 @@ export default function MelodyMatch() {
     return () => window.removeEventListener('resize', handler);
   }, [drawCanvas]);
 
-  // ── GAME ACTIONS ────────────────────────────────────────────
-  function addPitch(noteIdx) {
-    if (userPitches.length >= GOAL.length) { setStatus('Melody complete — press Check or Clear'); return; }
-    setMatchResult(null);
-    const next = [...userPitches, noteIdx];
-    setUserPitches(next);
-    playNotePreview(NOTES[noteIdx].freq);
-    setStatus(`${next.length} of ${GOAL.length} placed`);
-  }
-
-  function addBeat(beat) {
-    const idx = userBeats.length;
-    if (idx >= GOAL.length) { setStatus('All notes placed — press Check or Clear'); return; }
-    if (idx > 0 && beat <= userBeats[idx - 1]) {
-      setStatus('Beat must come after the previous note');
-      return;
-    }
-    setMatchResult(null);
-    const next = [...userBeats, beat];
-    setUserBeats(next);
-    playNotePreview(NOTES[GOAL[idx].noteIdx].freq);
-    setStatus(`${next.length} of ${GOAL.length} placed`);
-  }
-
-  function undoLast() {
-    setMatchResult(null);
-    if (currentTab === 'pitch') {
-      setUserPitches(prev => {
-        const next = prev.slice(0, -1);
-        setStatus(next.length === 0 ? 'Tap note names on the left to begin' : `${next.length} of ${GOAL.length} placed`);
-        return next;
-      });
-    } else {
-      setUserBeats(prev => {
-        const next = prev.slice(0, -1);
-        setStatus(next.length === 0 ? 'Tap beat numbers at the bottom to begin' : `${next.length} of ${GOAL.length} placed`);
-        return next;
-      });
-    }
-    stopNodes(mineNodesRef.current);
-    stopPlayhead();
-    setMinePlaying(false);
-  }
+  // ── Game actions ───────────────────────────────────────────────────────────
 
   function checkMatch() {
     if (currentTab === 'pitch') {
-      if (userPitches.length === 0) { setStatus('Add some notes first!'); return; }
-      const result = GOAL.map((g, i) => userPitches[i] === g.noteIdx);
+      const result = GOAL.map((g, i) => pitchPositions[i] === g.noteIdx);
       setMatchResult(result);
       const correct = result.filter(Boolean).length;
-      setStatus(correct === result.length ? '🎉 Perfect! Well done.' : `${correct} of ${result.length} correct — try again!`);
+      setStatus(correct === result.length
+        ? '🎉 Perfect! Well done.'
+        : `${correct} of ${result.length} correct — keep trying!`);
     } else {
-      if (userBeats.length === 0) { setStatus('Tap some beats first!'); return; }
-      const result = GOAL.map((g, i) => userBeats[i] === GOAL_BEAT_STARTS[i]);
+      const result = GOAL.map((g, i) => rhythmBeats[i] === GOAL_BEAT_STARTS[i]);
       setMatchResult(result);
       const correct = result.filter(Boolean).length;
-      setStatus(correct === result.length ? '🎉 Perfect! Well done.' : `${correct} of ${result.length} correct — try again!`);
+      setStatus(correct === result.length
+        ? '🎉 Perfect! Well done.'
+        : `${correct} of ${result.length} correct — keep trying!`);
     }
   }
 
   function clearUser() {
-    setUserPitches([]); setUserBeats([]); setMatchResult(null);
+    setMatchResult(null);
     stopNodes(mineNodesRef.current); stopPlayhead(); setMinePlaying(false);
-    setStatus(currentTab === 'pitch' ? 'Tap note names on the left to begin' : 'Tap beat numbers at the bottom to begin');
+    if (currentTab === 'pitch') {
+      setPitchPositions(initPitchPositions(GOAL));
+      setPitchHistory([]);
+    } else {
+      setRhythmBeats(initRhythmBeats(GOAL));
+      setRhythmHistory([]);
+    }
+    setStatus('Blocks reset — rearrange to match the goal');
   }
 
   function switchTab(tab) {
-    setCurrentTab(tab); setMatchResult(null);
+    if (tab === currentTab) return;
+    setCurrentTab(tab);
+    setMatchResult(null);
     stopNodes(mineNodesRef.current); stopPlayhead(); setMinePlaying(false);
-    setStatus(tab === 'pitch' ? 'Tap note names on the left to begin' : 'Tap beat numbers at the bottom to begin');
+    // State of each tab is preserved — no reset on switch
+    setStatus(tab === 'pitch'
+      ? 'Drag blocks up/down to match the goal melody'
+      : 'Drag blocks left/right to match the goal rhythm');
   }
 
-  // ── DRAG ────────────────────────────────────────────────────
+  function undoLast() {
+    setMatchResult(null);
+    if (currentTab === 'pitch' && pitchHistory.length > 0) {
+      const prev = pitchHistory[pitchHistory.length - 1];
+      setPitchPositions(prev);
+      setPitchHistory(h => h.slice(0, -1));
+    } else if (currentTab === 'rhythm' && rhythmHistory.length > 0) {
+      const prev = rhythmHistory[rhythmHistory.length - 1];
+      setRhythmBeats(prev);
+      setRhythmHistory(h => h.slice(0, -1));
+    }
+  }
+
+  // ── Drag ──────────────────────────────────────────────────────────────────
+
   function getCanvasCoords(e) {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
@@ -506,23 +555,25 @@ export default function MelodyMatch() {
     };
   }
 
-  function hitTestCanvas(x, y) {
+  /** Pitch tab: find block by x column (column = beat range of that note) */
+  function hitTestPitchColumn(x) {
     const ppb = getPxPerBeat();
-    if (currentTab === 'pitch') {
-      for (let i = 0; i < userPitches.length; i++) {
-        const bx = GOAL_BEAT_STARTS[i] * ppb;
-        const by = userPitches[i] * ROW_H;
-        const bw = GOAL[i].beats * ppb;
-        if (x >= bx && x < bx + bw && y >= by && y < by + ROW_H) return i;
-      }
-    } else {
-      for (let i = 0; i < userBeats.length; i++) {
-        const bx = userBeats[i] * ppb;
-        const by = GOAL[i].noteIdx * ROW_H;
-        const dur = getRhythmDuration(i, userBeats);
-        const bw = dur * ppb;
-        if (x >= bx && x < bx + bw && y >= by && y < by + ROW_H) return i;
-      }
+    for (let i = 0; i < GOAL.length; i++) {
+      const bx = GOAL_BEAT_STARTS[i] * ppb;
+      const bw = GOAL[i].beats * ppb;
+      if (x >= bx && x < bx + bw) return i;
+    }
+    return -1;
+  }
+
+  /** Rhythm tab: find block by x,y position */
+  function hitTestRhythmBlock(x, y) {
+    const ppb = getPxPerBeat();
+    for (let i = 0; i < GOAL.length; i++) {
+      const bx = rhythmBeats[i] * ppb;
+      const by = GOAL[i].noteIdx * ROW_H;
+      const bw = GOAL[i].beats * ppb;
+      if (x >= bx && x < bx + bw && y >= by && y < by + ROW_H) return i;
     }
     return -1;
   }
@@ -530,86 +581,122 @@ export default function MelodyMatch() {
   function handleCanvasCursorHover(e) {
     if (isDraggingRef.current) return;
     const { x, y } = getCanvasCoords(e);
-    const idx = hitTestCanvas(x, y);
-    if (canvasRef.current) {
-      canvasRef.current.style.cursor = idx !== -1
-        ? (currentTab === 'pitch' ? 'ns-resize' : 'ew-resize')
-        : 'default';
+    let cursor = 'default';
+    if (currentTab === 'pitch') {
+      if (hitTestPitchColumn(x) !== -1) cursor = 'ns-resize';
+    } else {
+      if (hitTestRhythmBlock(x, y) !== -1) cursor = 'ew-resize';
     }
+    if (canvasRef.current) canvasRef.current.style.cursor = cursor;
   }
 
   function handleCanvasPointerDown(e) {
     if (goalPlaying || minePlaying) return;
     e.preventDefault();
     const { x, y } = getCanvasCoords(e);
-    const idx = hitTestCanvas(x, y);
-    if (idx === -1) return;
+    const ppb = getPxPerBeat();
 
-    isDraggingRef.current = true;
-    if (canvasRef.current) {
-      canvasRef.current.style.cursor = currentTab === 'pitch' ? 'ns-resize' : 'ew-resize';
-    }
+    if (currentTab === 'pitch') {
+      const idx = hitTestPitchColumn(x);
+      if (idx === -1) return;
 
-    const origPitches = [...userPitches];
-    const origBeats = [...userBeats];
-    const tab = currentTab;
-    let lastDragPitch = origPitches[idx];
+      isDraggingRef.current = true;
+      if (canvasRef.current) canvasRef.current.style.cursor = 'ns-resize';
 
-    function onMove(ev) {
-      if (ev.cancelable) ev.preventDefault();
-      const { x: cx, y: cy } = getCanvasCoords(ev);
-      const ppb = getPxPerBeat();
+      const origPitches = [...pitchPositions];
 
-      if (tab === 'pitch') {
-        const pitchDelta = Math.round((cy - y) / ROW_H);
-        const newPitch = Math.max(0, Math.min(NOTE_COUNT - 1, origPitches[idx] + pitchDelta));
+      // Immediately snap to the clicked row
+      const clickedRow = Math.max(0, Math.min(NOTE_COUNT - 1, Math.floor(y / ROW_H)));
+      const snapped = [...origPitches];
+      snapped[idx] = clickedRow;
+      setPitchPositions(snapped);
+      setMatchResult(null);
+      playNotePreview(NOTES[clickedRow].freq);
+
+      let lastRow = clickedRow;
+      let finalPitches = snapped;
+
+      function onMove(ev) {
+        if (ev.cancelable) ev.preventDefault();
+        const { y: cy } = getCanvasCoords(ev);
+        const newRow = Math.max(0, Math.min(NOTE_COUNT - 1, Math.floor(cy / ROW_H)));
+        if (newRow === lastRow) return;
+        lastRow = newRow;
         const next = [...origPitches];
-        next[idx] = newPitch;
+        next[idx] = newRow;
+        finalPitches = next;
         setMatchResult(null);
-        setUserPitches(next);
-        if (newPitch !== lastDragPitch) {
-          lastDragPitch = newPitch;
-          playNotePreview(NOTES[newPitch].freq);
-        }
-      } else {
-        const beatDelta = Math.round((cx - x) / ppb);
-        if (beatDelta === 0) return;
-        const newBeats = [...origBeats];
-        if (beatDelta < 0) {
-          // Left drag: start moves left, previous note shrinks
-          const minStart = idx > 0 ? origBeats[idx - 1] + 1 : 0;
-          newBeats[idx] = Math.max(origBeats[idx] + beatDelta, minStart);
-        } else {
-          // Right drag: end moves right, next note shrinks
-          if (idx + 1 >= origBeats.length) return;
-          const nextEnd = idx + 2 < origBeats.length ? origBeats[idx + 2] : TOTAL_BEATS;
-          const minNextStart = origBeats[idx] + 1;
-          const maxNextStart = nextEnd - 1;
-          newBeats[idx + 1] = Math.max(minNextStart, Math.min(origBeats[idx + 1] + beatDelta, maxNextStart));
-        }
-        setMatchResult(null);
-        setUserBeats(newBeats);
+        setPitchPositions(next);
+        playNotePreview(NOTES[newRow].freq);
       }
-    }
 
-    function onUp() {
-      isDraggingRef.current = false;
-      if (canvasRef.current) canvasRef.current.style.cursor = 'default';
-      document.removeEventListener('mousemove', onMove);
-      document.removeEventListener('mouseup', onUp);
-      document.removeEventListener('touchmove', onMove);
-      document.removeEventListener('touchend', onUp);
-    }
+      function onUp() {
+        isDraggingRef.current = false;
+        if (canvasRef.current) canvasRef.current.style.cursor = 'default';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        document.removeEventListener('touchmove', onMove);
+        document.removeEventListener('touchend', onUp);
+        // Push to undo history only if block actually moved
+        if (finalPitches[idx] !== origPitches[idx]) {
+          setPitchHistory(prev => [...prev, origPitches]);
+        }
+      }
 
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', onUp);
-    document.addEventListener('touchmove', onMove, { passive: false });
-    document.addEventListener('touchend', onUp);
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+      document.addEventListener('touchmove', onMove, { passive: false });
+      document.addEventListener('touchend', onUp);
+
+    } else {
+      // Rhythm tab
+      const idx = hitTestRhythmBlock(x, y);
+      if (idx === -1) return;
+
+      isDraggingRef.current = true;
+      if (canvasRef.current) canvasRef.current.style.cursor = 'ew-resize';
+
+      const origBeats = [...rhythmBeats];
+      const offsetX = x - origBeats[idx] * ppb; // click offset within block
+      let finalBeats = origBeats;
+
+      function onMove(ev) {
+        if (ev.cancelable) ev.preventDefault();
+        const { x: cx } = getCanvasCoords(ev);
+        const ppb2 = getPxPerBeat();
+        const dragBeat = (cx - offsetX) / ppb2;
+        const newOrder = getDraggedOrder(origBeats, GOAL, idx, dragBeat);
+        const newBeats = computeBeatsFromOrder(newOrder, GOAL);
+        finalBeats = newBeats;
+        setMatchResult(null);
+        setRhythmBeats(newBeats);
+      }
+
+      function onUp() {
+        isDraggingRef.current = false;
+        if (canvasRef.current) canvasRef.current.style.cursor = 'default';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        document.removeEventListener('touchmove', onMove);
+        document.removeEventListener('touchend', onUp);
+        // Push to undo history if anything changed
+        const changed = finalBeats.some((b, i) => b !== origBeats[i]);
+        if (changed) {
+          setRhythmHistory(prev => [...prev, origBeats]);
+        }
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+      document.addEventListener('touchmove', onMove, { passive: false });
+      document.addEventListener('touchend', onUp);
+    }
   }
 
-  const hasInput = currentTab === 'pitch' ? userPitches.length > 0 : userBeats.length > 0;
+  const hasUndo = currentTab === 'pitch' ? pitchHistory.length > 0 : rhythmHistory.length > 0;
 
-  // ── STYLES ──────────────────────────────────────────────────
+  // ── Styles ─────────────────────────────────────────────────────────────────
+
   const S = {
     section: { border: '2px dashed #111', marginBottom: 0 },
     banner: { background: '#F5F2EB', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 },
@@ -617,7 +704,6 @@ export default function MelodyMatch() {
     bannerSub: { fontSize: 12, color: '#555', marginTop: 4, fontFamily: 'var(--font-space-mono), monospace' },
     inner: { padding: '20px 20px 24px' },
     gameTitle: { fontSize: 11, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: '#E8473F', marginBottom: 4 },
-    gameDesc: { fontSize: 12, color: '#777', fontFamily: 'Georgia, serif', fontStyle: 'italic', marginBottom: 16 },
     tabsRow: { display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12, flexWrap: 'wrap' },
     tabs: { display: 'flex', border: '2.5px solid #111', width: 'fit-content' },
     tab: (active) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', padding: '9px 20px', cursor: 'pointer', background: active ? '#111' : '#fff', color: active ? '#fff' : '#111', border: 'none', borderRight: '2.5px solid #111' }),
@@ -626,16 +712,16 @@ export default function MelodyMatch() {
     hintsLabel: { fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#111' },
     toggleTrack: (on) => ({ width: 36, height: 20, background: on ? '#111' : '#fff', border: '2px solid #111', position: 'relative', transition: 'background 0.15s', flexShrink: 0 }),
     toggleThumb: (on) => ({ position: 'absolute', top: 1, left: on ? 17 : 1, width: 14, height: 14, background: on ? '#fff' : '#111', border: '1.5px solid #111', transition: 'left 0.15s' }),
-    instructions: { fontSize: 11, color: '#333', fontFamily: 'var(--font-space-mono), monospace', marginBottom: 12 },
+    instructions: { fontSize: 11, color: '#555', fontFamily: 'var(--font-space-mono), monospace', marginBottom: 12 },
     graphOuter: { border: '2.5px solid #111', background: '#F5F2EB', marginBottom: 8 },
     graphInner: { display: 'flex' },
     yAxis: { width: 40, flexShrink: 0, borderRight: '2px solid #111', display: 'flex', flexDirection: 'column', background: '#EDEAE0' },
-    yCell: (active) => ({ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: '#444', fontFamily: 'var(--font-space-mono), monospace', borderBottom: '1px solid #D5D1C5', cursor: active ? 'pointer' : 'default', height: ROW_H, flexShrink: 0, userSelect: 'none', opacity: active ? 1 : 0.4 }),
-    yCellSa: (active) => ({ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 900, color: '#E8473F', fontFamily: 'var(--font-space-mono), monospace', borderBottom: '1px solid #D5D1C5', cursor: active ? 'pointer' : 'default', height: ROW_H, flexShrink: 0, userSelect: 'none', opacity: active ? 1 : 0.45 }),
+    yCell: { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: '#444', fontFamily: 'var(--font-space-mono), monospace', borderBottom: '1px solid #D5D1C5', height: ROW_H, flexShrink: 0, userSelect: 'none' },
+    yCellSa: { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 900, color: '#E8473F', fontFamily: 'var(--font-space-mono), monospace', borderBottom: '1px solid #D5D1C5', height: ROW_H, flexShrink: 0, userSelect: 'none' },
     canvasWrap: { flex: 1, overflow: 'hidden', position: 'relative', touchAction: 'none' },
     canvas: { display: 'block', width: '100%' },
     xAxis: { display: 'flex', marginLeft: 40, borderTop: '2px solid #111' },
-    xCell: (active) => ({ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: '#888', fontFamily: 'var(--font-space-mono), monospace', cursor: active ? 'pointer' : 'default', borderRight: '1px solid #E0DDD4', display: 'flex', alignItems: 'center', justifyContent: 'center', height: 28, minWidth: 0, userSelect: 'none', opacity: active ? 1 : 0.4 }),
+    xCell: { flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: '#888', fontFamily: 'var(--font-space-mono), monospace', borderRight: '1px solid #E0DDD4', display: 'flex', alignItems: 'center', justifyContent: 'center', height: 28, minWidth: 0, userSelect: 'none' },
     controls: { display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginTop: 4 },
     goalBtn: (playing) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '9px 14px', border: playing ? '2px solid #E8473F' : '2px solid #111', cursor: 'pointer', background: playing ? '#E8473F' : '#111', color: '#fff', whiteSpace: 'nowrap' }),
     mineBtn: (playing) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '9px 14px', border: playing ? '2px solid #E8473F' : '2px solid #111', cursor: 'pointer', background: playing ? '#E8473F' : '#fff', color: playing ? '#fff' : '#111', whiteSpace: 'nowrap' }),
@@ -643,6 +729,8 @@ export default function MelodyMatch() {
     nextBtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '9px 14px', border: '2px solid #111', cursor: 'pointer', background: '#111', color: '#fff', whiteSpace: 'nowrap' },
     gameStatus: { fontSize: 10, color: '#333', fontFamily: 'var(--font-space-mono), monospace', letterSpacing: 1, width: '100%', marginTop: 4 },
   };
+
+  // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
     <section style={S.section}>
@@ -655,7 +743,7 @@ export default function MelodyMatch() {
       </div>
 
       <div style={S.inner}>
-        {/* Tabs + Hints */}
+        {/* Tabs + Hints toggle */}
         <div style={S.tabsRow}>
           <div style={S.tabs}>
             <button style={S.tab(currentTab === 'pitch')} onClick={() => switchTab('pitch')}>Pitch</button>
@@ -671,24 +759,19 @@ export default function MelodyMatch() {
 
         <div style={S.instructions}>
           {currentTab === 'pitch'
-            ? 'Tap note names on the left to place pitches in order.'
-            : 'Tap beat numbers at the bottom to place each note in time.'}
+            ? 'Drag the blocks up/down to match the goal pitch.'
+            : 'Drag the blocks left/right to match the goal rhythm.'}
         </div>
 
         {/* Graph */}
         <div style={S.graphOuter}>
           <div style={S.graphInner}>
-            {/* Y Axis */}
+            {/* Y Axis — labels only, not clickable */}
             <div style={{ ...S.yAxis, height: GRAPH_H }}>
-              {NOTES.map((n, i) => {
+              {NOTES.map((n) => {
                 const isSa = n.name.includes('Sa');
-                const active = currentTab === 'pitch';
                 return (
-                  <div
-                    key={n.name}
-                    style={isSa ? S.yCellSa(active) : S.yCell(active)}
-                    onClick={() => active && addPitch(i)}
-                  >
+                  <div key={n.name} style={isSa ? S.yCellSa : S.yCell}>
                     {n.name}
                   </div>
                 );
@@ -705,20 +788,11 @@ export default function MelodyMatch() {
               />
             </div>
           </div>
-          {/* X Axis */}
+          {/* X Axis — labels only */}
           <div style={S.xAxis}>
-            {Array.from({ length: TOTAL_BEATS }, (_, b) => {
-              const active = currentTab === 'rhythm';
-              return (
-                <div
-                  key={b}
-                  style={S.xCell(active)}
-                  onClick={() => active && addBeat(b)}
-                >
-                  {b + 1}
-                </div>
-              );
-            })}
+            {Array.from({ length: TOTAL_BEATS }, (_, b) => (
+              <div key={b} style={S.xCell}>{b + 1}</div>
+            ))}
           </div>
         </div>
 
@@ -727,11 +801,17 @@ export default function MelodyMatch() {
           <button style={S.goalBtn(goalPlaying)} onClick={toggleGoal}>
             {goalPlaying ? '■ Goal' : '▶ Goal'}
           </button>
-          <button style={S.mineBtn(minePlaying)} onClick={() => toggleMine(currentTab, userPitches, userBeats)}>
+          <button style={S.mineBtn(minePlaying)} onClick={toggleMine}>
             {minePlaying ? '■ Mine' : '▶ Mine'}
           </button>
           <button style={S.gbtn} onClick={checkMatch}>✓ Check</button>
-          <button style={{ ...S.gbtn, opacity: hasInput ? 1 : 0.35, cursor: hasInput ? 'pointer' : 'default' }} onClick={undoLast} disabled={!hasInput}>↩ Undo</button>
+          <button
+            style={{ ...S.gbtn, opacity: hasUndo ? 1 : 0.35, cursor: hasUndo ? 'pointer' : 'default' }}
+            onClick={undoLast}
+            disabled={!hasUndo}
+          >
+            ↩ Undo
+          </button>
           <button style={S.gbtn} onClick={clearUser}>✕ Clear</button>
           <button style={S.nextBtn} onClick={nextMelody}>→ Next</button>
           <div style={S.gameStatus}>{status}</div>
