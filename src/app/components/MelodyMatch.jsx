@@ -495,7 +495,7 @@ export default function MelodyMatch() {
 
   // ── STYLES ──────────────────────────────────────────────────
   const S = {
-    section: { border: '2.5px solid #111', borderTop: 'none', marginBottom: 0, borderBottom: '2.5px solid #111' },
+    section: { borderLeft: '2.5px solid #111', borderRight: '2.5px solid #111', borderBottom: '2.5px solid #111', borderTop: '2px dashed #111', marginBottom: 0 },
     banner: { background: '#F5F2EB', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 },
     bannerText: { fontSize: 20, fontWeight: 700, color: '#111', fontFamily: 'var(--font-bebas-neue), sans-serif', letterSpacing: 2 },
     bannerSub: { fontSize: 12, color: '#555', marginTop: 4, fontFamily: 'var(--font-space-mono), monospace' },
