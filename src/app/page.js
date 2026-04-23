@@ -78,13 +78,13 @@ export default function Home() {
 
       {/* MelodyMatch intro + component */}
       <div style={{ borderBottom: "3px solid #111", background: "#F5C842" }}>
-        <div style={{ padding: "24px 28px 16px" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1 }}>
+        <div style={{ padding: "24px 28px 16px", background: "#111" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1 }}>
             Sometimes I design interactive explorations for music learners.
           </div>
         </div>
         <MelodyMatch />
-        <div style={{ padding: "16px 28px 24px", textAlign: "center" }}>
+        <div style={{ padding: "16px 28px 24px", textAlign: "center", background: "#111" }}>
           <a href="/explorations" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #F5C842", display: "inline-block" }}>
             More Explorations →
           </a>
