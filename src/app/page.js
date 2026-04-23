@@ -34,9 +34,9 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <div id="music" style={{ background: "#F5F2EB", borderBottom: "3px solid #111" }}>
-        {/* Text above video */}
-        <div style={{ padding: "20px 24px 16px", textAlign: "center" }}>
+      <div id="music" style={{ borderBottom: "3px solid #111" }}>
+        {/* Text above video — sky colour */}
+        <div style={{ padding: "20px 24px 16px", textAlign: "center", background: "#D4DCE2" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1 }}>
             Hi! I'm Anirudh,{" "}
             <span style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 14, letterSpacing: 2, fontWeight: 700 }}>aka</span>
@@ -53,12 +53,12 @@ export default function Home() {
           />
         </div>
 
-        {/* Text + button below video */}
-        <div style={{ padding: "16px 24px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1 }}>
+        {/* Text + button below video — ground colour */}
+        <div style={{ padding: "16px 24px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16, background: "#C07248" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1 }}>
             ... and I'm on a quest for musical fluency.
           </div>
-          <a href="/bio" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#111", border: "2px solid #111", display: "inline-block" }}>
+          <a href="/bio" className="btn-cream-outline" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#EEE8D0", border: "2px solid #EEE8D0", display: "inline-block" }}>
             My Story →
           </a>
         </div>
@@ -79,7 +79,7 @@ export default function Home() {
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1, marginBottom: 18, textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}>
             I use multiple voices to speak the language of music.
           </div>
-          <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block" }}>
+          <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" className="btn-yellow-outline" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block" }}>
             Look ma - I'm on YouTube! →
           </a>
         </div>
@@ -94,7 +94,7 @@ export default function Home() {
         </div>
         <MelodyMatch />
         <div style={{ padding: "16px 28px 24px", textAlign: "center" }}>
-          <a href="/tools" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#111", border: "2px solid #111", display: "inline-block" }}>
+          <a href="/tools" className="btn-dark-outline" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#111", border: "2px solid #111", display: "inline-block" }}>
             More Explorations →
           </a>
         </div>
@@ -154,7 +154,7 @@ export default function Home() {
             </div>
           </a>
 
-          <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block" }}>
+          <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" className="btn-dark-outline" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block" }}>
             All articles →
           </a>
         </div>
@@ -174,7 +174,7 @@ export default function Home() {
             <div key={item.title} style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)" }}>
               <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, letterSpacing: 1, color: "#fff", marginBottom: 5 }}>{item.title}</div>
               <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#EEE8D0", margin: "0 0 8px", lineHeight: 1.5 }}>{item.desc}</p>
-              <a href={item.link} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#fff", textDecoration: "none", border: "2px solid #fff", padding: "9px 16px", display: "inline-block" }}>{item.label}</a>
+              <a href={item.link} target="_blank" rel="noopener noreferrer" className="btn-white-outline" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#fff", textDecoration: "none", border: "2px solid #fff", padding: "9px 16px", display: "inline-block" }}>{item.label}</a>
             </div>
           ))}
         </div>
@@ -209,6 +209,7 @@ export default function Home() {
           />
           <button
             type="submit"
+            className="btn-solid-dark"
             style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 18px", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#111", color: "#F5C842", border: "2px solid #111", cursor: "pointer", whiteSpace: "nowrap" }}
           >
             Subscribe
