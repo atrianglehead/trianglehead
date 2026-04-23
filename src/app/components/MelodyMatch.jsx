@@ -68,6 +68,7 @@ export default function MelodyMatch() {
   const playheadRafRef = useRef(null);
   const goalStopRef = useRef(null);
   const mineStopRef = useRef(null);
+  const isDraggingRef = useRef(false);
 
   const [melodyIdx, setMelodyIdx] = useState(0);
   const [currentTab, setCurrentTab] = useState('pitch');
@@ -491,6 +492,121 @@ export default function MelodyMatch() {
     setStatus(tab === 'pitch' ? 'Tap note names on the left to begin' : 'Tap beat numbers at the bottom to begin');
   }
 
+  // ── DRAG ────────────────────────────────────────────────────
+  function getCanvasCoords(e) {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const src = e.touches ? e.touches[0] : e;
+    return {
+      x: (src.clientX - rect.left) * scaleX,
+      y: (src.clientY - rect.top) * scaleY,
+    };
+  }
+
+  function hitTestCanvas(x, y) {
+    const ppb = getPxPerBeat();
+    if (currentTab === 'pitch') {
+      for (let i = 0; i < userPitches.length; i++) {
+        const bx = GOAL_BEAT_STARTS[i] * ppb;
+        const by = userPitches[i] * ROW_H;
+        const bw = GOAL[i].beats * ppb;
+        if (x >= bx && x < bx + bw && y >= by && y < by + ROW_H) return i;
+      }
+    } else {
+      for (let i = 0; i < userBeats.length; i++) {
+        const bx = userBeats[i] * ppb;
+        const by = GOAL[i].noteIdx * ROW_H;
+        const dur = getRhythmDuration(i, userBeats);
+        const bw = dur * ppb;
+        if (x >= bx && x < bx + bw && y >= by && y < by + ROW_H) return i;
+      }
+    }
+    return -1;
+  }
+
+  function handleCanvasCursorHover(e) {
+    if (isDraggingRef.current) return;
+    const { x, y } = getCanvasCoords(e);
+    const idx = hitTestCanvas(x, y);
+    if (canvasRef.current) {
+      canvasRef.current.style.cursor = idx !== -1
+        ? (currentTab === 'pitch' ? 'ns-resize' : 'ew-resize')
+        : 'default';
+    }
+  }
+
+  function handleCanvasPointerDown(e) {
+    if (goalPlaying || minePlaying) return;
+    e.preventDefault();
+    const { x, y } = getCanvasCoords(e);
+    const idx = hitTestCanvas(x, y);
+    if (idx === -1) return;
+
+    isDraggingRef.current = true;
+    if (canvasRef.current) {
+      canvasRef.current.style.cursor = currentTab === 'pitch' ? 'ns-resize' : 'ew-resize';
+    }
+
+    const origPitches = [...userPitches];
+    const origBeats = [...userBeats];
+    const tab = currentTab;
+    let lastDragPitch = origPitches[idx];
+
+    function onMove(ev) {
+      if (ev.cancelable) ev.preventDefault();
+      const { x: cx, y: cy } = getCanvasCoords(ev);
+      const ppb = getPxPerBeat();
+
+      if (tab === 'pitch') {
+        const pitchDelta = Math.round((cy - y) / ROW_H);
+        const newPitch = Math.max(0, Math.min(NOTE_COUNT - 1, origPitches[idx] + pitchDelta));
+        const next = [...origPitches];
+        next[idx] = newPitch;
+        setMatchResult(null);
+        setUserPitches(next);
+        if (newPitch !== lastDragPitch) {
+          lastDragPitch = newPitch;
+          playNotePreview(NOTES[newPitch].freq);
+        }
+      } else {
+        const beatDelta = Math.round((cx - x) / ppb);
+        if (beatDelta === 0) return;
+        const newBeats = [...origBeats];
+        if (beatDelta < 0) {
+          // Left drag: start moves left, previous note shrinks
+          const minStart = idx > 0 ? origBeats[idx - 1] + 1 : 0;
+          newBeats[idx] = Math.max(origBeats[idx] + beatDelta, minStart);
+        } else {
+          // Right drag: end moves right, next note shrinks
+          if (idx + 1 >= origBeats.length) return;
+          const nextEnd = idx + 2 < origBeats.length ? origBeats[idx + 2] : TOTAL_BEATS;
+          const minNextStart = origBeats[idx] + 1;
+          const maxNextStart = nextEnd - 1;
+          newBeats[idx + 1] = Math.max(minNextStart, Math.min(origBeats[idx + 1] + beatDelta, maxNextStart));
+        }
+        setMatchResult(null);
+        setUserBeats(newBeats);
+      }
+    }
+
+    function onUp() {
+      isDraggingRef.current = false;
+      if (canvasRef.current) canvasRef.current.style.cursor = 'default';
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend', onUp);
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend', onUp);
+  }
+
   const hasInput = currentTab === 'pitch' ? userPitches.length > 0 : userBeats.length > 0;
 
   // ── STYLES ──────────────────────────────────────────────────
@@ -516,12 +632,11 @@ export default function MelodyMatch() {
     yAxis: { width: 40, flexShrink: 0, borderRight: '2px solid #111', display: 'flex', flexDirection: 'column', background: '#EDEAE0' },
     yCell: (active) => ({ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: '#444', fontFamily: 'var(--font-space-mono), monospace', borderBottom: '1px solid #D5D1C5', cursor: active ? 'pointer' : 'default', height: ROW_H, flexShrink: 0, userSelect: 'none', opacity: active ? 1 : 0.4 }),
     yCellSa: (active) => ({ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 900, color: '#E8473F', fontFamily: 'var(--font-space-mono), monospace', borderBottom: '1px solid #D5D1C5', cursor: active ? 'pointer' : 'default', height: ROW_H, flexShrink: 0, userSelect: 'none', opacity: active ? 1 : 0.45 }),
-    canvasWrap: { flex: 1, overflow: 'hidden', position: 'relative' },
+    canvasWrap: { flex: 1, overflow: 'hidden', position: 'relative', touchAction: 'none' },
     canvas: { display: 'block', width: '100%' },
     xAxis: { display: 'flex', marginLeft: 40, borderTop: '2px solid #111' },
     xCell: (active) => ({ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: '#888', fontFamily: 'var(--font-space-mono), monospace', cursor: active ? 'pointer' : 'default', borderRight: '1px solid #E0DDD4', display: 'flex', alignItems: 'center', justifyContent: 'center', height: 28, minWidth: 0, userSelect: 'none', opacity: active ? 1 : 0.4 }),
     controls: { display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginTop: 4 },
-    undoBtn: (enabled) => ({ width: 36, height: 36, borderRadius: '50%', border: '2px solid #111', background: '#fff', fontSize: 16, cursor: enabled ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#111', userSelect: 'none', opacity: enabled ? 1 : 0.3 }),
     goalBtn: (playing) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '9px 14px', border: playing ? '2px solid #E8473F' : '2px solid #111', cursor: 'pointer', background: playing ? '#E8473F' : '#111', color: '#fff', whiteSpace: 'nowrap' }),
     mineBtn: (playing) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '9px 14px', border: playing ? '2px solid #E8473F' : '2px solid #111', cursor: 'pointer', background: playing ? '#E8473F' : '#fff', color: playing ? '#fff' : '#111', whiteSpace: 'nowrap' }),
     gbtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '9px 14px', border: '2px solid #111', cursor: 'pointer', background: '#fff', color: '#111', whiteSpace: 'nowrap' },
@@ -581,7 +696,13 @@ export default function MelodyMatch() {
             </div>
             {/* Canvas */}
             <div style={S.canvasWrap} ref={wrapRef}>
-              <canvas ref={canvasRef} style={S.canvas} />
+              <canvas
+                ref={canvasRef}
+                style={S.canvas}
+                onMouseDown={handleCanvasPointerDown}
+                onMouseMove={handleCanvasCursorHover}
+                onTouchStart={handleCanvasPointerDown}
+              />
             </div>
           </div>
           {/* X Axis */}
@@ -603,7 +724,6 @@ export default function MelodyMatch() {
 
         {/* Controls */}
         <div style={S.controls}>
-          <button style={S.undoBtn(hasInput)} onClick={undoLast} disabled={!hasInput} title="Undo last note">↩</button>
           <button style={S.goalBtn(goalPlaying)} onClick={toggleGoal}>
             {goalPlaying ? '■ Goal' : '▶ Goal'}
           </button>
@@ -611,6 +731,7 @@ export default function MelodyMatch() {
             {minePlaying ? '■ Mine' : '▶ Mine'}
           </button>
           <button style={S.gbtn} onClick={checkMatch}>✓ Check</button>
+          <button style={{ ...S.gbtn, opacity: hasInput ? 1 : 0.35, cursor: hasInput ? 'pointer' : 'default' }} onClick={undoLast} disabled={!hasInput}>↩ Undo</button>
           <button style={S.gbtn} onClick={clearUser}>✕ Clear</button>
           <button style={S.nextBtn} onClick={nextMelody}>→ Next</button>
           <div style={S.gameStatus}>{status}</div>
