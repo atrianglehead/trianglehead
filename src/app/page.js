@@ -95,7 +95,7 @@ export default function Home() {
       <div className="main-grid" style={{ display: "grid", gridTemplateColumns: "3fr 2fr", borderBottom: "3px solid #111" }}>
         <div id="sound-insight" className="main-left" style={{ padding: "28px", borderRight: "3px solid #111", background: "#EDEAE0" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid #CCC8BC", paddingBottom: 16 }}>
-            I also love writing articles around musical concepts.
+            I love writing articles around musical concepts.
           </div>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#111", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Sound Insight: The Music Guide
@@ -152,7 +152,7 @@ export default function Home() {
 
         <div id="learn" className="main-right" style={{ padding: "28px 24px", background: "#E8473F" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#fff", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)", paddingBottom: 16 }}>
-            Most of all though, I love helping others through one-on-one coaching.
+            And I absolutely love helping others through one-on-one coaching.
           </div>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#fff", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Lessons
