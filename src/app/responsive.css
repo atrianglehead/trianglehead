@@ -3,44 +3,14 @@
   width: 100%;
 }
 
-/* Button hover animations */
-.btn-dark-outline {
-  transition: background 0.18s, color 0.18s;
+/* Universal button */
+.btn {
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
 }
-.btn-dark-outline:hover {
+.btn:hover {
   background: #111 !important;
-  color: #F5F2EB !important;
-}
-
-.btn-yellow-outline {
-  transition: background 0.18s, color 0.18s;
-}
-.btn-yellow-outline:hover {
-  background: #F5C842 !important;
-  color: #111 !important;
-}
-
-.btn-cream-outline {
-  transition: background 0.18s, color 0.18s;
-}
-.btn-cream-outline:hover {
-  background: #EEE8D0 !important;
-  color: #111 !important;
-}
-
-.btn-white-outline {
-  transition: background 0.18s, color 0.18s;
-}
-.btn-white-outline:hover {
-  background: #fff !important;
-  color: #E8473F !important;
-}
-
-.btn-solid-dark {
-  transition: background 0.18s;
-}
-.btn-solid-dark:hover {
-  background: #2A2A2A !important;
+  color: #F5C842 !important;
+  border-color: #111 !important;
 }
 
 @media (max-width: 620px) {
