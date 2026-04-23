@@ -53,12 +53,12 @@ export default function Home() {
           />
         </div>
 
-        {/* Text + button below video — ground colour */}
-        <div style={{ padding: "16px 24px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16, background: "#C07248" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1 }}>
+        {/* Text + button below video */}
+        <div style={{ padding: "16px 24px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16, background: "#D4DCE2" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1 }}>
             ... and I'm on a quest for musical fluency.
           </div>
-          <a href="/bio" className="btn-cream-outline" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#EEE8D0", border: "2px solid #EEE8D0", display: "inline-block" }}>
+          <a href="/bio" className="btn-dark-outline" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#111", border: "2px solid #111", display: "inline-block" }}>
             My Story →
           </a>
         </div>
