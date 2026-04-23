@@ -67,56 +67,45 @@ function initPitchPositions(goal) {
 }
 
 /**
- * Rhythm tab initial order: ascending pitch (Sa first, then Re, Ga… Sa').
- * noteIdx 7 = Sa (lowest), so descending noteIdx = ascending pitch.
- * Multiple notes of the same pitch keep their original melody order.
+ * Rhythm tab state: rhythmSlots[i] = duration assigned to slot i.
+ * Slot i always shows pitch GOAL[i].noteIdx — pitches never move.
+ * Initial state: durations sorted ascending (shortest first), ties in melody order.
  */
-function initRhythmOrder(goal) {
-  const indices = goal.map((_, i) => i);
-  indices.sort((a, b) => {
-    const pitchDiff = goal[b].noteIdx - goal[a].noteIdx; // descending noteIdx = ascending pitch
-    return pitchDiff !== 0 ? pitchDiff : a - b;
-  });
-  return indices;
+function initRhythmSlots(goal) {
+  return [...goal.map(g => g.beats)].sort((a, b) => a - b);
 }
 
-/** Pack blocks sequentially according to given order, returning beat-start array. */
-function computeBeatsFromOrder(order, goal) {
-  const result = new Array(goal.length).fill(0);
+/** Compute beat-start for each slot from the duration array. */
+function computeSlotBeatStarts(slots) {
+  const starts = [];
   let cursor = 0;
-  order.forEach(i => {
-    result[i] = cursor;
-    cursor += goal[i].beats;
-  });
-  return result;
-}
-
-function initRhythmBeats(goal) {
-  return computeBeatsFromOrder(initRhythmOrder(goal), goal);
+  for (const dur of slots) {
+    starts.push(cursor);
+    cursor += dur;
+  }
+  return starts;
 }
 
 /**
- * Given current beat-starts, a dragged block index, and where it's being dragged,
- * return a new packed beat-start array that reflects reordering.
- * Uses centre-of-block comparison to determine insertion position among others.
+ * Reorder durations in `origSlots` as if slot `dragSlotIdx` were dragged to
+ * beat position `dragBeatPos`. Uses centre-of-block insertion logic so other
+ * slots slide smoothly out of the way.
  */
-function getDraggedOrder(origBeats, goal, dragIdx, dragBeat) {
-  const others = goal.map((_, i) => i).filter(i => i !== dragIdx);
-  others.sort((a, b) => origBeats[a] - origBeats[b]);
-
-  const dragCenter = dragBeat + goal[dragIdx].beats / 2;
+function getDraggedSlots(origSlots, dragSlotIdx, dragBeatPos) {
+  const others = origSlots.map((_, i) => i).filter(i => i !== dragSlotIdx);
+  const dragCenter = dragBeatPos + origSlots[dragSlotIdx] / 2;
 
   let cursor = 0;
   let insertPos = others.length;
   for (let p = 0; p < others.length; p++) {
-    const center = cursor + goal[others[p]].beats / 2;
+    const center = cursor + origSlots[others[p]] / 2;
     if (dragCenter < center) { insertPos = p; break; }
-    cursor += goal[others[p]].beats;
+    cursor += origSlots[others[p]];
   }
 
   const newOrder = [...others];
-  newOrder.splice(insertPos, 0, dragIdx);
-  return newOrder;
+  newOrder.splice(insertPos, 0, dragSlotIdx);
+  return newOrder.map(i => origSlots[i]);
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -138,7 +127,8 @@ export default function MelodyMatch() {
 
   // Per-tab arrangement state
   const [pitchPositions, setPitchPositions] = useState(() => initPitchPositions(MELODIES[0]));
-  const [rhythmBeats, setRhythmBeats] = useState(() => initRhythmBeats(MELODIES[0]));
+  // rhythmSlots[i] = duration assigned to slot i (slot i always has pitch GOAL[i].noteIdx)
+  const [rhythmSlots, setRhythmSlots] = useState(() => initRhythmSlots(MELODIES[0]));
 
   // Per-tab undo history (stack of snapshots)
   const [pitchHistory, setPitchHistory] = useState([]);
@@ -297,14 +287,12 @@ export default function MelodyMatch() {
         xPx: GOAL_BEAT_STARTS[i] * ppb,
       }));
     } else {
-      // Play in beat order
-      const sorted = rhythmBeats
-        .map((b, i) => ({ idx: i, beat: b }))
-        .sort((a, b) => a.beat - b.beat);
-      items = sorted.map(({ idx }) => ({
-        freq: NOTES[GOAL[idx].noteIdx].freq,
-        beats: GOAL[idx].beats,
-        xPx: rhythmBeats[idx] * ppb,
+      // Slots play left-to-right in slot order
+      const slotStarts = computeSlotBeatStarts(rhythmSlots);
+      items = rhythmSlots.map((dur, i) => ({
+        freq: NOTES[GOAL[i].noteIdx].freq,
+        beats: dur,
+        xPx: slotStarts[i] * ppb,
       }));
     }
 
@@ -330,7 +318,7 @@ export default function MelodyMatch() {
     const nextIdx = (melodyIdx + 1) % MELODIES.length;
     const nextGoal = MELODIES[nextIdx];
     setPitchPositions(initPitchPositions(nextGoal));
-    setRhythmBeats(initRhythmBeats(nextGoal));
+    setRhythmSlots(initRhythmSlots(nextGoal));
     setPitchHistory([]);
     setRhythmHistory([]);
     setStatus('New melody — press ▶ Goal to hear it');
@@ -443,11 +431,12 @@ export default function MelodyMatch() {
         );
       });
     } else {
-      rhythmBeats.forEach((beatStart, i) => {
+      const slotStarts = computeSlotBeatStarts(rhythmSlots);
+      rhythmSlots.forEach((dur, i) => {
         drawBlock(
-          beatStart * ppb,
+          slotStarts[i] * ppb,
           GOAL[i].noteIdx * ROW_H,
-          GOAL[i].beats * ppb,
+          dur * ppb,
           NOTES[GOAL[i].noteIdx].name,
           i,
         );
@@ -474,7 +463,7 @@ export default function MelodyMatch() {
       ctx.moveTo(playheadX - 5, 0); ctx.lineTo(playheadX + 5, 0); ctx.lineTo(playheadX, 8);
       ctx.fill();
     }
-  }, [currentTab, hintsOn, pitchPositions, rhythmBeats, matchResult, playheadX, melodyIdx]);
+  }, [currentTab, hintsOn, pitchPositions, rhythmSlots, matchResult, playheadX, melodyIdx]);
 
   useEffect(() => { drawCanvas(); }, [drawCanvas]);
   useEffect(() => {
@@ -494,7 +483,8 @@ export default function MelodyMatch() {
         ? '🎉 Perfect! Well done.'
         : `${correct} of ${result.length} correct — keep trying!`);
     } else {
-      const result = GOAL.map((g, i) => rhythmBeats[i] === GOAL_BEAT_STARTS[i]);
+      // Each slot's duration should match the goal note's duration
+      const result = rhythmSlots.map((dur, i) => dur === GOAL[i].beats);
       setMatchResult(result);
       const correct = result.filter(Boolean).length;
       setStatus(correct === result.length
@@ -510,7 +500,7 @@ export default function MelodyMatch() {
       setPitchPositions(initPitchPositions(GOAL));
       setPitchHistory([]);
     } else {
-      setRhythmBeats(initRhythmBeats(GOAL));
+      setRhythmSlots(initRhythmSlots(GOAL));
       setRhythmHistory([]);
     }
     setStatus('Blocks reset — rearrange to match the goal');
@@ -535,7 +525,7 @@ export default function MelodyMatch() {
       setPitchHistory(h => h.slice(0, -1));
     } else if (currentTab === 'rhythm' && rhythmHistory.length > 0) {
       const prev = rhythmHistory[rhythmHistory.length - 1];
-      setRhythmBeats(prev);
+      setRhythmSlots(prev);
       setRhythmHistory(h => h.slice(0, -1));
     }
   }
@@ -566,13 +556,14 @@ export default function MelodyMatch() {
     return -1;
   }
 
-  /** Rhythm tab: find block by x,y position */
-  function hitTestRhythmBlock(x, y) {
+  /** Rhythm tab: find which slot was hit at canvas (x, y) */
+  function hitTestRhythmSlot(x, y) {
     const ppb = getPxPerBeat();
+    const slotStarts = computeSlotBeatStarts(rhythmSlots);
     for (let i = 0; i < GOAL.length; i++) {
-      const bx = rhythmBeats[i] * ppb;
+      const bx = slotStarts[i] * ppb;
       const by = GOAL[i].noteIdx * ROW_H;
-      const bw = GOAL[i].beats * ppb;
+      const bw = rhythmSlots[i] * ppb;
       if (x >= bx && x < bx + bw && y >= by && y < by + ROW_H) return i;
     }
     return -1;
@@ -585,7 +576,7 @@ export default function MelodyMatch() {
     if (currentTab === 'pitch') {
       if (hitTestPitchColumn(x) !== -1) cursor = 'ns-resize';
     } else {
-      if (hitTestRhythmBlock(x, y) !== -1) cursor = 'ew-resize';
+      if (hitTestRhythmSlot(x, y) !== -1) cursor = 'ew-resize';
     }
     if (canvasRef.current) canvasRef.current.style.cursor = cursor;
   }
@@ -649,27 +640,27 @@ export default function MelodyMatch() {
       document.addEventListener('touchend', onUp);
 
     } else {
-      // Rhythm tab
-      const idx = hitTestRhythmBlock(x, y);
+      // Rhythm tab — drag moves a duration to a different slot
+      const idx = hitTestRhythmSlot(x, y);
       if (idx === -1) return;
 
       isDraggingRef.current = true;
       if (canvasRef.current) canvasRef.current.style.cursor = 'ew-resize';
 
-      const origBeats = [...rhythmBeats];
-      const offsetX = x - origBeats[idx] * ppb; // click offset within block
-      let finalBeats = origBeats;
+      const origSlots = [...rhythmSlots];
+      const slotStarts = computeSlotBeatStarts(origSlots);
+      const offsetX = x - slotStarts[idx] * ppb; // click offset within block
+      let finalSlots = origSlots;
 
       function onMove(ev) {
         if (ev.cancelable) ev.preventDefault();
         const { x: cx } = getCanvasCoords(ev);
         const ppb2 = getPxPerBeat();
-        const dragBeat = (cx - offsetX) / ppb2;
-        const newOrder = getDraggedOrder(origBeats, GOAL, idx, dragBeat);
-        const newBeats = computeBeatsFromOrder(newOrder, GOAL);
-        finalBeats = newBeats;
+        const dragBeatPos = (cx - offsetX) / ppb2;
+        const newSlots = getDraggedSlots(origSlots, idx, dragBeatPos);
+        finalSlots = newSlots;
         setMatchResult(null);
-        setRhythmBeats(newBeats);
+        setRhythmSlots(newSlots);
       }
 
       function onUp() {
@@ -679,10 +670,9 @@ export default function MelodyMatch() {
         document.removeEventListener('mouseup', onUp);
         document.removeEventListener('touchmove', onMove);
         document.removeEventListener('touchend', onUp);
-        // Push to undo history if anything changed
-        const changed = finalBeats.some((b, i) => b !== origBeats[i]);
+        const changed = finalSlots.some((d, i) => d !== origSlots[i]);
         if (changed) {
-          setRhythmHistory(prev => [...prev, origBeats]);
+          setRhythmHistory(prev => [...prev, origSlots]);
         }
       }
 
