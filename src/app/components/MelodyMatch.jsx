@@ -490,9 +490,9 @@ export default function MelodyMatch() {
   // ── STYLES ──────────────────────────────────────────────────
   const S = {
     section: { border: '2.5px solid #111', borderTop: 'none', marginBottom: 0, borderBottom: '2.5px solid #111' },
-    banner: { background: '#F5C842', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 },
-    bannerText: { fontSize: 13, fontWeight: 700, color: '#111' },
-    bannerSub: { fontSize: 10, color: '#555', marginTop: 2 },
+    banner: { background: '#F5F2EB', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 },
+    bannerText: { fontSize: 20, fontWeight: 700, color: '#111', fontFamily: 'var(--font-bebas-neue), sans-serif', letterSpacing: 2 },
+    bannerSub: { fontSize: 12, color: '#555', marginTop: 4 },
     inner: { padding: '20px 20px 24px' },
     gameTitle: { fontSize: 11, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: '#E8473F', marginBottom: 4 },
     gameDesc: { fontSize: 12, color: '#777', fontFamily: 'Georgia, serif', fontStyle: 'italic', marginBottom: 16 },

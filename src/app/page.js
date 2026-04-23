@@ -86,7 +86,7 @@ export default function Home() {
       </div>
 
       {/* MelodyMatch intro + component */}
-      <div style={{ borderBottom: "3px solid #111", background: "#F5F2EB" }}>
+      <div style={{ borderBottom: "3px solid #111", background: "#F5C842" }}>
         <div style={{ padding: "24px 28px 16px" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1 }}>
             Sometimes I design interactive explorations for music learners.

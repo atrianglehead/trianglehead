@@ -6,9 +6,9 @@ import { usePathname } from "next/navigation";
 const navItems = [
   { label: "Home", href: "/" },
   { label: "About", href: "/bio" },
+  { label: "Music", href: "https://www.youtube.com/@trianglehead" },
   { label: "Explorations", href: "/explorations" },
   { label: "Articles", href: "https://soundinsight.substack.com/" },
-  { label: "Music", href: "https://www.youtube.com/@trianglehead" },
   { label: "Lessons", href: "https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" },
   { label: "Contact", href: "/contact" },
 ];
