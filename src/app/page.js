@@ -58,7 +58,7 @@ export default function Home() {
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1 }}>
             ... and I'm on a quest for musical fluency.
           </div>
-          <a href="/bio" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #F5C842", display: "inline-block" }}>
+          <a href="/bio" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #111", display: "inline-block" }}>
             My Story →
           </a>
         </div>
@@ -70,7 +70,7 @@ export default function Home() {
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1, marginBottom: 18 }}>
             I use multiple voices to speak the language of music.
           </div>
-          <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #F5C842", display: "inline-block" }}>
+          <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #111", display: "inline-block" }}>
             Look ma - I'm on YouTube! →
           </a>
         </div>
@@ -78,14 +78,14 @@ export default function Home() {
 
       {/* MelodyMatch intro + component */}
       <div style={{ borderBottom: "3px solid #111", background: "#F5C842" }}>
-        <div style={{ padding: "24px 28px 16px", background: "#111" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1 }}>
+        <div style={{ padding: "24px 28px 16px" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1 }}>
             Sometimes I design interactive explorations for music learners.
           </div>
         </div>
         <MelodyMatch />
-        <div style={{ padding: "16px 28px 24px", textAlign: "center", background: "#111" }}>
-          <a href="/explorations" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #F5C842", display: "inline-block" }}>
+        <div style={{ padding: "16px 28px 24px", textAlign: "center" }}>
+          <a href="/explorations" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #111", display: "inline-block" }}>
             More Explorations →
           </a>
         </div>
@@ -145,7 +145,7 @@ export default function Home() {
             </div>
           </a>
 
-          <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #F5C842", padding: "9px 16px", display: "inline-block", background: "#F5C842" }}>
+          <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#F5C842" }}>
             All articles →
           </a>
         </div>
@@ -165,7 +165,7 @@ export default function Home() {
             <div key={item.title} style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)" }}>
               <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, letterSpacing: 1, color: "#fff", marginBottom: 5 }}>{item.title}</div>
               <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#EEE8D0", margin: "0 0 8px", lineHeight: 1.5 }}>{item.desc}</p>
-              <a href={item.link} target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #F5C842", padding: "9px 16px", display: "inline-block", background: "#F5C842" }}>{item.label}</a>
+              <a href={item.link} target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#F5C842" }}>{item.label}</a>
             </div>
           ))}
         </div>
@@ -201,7 +201,7 @@ export default function Home() {
           <button
             type="submit"
             className="btn"
-            style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 18px", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #F5C842", cursor: "pointer", whiteSpace: "nowrap" }}
+            style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 18px", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #111", cursor: "pointer", whiteSpace: "nowrap" }}
           >
             Subscribe
           </button>
