@@ -80,7 +80,7 @@ export default function Home() {
       <div style={{ borderBottom: "3px solid #111", background: "#F5C842" }}>
         <div style={{ padding: "24px 28px 16px" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1 }}>
-            I love designing interactive explorations for music learners.
+            I love designing interactive music explorations.
           </div>
         </div>
         <MelodyMatch />
@@ -95,7 +95,7 @@ export default function Home() {
       <div className="main-grid" style={{ display: "grid", gridTemplateColumns: "3fr 2fr", borderBottom: "3px solid #111" }}>
         <div id="sound-insight" className="main-left" style={{ padding: "28px", borderRight: "3px solid #111", background: "#EDEAE0" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid #CCC8BC", paddingBottom: 16 }}>
-            I love writing articles around musical concepts.
+            I love writing about musical concepts.
           </div>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#111", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
             Sound Insight: The Music Guide
