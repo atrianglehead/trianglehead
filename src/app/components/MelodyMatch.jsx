@@ -323,8 +323,12 @@ export default function MelodyMatch() {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, W, GRAPH_H);
 
+    // Background
+    ctx.fillStyle = '#F5F2EB';
+    ctx.fillRect(0, 0, W, GRAPH_H);
+
     // Grid
-    ctx.strokeStyle = '#F0EDE4'; ctx.lineWidth = 1;
+    ctx.strokeStyle = '#DDD9CE'; ctx.lineWidth = 1;
     for (let i = 0; i <= NOTE_COUNT; i++) {
       ctx.beginPath(); ctx.moveTo(0, i * ROW_H); ctx.lineTo(W, i * ROW_H); ctx.stroke();
     }
@@ -336,7 +340,7 @@ export default function MelodyMatch() {
     if (hintsOn) {
       ctx.save();
       ctx.setLineDash([4, 4]);
-      ctx.strokeStyle = '#C8C4B4'; ctx.lineWidth = 1.5;
+      ctx.strokeStyle = '#999'; ctx.lineWidth = 1.5;
       GOAL.forEach((g, i) => {
         const x = GOAL_BEAT_STARTS[i] * ppb;
         const y = g.noteIdx * ROW_H;
@@ -348,18 +352,20 @@ export default function MelodyMatch() {
 
     // User blocks
     const drawBlock = (x, y, w, label, colorIdx) => {
-      let color = '#1A3A5C';
+      let blockColor = '#111';
+      let textColor = '#EEE8D0';
       if (matchResult && colorIdx < matchResult.length) {
-        color = matchResult[colorIdx] ? '#27AE60' : '#E8473F';
+        blockColor = matchResult[colorIdx] ? '#4CAF76' : '#E8473F';
+        textColor = '#fff';
       }
-      ctx.fillStyle = color;
+      ctx.fillStyle = blockColor;
       ctx.fillRect(x + 2, y + 3, w - 4, ROW_H - 6);
-      ctx.fillStyle = '#fff';
-      ctx.font = `bold ${w < 36 ? 8 : 11}px Courier New`;
+      ctx.fillStyle = textColor;
+      ctx.font = `bold ${w < 36 ? 8 : 11}px 'Space Mono', monospace`;
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText(label, x + w / 2, y + ROW_H / 2);
       if (matchResult && colorIdx < matchResult.length) {
-        ctx.font = 'bold 11px Courier New';
+        ctx.font = `bold 11px 'Space Mono', monospace`;
         ctx.fillText(matchResult[colorIdx] ? '✓' : '✗', x + w - 9, y + 10);
       }
     };
@@ -381,17 +387,17 @@ export default function MelodyMatch() {
     const isEmpty = currentTab === 'pitch' ? userPitches.length === 0 : userBeats.length === 0;
     if (isEmpty) {
       ctx.fillStyle = '#B8B4A4';
-      const fontSize = Math.max(20, Math.min(30, GRAPH_H / 5));
-      ctx.font = `italic ${fontSize}px Georgia, serif`;
+      const fontSize = Math.max(14, Math.min(22, GRAPH_H / 6));
+      ctx.font = `bold ${fontSize}px 'Space Mono', monospace`;
       ctx.textBaseline = 'middle';
       if (currentTab === 'pitch') {
         ctx.textAlign = 'left';
-        ctx.fillText('← tap a note', 14, GRAPH_H / 2 - fontSize * 0.65);
-        ctx.fillText('name to begin', 14, GRAPH_H / 2 + fontSize * 0.65);
+        ctx.fillText('← tap a note', 14, GRAPH_H / 2 - fontSize * 0.75);
+        ctx.fillText('name to begin', 14, GRAPH_H / 2 + fontSize * 0.75);
       } else {
         ctx.textAlign = 'center';
-        ctx.fillText('tap a beat number', W / 2, GRAPH_H / 2 - fontSize * 0.65);
-        ctx.fillText('below to begin ↓', W / 2, GRAPH_H / 2 + fontSize * 0.65);
+        ctx.fillText('tap a beat number', W / 2, GRAPH_H / 2 - fontSize * 0.75);
+        ctx.fillText('below to begin ↓', W / 2, GRAPH_H / 2 + fontSize * 0.75);
       }
     }
 
@@ -492,7 +498,7 @@ export default function MelodyMatch() {
     section: { border: '2.5px solid #111', borderTop: 'none', marginBottom: 0, borderBottom: '2.5px solid #111' },
     banner: { background: '#F5F2EB', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 },
     bannerText: { fontSize: 20, fontWeight: 700, color: '#111', fontFamily: 'var(--font-bebas-neue), sans-serif', letterSpacing: 2 },
-    bannerSub: { fontSize: 12, color: '#555', marginTop: 4 },
+    bannerSub: { fontSize: 12, color: '#555', marginTop: 4, fontFamily: 'var(--font-space-mono), monospace' },
     inner: { padding: '20px 20px 24px' },
     gameTitle: { fontSize: 11, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: '#E8473F', marginBottom: 4 },
     gameDesc: { fontSize: 12, color: '#777', fontFamily: 'Georgia, serif', fontStyle: 'italic', marginBottom: 16 },
@@ -504,23 +510,23 @@ export default function MelodyMatch() {
     hintsLabel: { fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#111' },
     toggleTrack: (on) => ({ width: 36, height: 20, background: on ? '#111' : '#fff', border: '2px solid #111', position: 'relative', transition: 'background 0.15s', flexShrink: 0 }),
     toggleThumb: (on) => ({ position: 'absolute', top: 1, left: on ? 17 : 1, width: 14, height: 14, background: on ? '#fff' : '#111', border: '1.5px solid #111', transition: 'left 0.15s' }),
-    instructions: { fontSize: 11, color: '#333', fontStyle: 'italic', marginBottom: 12 },
-    graphOuter: { border: '2.5px solid #111', background: '#fff', marginBottom: 8 },
+    instructions: { fontSize: 11, color: '#333', fontFamily: 'var(--font-space-mono), monospace', marginBottom: 12 },
+    graphOuter: { border: '2.5px solid #111', background: '#F5F2EB', marginBottom: 8 },
     graphInner: { display: 'flex' },
-    yAxis: { width: 40, flexShrink: 0, borderRight: '2px solid #111', display: 'flex', flexDirection: 'column', background: '#EDEAE0' },
-    yCell: (active) => ({ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: '#666', borderBottom: '1px solid #E0DDD4', cursor: active ? 'pointer' : 'default', height: ROW_H, flexShrink: 0, userSelect: 'none', opacity: active ? 1 : 0.4 }),
-    yCellSa: (active) => ({ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 900, color: '#E8473F', borderBottom: '1px solid #E0DDD4', cursor: active ? 'pointer' : 'default', height: ROW_H, flexShrink: 0, userSelect: 'none', opacity: active ? 1 : 0.4 }),
+    yAxis: { width: 40, flexShrink: 0, borderRight: '2px solid #111', display: 'flex', flexDirection: 'column', background: '#111' },
+    yCell: (active) => ({ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: '#CCC8BC', fontFamily: 'var(--font-space-mono), monospace', borderBottom: '1px solid rgba(255,255,255,0.1)', cursor: active ? 'pointer' : 'default', height: ROW_H, flexShrink: 0, userSelect: 'none', opacity: active ? 1 : 0.35 }),
+    yCellSa: (active) => ({ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 900, color: '#E8473F', fontFamily: 'var(--font-space-mono), monospace', borderBottom: '1px solid rgba(255,255,255,0.1)', cursor: active ? 'pointer' : 'default', height: ROW_H, flexShrink: 0, userSelect: 'none', opacity: active ? 1 : 0.4 }),
     canvasWrap: { flex: 1, overflow: 'hidden', position: 'relative' },
     canvas: { display: 'block', width: '100%' },
     xAxis: { display: 'flex', marginLeft: 40, borderTop: '2px solid #111' },
-    xCell: (active) => ({ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: '#888', cursor: active ? 'pointer' : 'default', borderRight: '1px solid #E0DDD4', display: 'flex', alignItems: 'center', justifyContent: 'center', height: 28, minWidth: 0, userSelect: 'none', opacity: active ? 1 : 0.4 }),
+    xCell: (active) => ({ flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: '#888', fontFamily: 'var(--font-space-mono), monospace', cursor: active ? 'pointer' : 'default', borderRight: '1px solid #E0DDD4', display: 'flex', alignItems: 'center', justifyContent: 'center', height: 28, minWidth: 0, userSelect: 'none', opacity: active ? 1 : 0.4 }),
     controls: { display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginTop: 4 },
     undoBtn: (enabled) => ({ width: 36, height: 36, borderRadius: '50%', border: '2px solid #111', background: '#fff', fontSize: 16, cursor: enabled ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#111', userSelect: 'none', opacity: enabled ? 1 : 0.3 }),
     goalBtn: (playing) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '9px 14px', border: playing ? '2px solid #E8473F' : '2px solid #111', cursor: 'pointer', background: playing ? '#E8473F' : '#111', color: '#fff', whiteSpace: 'nowrap' }),
     mineBtn: (playing) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '9px 14px', border: playing ? '2px solid #E8473F' : '2px solid #111', cursor: 'pointer', background: playing ? '#E8473F' : '#fff', color: playing ? '#fff' : '#111', whiteSpace: 'nowrap' }),
     gbtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '9px 14px', border: '2px solid #111', cursor: 'pointer', background: '#fff', color: '#111', whiteSpace: 'nowrap' },
     nextBtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '9px 14px', border: '2px solid #111', cursor: 'pointer', background: '#111', color: '#fff', whiteSpace: 'nowrap' },
-    gameStatus: { fontSize: 10, color: '#333', letterSpacing: 1, width: '100%', marginTop: 4 },
+    gameStatus: { fontSize: 10, color: '#333', fontFamily: 'var(--font-space-mono), monospace', letterSpacing: 1, width: '100%', marginTop: 4 },
   };
 
   return (
