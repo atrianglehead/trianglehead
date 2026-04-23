@@ -38,45 +38,7 @@ export default function RootLayout({ children }) {
             flexDirection: "column",
           }}
         >
-          {/* Dark nav bar */}
-          <nav
-            className="nav-bar"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "12px 24px",
-              background: "#111",
-              flexShrink: 0,
-            }}
-          >
-            <Link href="/" style={{ textDecoration: "none" }}>
-              <span
-                style={{
-                  fontFamily: "var(--font-bebas-neue), sans-serif",
-                  fontSize: 32,
-                  letterSpacing: 2,
-                  lineHeight: 1,
-                }}
-              >
-                <span style={{ color: "#F5C842" }}>TRI</span>
-                <span style={{ color: "#E8F0FF" }}>ANGLE</span>
-                <span style={{ color: "#F5C842" }}>HEAD</span>
-              </span>
-            </Link>
-            <span
-              style={{
-                fontFamily: "var(--font-space-mono), monospace",
-                fontSize: 10,
-                color: "#aaa",
-                letterSpacing: 1.5,
-              }}
-            >
-              aka Anirudh Venkatesh
-            </span>
-          </nav>
-
-          {/* Sticky yellow nav bar */}
+          {/* Sticky nav bar with logo */}
           <StickyNav />
 
           {/* Page content */}

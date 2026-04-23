@@ -35,8 +35,8 @@ export default function Home() {
     <>
       {/* Hero */}
       <div id="music" style={{ borderBottom: "3px solid #111" }}>
-        {/* Text above video — sky colour */}
-        <div style={{ padding: "20px 24px 16px", textAlign: "center", background: "#D4DCE2" }}>
+        {/* Text above video */}
+        <div style={{ padding: "20px 24px 16px", textAlign: "center", background: "#F5F2EB" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1 }}>
             Hi! I'm Anirudh,{" "}
             <span style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 14, letterSpacing: 2, fontWeight: 700 }}>aka</span>
@@ -54,7 +54,7 @@ export default function Home() {
         </div>
 
         {/* Text + button below video */}
-        <div style={{ padding: "16px 24px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16, background: "#D4DCE2" }}>
+        <div style={{ padding: "16px 24px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16, background: "#F5F2EB" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1 }}>
             ... and I'm on a quest for musical fluency.
           </div>
@@ -64,22 +64,13 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Music background video section */}
-      <div className="music-video-section" style={{ position: "relative", borderBottom: "3px solid #111", overflow: "hidden", background: "#111", minHeight: 200, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.45 }}
-        >
-          <source src="/instruments_bg.mp4" type="video/mp4" />
-        </video>
-        <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "40px 28px" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1, marginBottom: 18, textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}>
+      {/* Instruments section */}
+      <div className="music-video-section" style={{ borderBottom: "3px solid #111", background: "#F5F2EB", minHeight: 200, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ textAlign: "center", padding: "40px 28px" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1, marginBottom: 18 }}>
             I use multiple voices to speak the language of music.
           </div>
-          <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" className="btn-yellow-outline" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#F5C842", border: "2px solid #F5C842", display: "inline-block" }}>
+          <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" className="btn-dark-outline" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#111", border: "2px solid #111", display: "inline-block" }}>
             Look ma - I'm on YouTube! →
           </a>
         </div>
@@ -94,7 +85,7 @@ export default function Home() {
         </div>
         <MelodyMatch />
         <div style={{ padding: "16px 28px 24px", textAlign: "center" }}>
-          <a href="/tools" className="btn-dark-outline" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#111", border: "2px solid #111", display: "inline-block" }}>
+          <a href="/explorations" className="btn-dark-outline" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "transparent", color: "#111", border: "2px solid #111", display: "inline-block" }}>
             More Explorations →
           </a>
         </div>

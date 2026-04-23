@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -72,10 +73,19 @@ export default function StickyNav() {
           borderBottom: "2px solid #111",
           display: "flex",
           alignItems: "center",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
           padding: "8px 24px",
         }}
       >
+        {/* Logo */}
+        <Link href="/" style={{ textDecoration: "none", lineHeight: 1 }}>
+          <span style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 26, letterSpacing: 2, lineHeight: 1 }}>
+            <span style={{ color: "#111" }}>TRI</span>
+            <span style={{ color: "#E8473F" }}>ANGLE</span>
+            <span style={{ color: "#111" }}>HEAD</span>
+          </span>
+        </Link>
+
         {/* Desktop links */}
         <nav className={`sticky-nav-links${open ? " open" : ""}`}>
           {navItems.map((item) => {
