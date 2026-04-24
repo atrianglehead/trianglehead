@@ -120,6 +120,7 @@ export default function MelodyMatch() {
   const goalStopRef = useRef(null);
   const mineStopRef = useRef(null);
   const isDraggingRef = useRef(false);
+  const draggingIdxRef = useRef(-1); // which block is currently being dragged
 
   const [melodyIdx, setMelodyIdx] = useState(0);
   const [currentTab, setCurrentTab] = useState('pitch');
@@ -401,13 +402,22 @@ export default function MelodyMatch() {
     }
 
     // Draw a block
+    // Priority: check result > dragging > resting
     const drawBlock = (x, y, w, label, colorIdx) => {
-      let blockColor = '#111';
-      let textColor = '#EEE8D0';
+      let blockColor = '#F5C842'; // resting: yellow
+      let textColor = '#111';
+
+      if (colorIdx !== undefined && colorIdx === draggingIdxRef.current) {
+        // Being dragged: red
+        blockColor = '#E8473F';
+        textColor = '#EEE8D0';
+      }
       if (matchResult && colorIdx !== undefined && colorIdx < matchResult.length) {
+        // Check result overrides everything
         blockColor = matchResult[colorIdx] ? '#4CAF76' : '#E8473F';
         textColor = '#fff';
       }
+
       ctx.fillStyle = blockColor;
       ctx.fillRect(x + 2, y + 3, w - 4, ROW_H - 6);
       ctx.fillStyle = textColor;
@@ -592,6 +602,7 @@ export default function MelodyMatch() {
       if (idx === -1) return;
 
       isDraggingRef.current = true;
+      draggingIdxRef.current = idx;
       if (canvasRef.current) canvasRef.current.style.cursor = 'ns-resize';
 
       const origPitches = [...pitchPositions];
@@ -623,6 +634,7 @@ export default function MelodyMatch() {
 
       function onUp() {
         isDraggingRef.current = false;
+        draggingIdxRef.current = -1;
         if (canvasRef.current) canvasRef.current.style.cursor = 'default';
         document.removeEventListener('mousemove', onMove);
         document.removeEventListener('mouseup', onUp);
@@ -645,6 +657,7 @@ export default function MelodyMatch() {
       if (idx === -1) return;
 
       isDraggingRef.current = true;
+      draggingIdxRef.current = idx;
       if (canvasRef.current) canvasRef.current.style.cursor = 'ew-resize';
 
       const origSlots = [...rhythmSlots];
@@ -665,6 +678,7 @@ export default function MelodyMatch() {
 
       function onUp() {
         isDraggingRef.current = false;
+        draggingIdxRef.current = -1;
         if (canvasRef.current) canvasRef.current.style.cursor = 'default';
         document.removeEventListener('mousemove', onMove);
         document.removeEventListener('mouseup', onUp);
@@ -696,12 +710,12 @@ export default function MelodyMatch() {
     gameTitle: { fontSize: 11, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: '#E8473F', marginBottom: 4 },
     tabsRow: { display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12, flexWrap: 'wrap' },
     tabs: { display: 'flex', border: '2.5px solid #111', width: 'fit-content' },
-    tab: (active) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', padding: '9px 20px', cursor: 'pointer', background: active ? '#111' : '#fff', color: active ? '#fff' : '#111', border: 'none', borderRight: '2.5px solid #111' }),
-    tabLast: (active) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', padding: '9px 20px', cursor: 'pointer', background: active ? '#111' : '#fff', color: active ? '#fff' : '#111', border: 'none' }),
+    tab: (active) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', padding: '9px 20px', cursor: 'pointer', background: active ? '#E8473F' : '#fff', color: active ? '#EEE8D0' : '#111', border: 'none', borderRight: '2.5px solid #111' }),
+    tabLast: (active) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', padding: '9px 20px', cursor: 'pointer', background: active ? '#E8473F' : '#fff', color: active ? '#EEE8D0' : '#111', border: 'none' }),
     hintsToggle: { display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', userSelect: 'none' },
     hintsLabel: { fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#111' },
-    toggleTrack: (on) => ({ width: 36, height: 20, background: on ? '#111' : '#fff', border: '2px solid #111', position: 'relative', transition: 'background 0.15s', flexShrink: 0 }),
-    toggleThumb: (on) => ({ position: 'absolute', top: 1, left: on ? 17 : 1, width: 14, height: 14, background: on ? '#fff' : '#111', border: '1.5px solid #111', transition: 'left 0.15s' }),
+    toggleTrack: (on) => ({ width: 36, height: 20, background: on ? '#E8473F' : '#EDEAE0', border: '2px solid #111', position: 'relative', transition: 'background 0.15s', flexShrink: 0 }),
+    toggleThumb: (on) => ({ position: 'absolute', top: 1, left: on ? 17 : 1, width: 14, height: 14, background: on ? '#EEE8D0' : '#111', border: '1.5px solid #111', transition: 'left 0.15s' }),
     instructions: { fontSize: 11, color: '#555', fontFamily: 'var(--font-space-mono), monospace', marginBottom: 12 },
     graphOuter: { border: '2.5px solid #111', background: '#F5F2EB', marginBottom: 8 },
     graphInner: { display: 'flex' },
