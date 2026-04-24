@@ -375,10 +375,6 @@ export default function MelodyMatch() {
     ctx.fillStyle = '#F5F2EB';
     ctx.fillRect(0, 0, W, GRAPH_H);
 
-    // Subtle Sa-row tint
-    ctx.fillStyle = 'rgba(232,71,63,0.05)';
-    ctx.fillRect(0, 7 * ROW_H, W, ROW_H);
-
     // Grid
     ctx.strokeStyle = '#DDD9CE'; ctx.lineWidth = 1;
     for (let i = 0; i <= NOTE_COUNT; i++) {
