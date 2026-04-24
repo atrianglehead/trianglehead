@@ -105,7 +105,8 @@ function getDraggedSlots(origSlots, dragSlotIdx, dragBeatPos) {
 
   const newOrder = [...others];
   newOrder.splice(insertPos, 0, dragSlotIdx);
-  return newOrder.map(i => origSlots[i]);
+  // insertPos is the new slot index of the dragged block
+  return { slots: newOrder.map(i => origSlots[i]), newDragSlot: insertPos };
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -670,8 +671,9 @@ export default function MelodyMatch() {
         const { x: cx } = getCanvasCoords(ev);
         const ppb2 = getPxPerBeat();
         const dragBeatPos = (cx - offsetX) / ppb2;
-        const newSlots = getDraggedSlots(origSlots, idx, dragBeatPos);
+        const { slots: newSlots, newDragSlot } = getDraggedSlots(origSlots, idx, dragBeatPos);
         finalSlots = newSlots;
+        draggingIdxRef.current = newDragSlot; // follow the block to its current slot
         setMatchResult(null);
         setRhythmSlots(newSlots);
       }
