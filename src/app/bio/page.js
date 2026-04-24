@@ -12,7 +12,7 @@ export default function Bio() {
         Anirudh Venkatesh
       </div>
       <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2.5, textTransform: "uppercase", color: "#E8473F", marginBottom: 32 }}>
-        Musician · Educator · Explorer
+        Musician · Explorer · Educator
       </div>
 
       <BioProse />
