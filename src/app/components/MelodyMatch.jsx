@@ -448,21 +448,10 @@ export default function MelodyMatch() {
           slotStarts[i] * ppb,
           GOAL[i].noteIdx * ROW_H,
           dur * ppb,
-          NOTES[GOAL[i].noteIdx].name,
+          String(slotStarts[i] + 1), // beat number (1-indexed)
           i,
         );
       });
-    }
-
-    // Canvas help text (only before check)
-    if (!matchResult) {
-      ctx.fillStyle = 'rgba(0,0,0,0.2)';
-      ctx.font = 'bold 9px \'Space Mono\', monospace';
-      ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
-      const helpText = currentTab === 'pitch'
-        ? 'drag blocks up/down to recreate the goal melody'
-        : 'drag blocks left/right to recreate the goal melody';
-      ctx.fillText(helpText, W / 2, GRAPH_H - 4);
     }
 
     // Playhead
