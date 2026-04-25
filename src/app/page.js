@@ -118,9 +118,11 @@ export default function Home() {
             </div>
           </a>
 
-          <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#F5C842" }}>
-            All articles →
-          </a>
+          <div style={{ textAlign: "center" }}>
+            <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#F5C842" }}>
+              All articles →
+            </a>
+          </div>
 
           {/* Subscribe — inline after articles */}
           <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1.5px solid #CCC8BC" }}>
@@ -134,28 +136,31 @@ export default function Home() {
               action="https://soundinsight.substack.com/subscribe"
               method="get"
               target="_blank"
-              style={{ display: "flex", flexWrap: "wrap", gap: 8 }}
             >
-              <input
-                type="text"
-                name="first_name"
-                placeholder="Your name"
-                style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 14px", border: "2px solid #CCC8BC", background: "#fff", color: "#111", outline: "none", flex: "1 1 130px", minWidth: 0 }}
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="your@email.com"
-                required
-                style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 14px", border: "2px solid #CCC8BC", background: "#fff", color: "#111", outline: "none", flex: "2 1 180px", minWidth: 0 }}
-              />
-              <button
-                type="submit"
-                className="btn"
-                style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 18px", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #111", cursor: "pointer", whiteSpace: "nowrap" }}
-              >
-                Subscribe
-              </button>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
+                <input
+                  type="text"
+                  name="first_name"
+                  placeholder="Your name"
+                  style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 14px", border: "2px solid #CCC8BC", background: "#fff", color: "#111", outline: "none", flex: "1 1 130px", minWidth: 0 }}
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="your@email.com"
+                  required
+                  style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 14px", border: "2px solid #CCC8BC", background: "#fff", color: "#111", outline: "none", flex: "2 1 180px", minWidth: 0 }}
+                />
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <button
+                  type="submit"
+                  className="btn"
+                  style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 18px", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #111", cursor: "pointer", whiteSpace: "nowrap" }}
+                >
+                  Subscribe
+                </button>
+              </div>
             </form>
           </div>
         </div>
