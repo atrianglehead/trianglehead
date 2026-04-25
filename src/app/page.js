@@ -121,6 +121,43 @@ export default function Home() {
           <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#F5C842" }}>
             All articles →
           </a>
+
+          {/* Subscribe — inline after articles */}
+          <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1.5px solid #CCC8BC" }}>
+            <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#111", marginBottom: 6 }}>
+              Stay in the loop
+            </div>
+            <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#555", lineHeight: 1.6, margin: "0 0 14px" }}>
+              New articles, tools, and music — delivered to your inbox.
+            </p>
+            <form
+              action="https://soundinsight.substack.com/subscribe"
+              method="get"
+              target="_blank"
+              style={{ display: "flex", flexWrap: "wrap", gap: 8 }}
+            >
+              <input
+                type="text"
+                name="first_name"
+                placeholder="Your name"
+                style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 14px", border: "2px solid #CCC8BC", background: "#fff", color: "#111", outline: "none", flex: "1 1 130px", minWidth: 0 }}
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="your@email.com"
+                required
+                style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 14px", border: "2px solid #CCC8BC", background: "#fff", color: "#111", outline: "none", flex: "2 1 180px", minWidth: 0 }}
+              />
+              <button
+                type="submit"
+                className="btn"
+                style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 18px", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #111", cursor: "pointer", whiteSpace: "nowrap" }}
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
         </div>
 
         <div id="learn" className="main-right" style={{ padding: "28px 24px", background: "#E8473F" }}>
@@ -144,43 +181,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Mailing list */}
-      <div className="mailing-section" style={{ borderBottom: "3px solid #111", background: "#F5F2EB", padding: "32px 28px" }}>
-        <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#111", marginBottom: 8 }}>
-          Stay in the loop
-        </div>
-        <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#555", lineHeight: 1.6, margin: "0 0 20px" }}>
-          New articles, tools, and music — delivered to your inbox.
-        </p>
-        <form
-          action="https://soundinsight.substack.com/subscribe"
-          method="get"
-          target="_blank"
-          style={{ display: "flex", flexWrap: "wrap", gap: 10 }}
-        >
-          <input
-            type="text"
-            name="first_name"
-            placeholder="Your name"
-            style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 14px", border: "2px solid #CCC8BC", background: "#fff", color: "#111", outline: "none", flex: "1 1 160px", minWidth: 0 }}
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="your@email.com"
-            required
-            style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 14px", border: "2px solid #CCC8BC", background: "#fff", color: "#111", outline: "none", flex: "2 1 200px", minWidth: 0 }}
-          />
-          <button
-            type="submit"
-            className="btn"
-            style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 11, padding: "9px 18px", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #111", cursor: "pointer", whiteSpace: "nowrap" }}
-          >
-            Subscribe
-          </button>
-        </form>
-      </div>
 
-    </>
+</>
   );
 }
