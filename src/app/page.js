@@ -128,7 +128,7 @@ export default function Home() {
               Stay in the loop
             </div>
             <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#555", lineHeight: 1.6, margin: "0 0 14px" }}>
-              New articles, tools, and music — delivered to your inbox.
+              Weekly articles exploring music — delivered to your inbox.
             </p>
             <form
               action="https://soundinsight.substack.com/subscribe"
