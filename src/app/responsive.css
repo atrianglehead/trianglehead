@@ -29,19 +29,6 @@
     padding: 6px 16px !important;
   }
 
-/* Sound Insight + Lessons */
-  .main-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .main-left {
-    border-right: none !important;
-    border-bottom: 3px solid #111;
-    padding: 20px 16px !important;
-  }
-  .main-right {
-    padding: 20px 16px !important;
-  }
-
   /* Music */
   .music-section {
     padding: 18px 16px !important;

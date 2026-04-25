@@ -64,9 +64,8 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Main: Sound Insight + Lessons */}
-      <div className="main-grid" style={{ display: "grid", gridTemplateColumns: "3fr 2fr", borderBottom: "3px solid #111" }}>
-        <div id="sound-insight" className="main-left" style={{ padding: "28px", borderRight: "3px solid #111", background: "#EDEAE0" }}>
+      {/* Sound Insight */}
+      <div id="sound-insight" style={{ borderBottom: "3px solid #111", background: "#EDEAE0", padding: "28px" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid #CCC8BC", paddingBottom: 16, textAlign: "center" }}>
             I love writing about musical concepts.
           </div>
@@ -163,9 +162,10 @@ export default function Home() {
               </div>
             </form>
           </div>
-        </div>
+      </div>
 
-        <div id="learn" className="main-right" style={{ padding: "28px 24px", background: "#E8473F" }}>
+      {/* Lessons */}
+      <div id="learn" style={{ borderBottom: "3px solid #111", background: "#E8473F", padding: "28px" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#fff", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)", paddingBottom: 16, textAlign: "center" }}>
             And I absolutely love helping others through one-on-one coaching.
           </div>
@@ -183,9 +183,7 @@ export default function Home() {
               <a href={item.link} target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#F5C842" }}>{item.label}</a>
             </div>
           ))}
-        </div>
       </div>
-
 
 </>
   );
