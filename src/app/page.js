@@ -26,26 +26,19 @@ export default function Home() {
           />
         </div>
 
-        {/* Text + button below video */}
+        {/* Text + buttons below video */}
         <div style={{ padding: "16px 24px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16, background: "#E8473F" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#EEE8D0", lineHeight: 1.1 }}>
             ... and I'm on a quest for greater musical fluency.
           </div>
-          <a href="/bio" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #111", display: "inline-block" }}>
-            My Story →
-          </a>
-        </div>
-      </div>
-
-      {/* Instruments section */}
-      <div className="music-video-section" style={{ borderBottom: "3px solid #111", background: "#F5F2EB", minHeight: 200, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ textAlign: "center", padding: "40px 28px" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1, marginBottom: 18 }}>
-            I use multiple voices to speak the language of music.
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+            <a href="/bio" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #111", display: "inline-block" }}>
+              My Story →
+            </a>
+            <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #111", display: "inline-block" }}>
+              My Videos →
+            </a>
           </div>
-          <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, padding: "9px 16px", textDecoration: "none", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", background: "#F5C842", color: "#111", border: "2px solid #111", display: "inline-block" }}>
-            Look ma - I'm on YouTube! →
-          </a>
         </div>
       </div>
 
