@@ -2,33 +2,6 @@ import Image from "next/image";
 import YouTubeEmbed from "./components/YouTubeEmbed";
 import MelodyMatch from "./components/MelodyMatch";
 
-const socialLinks = [
-  {
-    label: "Trianglehead",
-    href: "https://www.youtube.com/@trianglehead",
-    group: "youtube",
-  },
-  {
-    label: "Anirudh Venkatesh",
-    href: "https://www.youtube.com/@anirudh.venkatesh",
-    group: "youtube",
-  },
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/a.trianglehead/",
-    group: "social",
-  },
-  {
-    label: "Vocal lessons",
-    href: "https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html",
-    group: "superprof",
-  },
-  {
-    label: "Guitar & musicianship",
-    href: "https://www.superprof.co.in/learn-how-use-music-like-language-from-full-time-musician.html",
-    group: "superprof",
-  },
-];
 
 export default function Home() {
   return (
@@ -208,22 +181,6 @@ export default function Home() {
         </form>
       </div>
 
-      {/* Founder */}
-      <div id="contact" className="founder-grid" style={{ display: "grid", gridTemplateColumns: "auto 1fr", borderBottom: "3px solid #111" }}>
-        <div className="founder-left" style={{ background: "#E8473F", padding: "24px 20px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, borderRight: "3px solid #111", minWidth: 80 }}>
-          <div style={{ width: 52, height: 52, borderRadius: "50%", background: "#F5F2EB", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, color: "#E8473F", border: "2px solid #111" }}>AV</div>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 11, letterSpacing: 2, color: "#fff", textAlign: "center", lineHeight: 1.2 }}>Anirudh<br />Venkatesh</div>
-        </div>
-        <div className="founder-right" style={{ padding: "22px 28px", background: "#F5F2EB" }}>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {socialLinks.map((s) => (
-              <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer" style={{ fontSize: 9, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", padding: "4px 10px", border: "1.5px solid #111", color: "#111", background: "transparent", textDecoration: "none" }}>
-                {s.label}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
     </>
   );
 }
