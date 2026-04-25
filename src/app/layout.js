@@ -75,7 +75,7 @@ export default function RootLayout({ children }) {
                 color: "#444",
               }}
             >
-              © 2026 · Built with intention
+              © 2026 · Built to serve
             </span>
           </div>
         </div>
