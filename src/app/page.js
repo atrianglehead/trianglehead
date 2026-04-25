@@ -65,8 +65,8 @@ export default function Home() {
       </div>
 
       {/* Sound Insight */}
-      <div id="sound-insight" style={{ background: "#EDEAE0", padding: "28px" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid #CCC8BC", paddingBottom: 16, textAlign: "center" }}>
+      <div id="sound-insight" style={{ borderBottom: "3px solid #111", background: "#EDEAE0", padding: "28px" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1, marginBottom: 20, textAlign: "center" }}>
             I love writing about musical concepts.
           </div>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#111", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
@@ -165,8 +165,8 @@ export default function Home() {
       </div>
 
       {/* Lessons */}
-      <div id="learn" style={{ background: "#E8473F", padding: "28px" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#fff", lineHeight: 1.1, marginBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)", paddingBottom: 16, textAlign: "center" }}>
+      <div id="learn" style={{ borderBottom: "3px solid #111", background: "#E8473F", padding: "28px" }}>
+          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#fff", lineHeight: 1.1, marginBottom: 20, textAlign: "center" }}>
             And I absolutely love helping others through one-on-one coaching.
           </div>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#fff", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
