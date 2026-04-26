@@ -167,14 +167,19 @@ export default function Home() {
             <span style={{ flex: 1, height: 2, background: "#fff", display: "block" }} />
           </div>
           {[
-            { title: "Free Your Voice", desc: "Use your voice like it was meant to be used - an extension of you in the world.", link: "https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html", label: "Book a session →" },
-            { title: "Connect With Your Instrument", desc: "Make your instrument an inalienable part of you — like another voice.", link: "https://www.superprof.co.in/learn-how-use-music-like-language-from-full-time-musician.html", label: "Book a session →" },
-            { title: "Understand Music", desc: "Understand and respond to musical thoughts like you're speaking a language.", link: "/contact", label: "Book a session →" },
+            { title: "Free Your Voice", desc: "Use your voice like it was meant to be used - an extension of you in the world.", reviewsLink: "https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" },
+            { title: "Connect With Your Instrument", desc: "Make your instrument an inalienable part of you — like another voice.", reviewsLink: "https://www.superprof.co.in/learn-how-use-music-like-language-from-full-time-musician.html" },
+            { title: "Understand Music", desc: "Understand and respond to musical thoughts like you're speaking a language." },
           ].map((item) => (
             <div key={item.title} style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)" }}>
               <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, letterSpacing: 1, color: "#fff", marginBottom: 5 }}>{item.title}</div>
               <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#EEE8D0", margin: "0 0 8px", lineHeight: 1.5 }}>{item.desc}</p>
-              <a href={item.link} target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#F5C842" }}>{item.label}</a>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {item.reviewsLink && (
+                  <a href={item.reviewsLink} target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#fff" }}>Read Reviews →</a>
+                )}
+                <a href="/contact" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#F5C842" }}>Book a session →</a>
+              </div>
             </div>
           ))}
       </div>
