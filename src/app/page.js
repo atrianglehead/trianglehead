@@ -169,7 +169,7 @@ export default function Home() {
           {[
             { title: "Free Your Voice", desc: "Use your voice like it was meant to be used - an extension of you in the world.", reviewsLink: "https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" },
             { title: "Connect With Your Instrument", desc: "Make your instrument an inalienable part of you — like another voice.", reviewsLink: "https://www.superprof.co.in/learn-how-use-music-like-language-from-full-time-musician.html" },
-            { title: "Understand Music", desc: "Understand and respond to musical thoughts like you're speaking a language." },
+            { title: "Understand Music", desc: "Understand and respond to musical thoughts like you're speaking a language.", reviewsLink: "https://www.superprof.co.in/learn-how-use-music-like-language-from-full-time-musician.html" },
           ].map((item) => (
             <div key={item.title} style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)" }}>
               <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, letterSpacing: 1, color: "#fff", marginBottom: 5 }}>{item.title}</div>
