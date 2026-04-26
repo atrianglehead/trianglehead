@@ -193,6 +193,7 @@ function ContactPageInner() {
               cursor: status === 'submitting' ? 'default' : 'pointer',
               width: 'fit-content',
               alignSelf: 'flex-start',
+              boxShadow: status === 'submitting' ? 'none' : '3px 3px 0 #111',
             }}
           >
             {status === 'submitting' ? 'Sending...' : 'Send message →'}
