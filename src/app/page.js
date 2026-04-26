@@ -168,7 +168,8 @@ export default function Home() {
           </div>
           {[
             { title: "Free Your Voice", desc: "Use your voice like it was meant to be used - an extension of you in the world.", link: "https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html", label: "Book a session →" },
-            { title: "Guitar & Composition", desc: "Learn music like a language.", link: "https://www.superprof.co.in/learn-how-use-music-like-language-from-full-time-musician.html", label: "Book a session →" },
+            { title: "Connect With Your Instrument", desc: "Make your instrument an inalienable part of you — like another voice.", link: "https://www.superprof.co.in/learn-how-use-music-like-language-from-full-time-musician.html", label: "Book a session →" },
+            { title: "Understand Music", desc: "Understand and respond to musical thoughts like you're speaking a language.", link: "/contact", label: "Book a session →" },
           ].map((item) => (
             <div key={item.title} style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)" }}>
               <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, letterSpacing: 1, color: "#fff", marginBottom: 5 }}>{item.title}</div>
