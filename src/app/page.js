@@ -167,9 +167,9 @@ export default function Home() {
         <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#fff", lineHeight: 1.1, marginBottom: 8, textAlign: "center" }}>
           And I absolutely love helping others through one-on-one coaching.
         </div>
-        <p style={{ fontFamily: "Georgia, serif", fontSize: 13, color: "#EEE8D0", lineHeight: 1.6, textAlign: "center", fontStyle: "italic", margin: "0 0 24px" }}>
-          A lesson is collaborative: I understand you while you understand the subject.
-        </p>
+        <div style={{ marginBottom: 20 }}>
+          <a href="https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#fff" }}>Read Reviews →</a>
+        </div>
         <div className="lessons-grid">
           {CATEGORIES.map(cat => (
             <div key={cat.id} style={{ background: "#fff", border: "2px solid #111", padding: "20px", display: "flex", flexDirection: "column" }}>
@@ -185,6 +185,9 @@ export default function Home() {
               </div>
             </div>
           ))}
+        </div>
+        <div style={{ textAlign: "center", marginTop: 20 }}>
+          <a href="/lessons" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#F5C842" }}>See all lessons →</a>
         </div>
       </div>
 

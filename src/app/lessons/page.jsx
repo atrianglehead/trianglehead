@@ -56,19 +56,20 @@ function LessonsPageInner() {
 
       {/* Page header */}
       <div style={{ marginBottom: 36 }}>
-        <div style={{ fontFamily: 'var(--font-space-mono), monospace', fontSize: 9, fontWeight: 700, letterSpacing: 2.5, textTransform: 'uppercase', color: '#E8473F', marginBottom: 10 }}>
-          Private lessons
-        </div>
+        
         <div style={{ fontFamily: 'var(--font-bebas-neue), sans-serif', fontSize: 40, letterSpacing: 2, color: '#111', lineHeight: 1.05, marginBottom: 10 }}>
-          And I absolutely love helping others through one-on-one coaching.
+          What would you like to learn today?
+        </div>
+        <div style={{ fontFamily: 'var(--font-space-mono), monospace', fontSize: 9, fontWeight: 700, letterSpacing: 2.5, textTransform: 'uppercase', color: '#E8473F', marginBottom: 10 }}>
+          A lesson is collaborative: I understand you while you understand the subject.
         </div>
         <p style={{ fontFamily: 'Georgia, serif', fontSize: 13, color: '#555', lineHeight: 1.65, fontStyle: 'italic', margin: 0 }}>
-          A lesson is collaborative: I understand you while you understand the subject.
+          
         </p>
       </div>
 
       {/* Category tabs */}
-      <div style={{ display: 'flex', gap: 6, overflowX: 'auto', marginBottom: 16, paddingBottom: 2 }}>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
         {[{ id: 'all', title: 'All' }, ...CATEGORIES].map(cat => {
           const active = category === cat.id;
           return (
@@ -86,8 +87,6 @@ function LessonsPageInner() {
                 border: '2px solid #111',
                 padding: '8px 14px',
                 cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                flexShrink: 0,
               }}
             >
               {cat.title}
@@ -175,7 +174,7 @@ function LessonsPageInner() {
       {/* Bottom CTA */}
       <div style={{ marginTop: 16, paddingTop: 28, borderTop: '2px solid #CCC8BC' }}>
         <p style={{ fontFamily: 'Georgia, serif', fontSize: 13, color: '#555', lineHeight: 1.75, margin: '0 0 16px', fontStyle: 'italic' }}>
-          All lessons happen online, from the comfort of your home. Reach out with any questions — you don't need to be ready, just curious.
+          All lessons happen online from the comfort of your home. Feel free to reach out with any questions — you don't need to be ready, just curious.
         </p>
         <a href="/contact" className="btn" style={{ fontFamily: 'var(--font-space-mono), monospace', fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#111', textDecoration: 'none', border: '2px solid #111', padding: '10px 18px', display: 'inline-block', background: '#F5C842' }}>
           Get in touch →
