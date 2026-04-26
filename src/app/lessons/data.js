@@ -35,7 +35,7 @@ export const CATEGORIES = [
   {
     id: 'rhythm',
     title: 'Unlock Rhythm',
-    shortDesc: 'Feel the pulse in everything — and make it speak.',
+    shortDesc: 'Understand the foundation of every performing art: time.',
     subcategories: [
       { id: 'konnakol', title: 'Konnakol', desc: 'The ancient South Indian art of vocal percussion — rhythm through syllables.' },
       { id: 'rhythm-drums', title: 'Drums', desc: 'Time, groove and the art of holding the rhythm together.' },
@@ -47,7 +47,7 @@ export const CATEGORIES = [
   {
     id: 'poetry',
     title: 'Express With Poetry',
-    shortDesc: 'Words are music too — find the song in what you say.',
+    shortDesc: 'Learn how sound and meaning can combine to bring your music to life.',
     subcategories: [
       { id: 'english-lyrics', title: 'English lyrics', desc: 'Write songs that mean something — craft, imagery and musicality.' },
       { id: 'hindi-lyrics', title: 'Hindi lyrics', desc: 'Explore the rich tradition of Hindi songwriting and poetry.' },

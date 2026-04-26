@@ -160,15 +160,15 @@ export default function Home() {
 
       {/* Lessons */}
       <div id="learn" style={{ borderBottom: "3px solid #111", background: "#E8473F", padding: "28px" }}>
-        <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#EEE8D0", marginBottom: 14, display: "flex", alignItems: "center", gap: 10 }}>
-          Private lessons
-          <span style={{ flex: 1, height: 2, background: "rgba(238,232,208,0.35)", display: "block" }} />
-        </div>
         <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#fff", lineHeight: 1.1, marginBottom: 8, textAlign: "center" }}>
           And I absolutely love helping others through one-on-one coaching.
         </div>
-        <div style={{ marginBottom: 20 }}>
+        <div style={{ textAlign: "center", marginBottom: 20 }}>
           <a href="https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#fff" }}>Read Reviews →</a>
+        </div>
+        <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#EEE8D0", marginBottom: 14, display: "flex", alignItems: "center", gap: 10 }}>
+          Private lessons
+          <span style={{ flex: 1, height: 2, background: "rgba(238,232,208,0.35)", display: "block" }} />
         </div>
         <div className="lessons-grid">
           {CATEGORIES.map(cat => (
