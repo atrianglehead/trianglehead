@@ -85,17 +85,6 @@ function ContactPageInner() {
           </a>
         </div>
 
-        <div style={{ border: '2px solid #111', padding: '16px 20px', background: '#fff' }}>
-          <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2.5, textTransform: 'uppercase', color: '#E8473F', marginBottom: 6 }}>Book directly</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <a href="https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'Georgia, serif', fontSize: 13, color: '#111', textDecoration: 'none', borderBottom: '1.5px solid #111', paddingBottom: 1, width: 'fit-content' }}>
-              SuperProf — Vocal lessons →
-            </a>
-            <a href="https://www.superprof.co.in/learn-how-use-music-like-language-from-full-time-musician.html" target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'Georgia, serif', fontSize: 13, color: '#111', textDecoration: 'none', borderBottom: '1.5px solid #111', paddingBottom: 1, width: 'fit-content' }}>
-              SuperProf — Guitar & musicianship →
-            </a>
-          </div>
-        </div>
 
       </div>
 
