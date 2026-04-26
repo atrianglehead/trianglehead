@@ -167,7 +167,7 @@ export default function Home() {
             <span style={{ flex: 1, height: 2, background: "#fff", display: "block" }} />
           </div>
           {[
-            { title: "Free Your Voice", desc: "Learn to sing freely.", link: "https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html", label: "Book a session →" },
+            { title: "Free Your Voice", desc: "Use your voice like it was meant to be used - an extension of you in the world.", link: "https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html", label: "Book a session →" },
             { title: "Guitar & Composition", desc: "Learn music like a language.", link: "https://www.superprof.co.in/learn-how-use-music-like-language-from-full-time-musician.html", label: "Book a session →" },
           ].map((item) => (
             <div key={item.title} style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)" }}>
