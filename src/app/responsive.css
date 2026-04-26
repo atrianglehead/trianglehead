@@ -13,6 +13,32 @@
   border-color: #111 !important;
 }
 
+/* Homepage lessons grid: 3 on row 1, 2 on row 2 */
+.lessons-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  margin-top: 0;
+}
+.lessons-grid > *:nth-child(-n+3) { grid-column: span 2; }
+.lessons-grid > *:nth-child(n+4)  { grid-column: span 3; }
+
+/* Lessons page subcategory grid: 2-column */
+.subcategory-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* Contact form subcategory reveal */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.subcategory-reveal {
+  animation: fadeSlideIn 0.2s ease;
+}
+
 @media (max-width: 620px) {
   .nav-bar {
     flex-wrap: wrap !important;
@@ -42,5 +68,9 @@
   .music-video-section div[style] {
     padding: 28px 16px !important;
   }
+
+  /* Lessons grids: single column on mobile */
+  .lessons-grid > * { grid-column: 1 / -1 !important; }
+  .subcategory-grid  { grid-template-columns: 1fr !important; }
 
 }

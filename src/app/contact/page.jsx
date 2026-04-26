@@ -2,15 +2,23 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, Suspense } from 'react';
+import { CATEGORIES } from '../lessons/data';
 
-const LESSON_OPTIONS = [
-  { value: '', label: 'Select a lesson type' },
-  { value: 'voice', label: 'Free Your Voice (singing & voice)' },
-  { value: 'instrument', label: 'Connect With Your Instrument (guitar / cello / flute)' },
-  { value: 'musicianship', label: 'Understand Music (theory, ear training, improvisation)' },
-  { value: 'rhythm', label: 'Rhythm & percussion' },
+const CATEGORY_OPTIONS = [
+  { value: '', label: 'Select a category' },
+  ...CATEGORIES.map(c => ({ value: c.id, label: c.title })),
   { value: 'general', label: 'General enquiry' },
 ];
+
+const getSubcategoryOptions = (categoryId) => {
+  if (!categoryId || categoryId === 'general') return [];
+  const cat = CATEGORIES.find(c => c.id === categoryId);
+  if (!cat) return [];
+  return [
+    { value: '', label: 'All / not sure yet' },
+    ...cat.subcategories.map(s => ({ value: s.id, label: s.title })),
+  ];
+};
 
 const INPUT_STYLE = {
   fontFamily: 'var(--font-space-mono), monospace',
@@ -35,15 +43,37 @@ const LABEL_STYLE = {
   display: 'block',
 };
 
+const SELECT_STYLE = {
+  ...INPUT_STYLE,
+  cursor: 'pointer',
+  appearance: 'none',
+  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23111' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`,
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'right 14px center',
+  paddingRight: 36,
+};
+
 function ContactPageInner() {
   const searchParams = useSearchParams();
-  const lessonParam = searchParams.get('lesson') || '';
+  const categoryParam = searchParams.get('category') || '';
+  const typeParam = searchParams.get('type') || '';
+
   const [status, setStatus] = useState('idle');
-  const [lesson, setLesson] = useState(lessonParam);
+  const [category, setCategory] = useState(categoryParam);
+  const [type, setType] = useState(typeParam);
 
   useEffect(() => {
-    if (lessonParam) setLesson(lessonParam);
-  }, [lessonParam]);
+    if (categoryParam) setCategory(categoryParam);
+    if (typeParam) setType(typeParam);
+  }, [categoryParam, typeParam]);
+
+  const subcategoryOptions = getSubcategoryOptions(category);
+  const showSubcategory = category && category !== 'general';
+
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
+    setType('');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,9 +85,17 @@ function ContactPageInner() {
         body: data,
         headers: { Accept: 'application/json' },
       });
-      if (res.ok) { setStatus('success'); e.target.reset(); setLesson(''); }
-      else setStatus('error');
-    } catch { setStatus('error'); }
+      if (res.ok) {
+        setStatus('success');
+        e.target.reset();
+        setCategory('');
+        setType('');
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    }
   };
 
   return (
@@ -84,7 +122,6 @@ function ContactPageInner() {
             @a.trianglehead
           </a>
         </div>
-
 
       </div>
 
@@ -131,26 +168,39 @@ function ContactPageInner() {
           </div>
 
           <div>
-            <label style={LABEL_STYLE} htmlFor="lesson">Lesson type *</label>
+            <label style={LABEL_STYLE} htmlFor="category">I&apos;m interested in *</label>
             <select
-              id="lesson" name="lesson" required
-              value={lesson}
-              onChange={e => setLesson(e.target.value)}
-              style={{
-                ...INPUT_STYLE,
-                cursor: 'pointer',
-                appearance: 'none',
-                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23111' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`,
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'right 14px center',
-                paddingRight: 36,
-              }}
+              id="category"
+              name="category"
+              required
+              value={category}
+              onChange={handleCategoryChange}
+              style={SELECT_STYLE}
             >
-              {LESSON_OPTIONS.map(opt => (
+              {CATEGORY_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>
           </div>
+
+          {showSubcategory && (
+            <div className="subcategory-reveal">
+              <label style={LABEL_STYLE} htmlFor="specific_interest">
+                Specific interest <span style={{ opacity: 0.5 }}>(optional)</span>
+              </label>
+              <select
+                id="specific_interest"
+                name="specific_interest"
+                value={type}
+                onChange={e => setType(e.target.value)}
+                style={SELECT_STYLE}
+              >
+                {subcategoryOptions.map(opt => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <div>
             <label style={LABEL_STYLE} htmlFor="message">Message *</label>

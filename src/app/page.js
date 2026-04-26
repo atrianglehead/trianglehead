@@ -1,6 +1,7 @@
 import Image from "next/image";
 import YouTubeEmbed from "./components/YouTubeEmbed";
 import MelodyMatch from "./components/MelodyMatch";
+import { CATEGORIES } from "./lessons/data";
 
 
 export default function Home() {
@@ -159,32 +160,32 @@ export default function Home() {
 
       {/* Lessons */}
       <div id="learn" style={{ borderBottom: "3px solid #111", background: "#E8473F", padding: "28px" }}>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#fff", lineHeight: 1.1, marginBottom: 20, textAlign: "center" }}>
-            And I absolutely love helping others through one-on-one coaching.
-          </div>
-          <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#fff", marginBottom: 16, display: "flex", alignItems: "center", gap: 10 }}>
-            Lessons
-            <span style={{ flex: 1, height: 2, background: "#fff", display: "block" }} />
-          </div>
-          {[
-            { title: "Free Your Voice", desc: "Use your voice like it was meant to be used - an extension of you in the world.", lessonParam: "voice", reviewsLink: "https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" },
-            { title: "Connect With Your Instrument", desc: "Make your instrument an inalienable part of you — like another voice.", lessonParam: "instrument", reviewsLink: "https://www.superprof.co.in/learn-how-use-music-like-language-from-full-time-musician.html" },
-            { title: "Understand Music", desc: "Understand and respond to musical thoughts like you're speaking a language.", lessonParam: "musicianship", reviewsLink: "https://www.superprof.co.in/learn-how-use-music-like-language-from-full-time-musician.html" },
-          ].map((item) => (
-            <div key={item.title} style={{ marginBottom: 20, paddingBottom: 20, borderBottom: "1.5px solid rgba(255,255,255,0.35)" }}>
-              <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, letterSpacing: 1, color: "#fff", marginBottom: 5 }}>{item.title}</div>
-              <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#EEE8D0", margin: "0 0 8px", lineHeight: 1.5 }}>{item.desc}</p>
+        <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 13, letterSpacing: 3, color: "#EEE8D0", marginBottom: 14, display: "flex", alignItems: "center", gap: 10 }}>
+          Private lessons
+          <span style={{ flex: 1, height: 2, background: "rgba(238,232,208,0.35)", display: "block" }} />
+        </div>
+        <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#fff", lineHeight: 1.1, marginBottom: 8, textAlign: "center" }}>
+          And I absolutely love helping others through one-on-one coaching.
+        </div>
+        <p style={{ fontFamily: "Georgia, serif", fontSize: 13, color: "#EEE8D0", lineHeight: 1.6, textAlign: "center", fontStyle: "italic", margin: "0 0 24px" }}>
+          A lesson is collaborative: I understand you while you understand the subject.
+        </p>
+        <div className="lessons-grid">
+          {CATEGORIES.map(cat => (
+            <div key={cat.id} style={{ background: "#fff", border: "2px solid #111", padding: "20px", display: "flex", flexDirection: "column" }}>
+              <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, letterSpacing: 1, color: "#111", lineHeight: 1.1, marginBottom: 8 }}>
+                {cat.title}
+              </div>
+              <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#555", lineHeight: 1.5, margin: "0 0 16px", flex: 1 }}>
+                {cat.shortDesc}
+              </p>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {item.reviewsLink && (
-                  <a href={item.reviewsLink} target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#fff" }}>Read Reviews →</a>
-                )}
-                <a href={`/contact?lesson=${item.lessonParam}`} className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#F5C842", boxShadow: "3px 3px 0 #111" }}>Book a session →</a>
+                <a href={`/contact?category=${cat.id}`} className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 14px", display: "inline-block", background: "#F5C842", boxShadow: "3px 3px 0 #111" }}>Book a session →</a>
+                <a href={`/lessons?category=${cat.id}`} className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 14px", display: "inline-block", background: "#F5F2EB" }}>Learn more →</a>
               </div>
             </div>
           ))}
-          <div style={{ textAlign: "center", marginTop: 8 }}>
-            <a href="/lessons" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#F5C842" }}>View All Lessons →</a>
-          </div>
+        </div>
       </div>
 
 </>
