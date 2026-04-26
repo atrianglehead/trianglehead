@@ -105,7 +105,7 @@ export default function LessonsPage() {
                 <a
                   href={`/contact?lesson=${lesson.lessonParam}`}
                   className="btn"
-                  style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "10px 18px", display: "inline-block", background: "#1D6FE8", color: "#fff" }}
+                  style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "10px 18px", display: "inline-block", background: "#F5C842", color: "#111", boxShadow: "3px 3px 0 #111" }}
                 >
                   Book a session →
                 </a>

@@ -178,7 +178,7 @@ export default function Home() {
                 {item.reviewsLink && (
                   <a href={item.reviewsLink} target="_blank" rel="noopener noreferrer" className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#fff" }}>Read Reviews →</a>
                 )}
-                <a href={`/contact?lesson=${item.lessonParam}`} className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#fff", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#1D6FE8" }}>Book a session →</a>
+                <a href={`/contact?lesson=${item.lessonParam}`} className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 16px", display: "inline-block", background: "#F5C842", boxShadow: "3px 3px 0 #111" }}>Book a session →</a>
               </div>
             </div>
           ))}
