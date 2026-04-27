@@ -55,7 +55,7 @@ function LessonsPageInner() {
     <>
       {/* Red top section */}
       <div style={{ background: '#E8473F', padding: '28px', borderBottom: '3px solid #111' }}>
-        <div style={{ fontFamily: 'var(--font-bebas-neue), sans-serif', fontSize: 36, letterSpacing: 2, color: '#fff', lineHeight: 1.05, marginBottom: 20 }}>
+        <div style={{ fontFamily: 'var(--font-bebas-neue), sans-serif', fontSize: 28, letterSpacing: 2, color: '#fff', lineHeight: 1.05, marginBottom: 20 }}>
           What is a typical lesson like?
         </div>
         <div style={{ background: '#EEE8D0', border: '2px solid #111' }}>
