@@ -24,7 +24,7 @@ export const CATEGORIES = [
       { id: 'piano', title: 'Piano', desc: 'Learn the instrument that blends theory and practice in the most magical way.' },
       { id: 'melodica', title: 'Melodica', desc: 'Learn to play a wind instrument with piano keys.' },
       { id: 'drums', title: 'Drums', desc: 'Learn how to express rhythmic ideas using the drumkit.' },
-      { id: 'swarmandal', title: 'Swarmandal', desc: 'Learn how a small harp can become an expressive, miniature piano suited for Indian music.' },
+      { id: 'swarmandal', title: 'Swarmandal', desc: 'Learn how to play this miniature harp in a way suited for Indian music.' },
     ],
   },
   {
@@ -33,7 +33,6 @@ export const CATEGORIES = [
     shortDesc: 'Understand the foundation of every performing art: time.',
     subcategories: [
       { id: 'rhythmic-intuition', title: 'Rhythmic intuition', desc: 'Develop rhythmic intuition using konnakol - the art of South Indian vocal percussion.' },
-      { id: 'body-percussion', title: 'Body percussion', desc: 'Turn your body and the floor into a unified percussive instrument.' },
       { id: 'rap', title: 'Applying rhythm to rap', desc: 'Learn how the nuances of rhythm can be used as expressive tools in rap.' },
       { id: 'song-lyrics', title: 'Applying rhythm to songs', desc: 'Learn how rhythm affects the perception of a vocal or instrumental melody.' },
     ],
