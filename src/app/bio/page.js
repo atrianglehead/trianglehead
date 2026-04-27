@@ -22,7 +22,7 @@ export default function Bio() {
         {[
           { label: "Sound Insight →", href: "https://soundinsight.substack.com/" },
           { label: "YouTube →", href: "https://www.youtube.com/@trianglehead" },
-          { label: "Lessons →", href: "https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" },
+          { label: "Lessons →", href: "/lessons" },
           { label: "Contact →", href: "/contact" },
         ].map((item) => {
           const isExternal = item.href.startsWith("http");

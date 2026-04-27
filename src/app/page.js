@@ -47,7 +47,7 @@ export default function Home() {
       <div style={{ borderBottom: "3px solid #111", background: "#F5C842" }}>
         <div style={{ padding: "24px 28px 16px", textAlign: "center" }}>
           <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 28, letterSpacing: 3, color: "#111", lineHeight: 1.1 }}>
-            I design interactive music explorations for music learners.
+            I design interactive explorations for music learners.
           </div>
         </div>
         <MelodyMatch />
@@ -173,15 +173,14 @@ export default function Home() {
         <div className="lessons-grid">
           {CATEGORIES.map(cat => (
             <div key={cat.id} style={{ background: "#fff", border: "2px solid #111", padding: "20px", display: "flex", flexDirection: "column" }}>
-              <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, letterSpacing: 1, color: "#111", lineHeight: 1.1, marginBottom: 8 }}>
-                {cat.title}
-              </div>
+              <a href={`/lessons?category=${cat.id}`} style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 20, letterSpacing: 1, color: "#E8473F", lineHeight: 1.1, marginBottom: 8, textDecoration: "none", display: "inline-block", borderBottom: "2px solid #E8473F", paddingBottom: 1 }}>
+                {cat.title} →
+              </a>
               <p style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#555", lineHeight: 1.5, margin: "0 0 16px", flex: 1 }}>
                 {cat.shortDesc}
               </p>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 <a href={`/contact?category=${cat.id}`} className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 14px", display: "inline-block", background: "#F5C842", boxShadow: "3px 3px 0 #111" }}>Book a session →</a>
-                <a href={`/lessons?category=${cat.id}`} className="btn" style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "#111", textDecoration: "none", border: "2px solid #111", padding: "9px 14px", display: "inline-block", background: "#F5F2EB" }}>Learn more →</a>
               </div>
             </div>
           ))}
