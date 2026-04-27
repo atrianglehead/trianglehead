@@ -43,7 +43,7 @@ export const CATEGORIES = [
     shortDesc: 'Learn how sound and meaning can combine to bring your music to life.',
     subcategories: [
       { id: 'songwriting', title: 'Songwriting', desc: 'Find your poetic voice and learn how to use it in a musical context.' },
-      { id: 'theory-of-poetry', title: 'Theory of poetry', desc: 'Express your innermost thoughts using the underlying grammar of poetic language.' },
+      { id: 'poetic-phrasing', title: 'Poetic Phrasing', desc: 'Express your innermost thoughts using the underlying grammar of poetic language.' },
     ],
   },
   {
@@ -53,7 +53,7 @@ export const CATEGORIES = [
     subcategories: [
       { id: 'ear-training', title: 'Ear training', desc: "Recognise and remember the music that you hear like you do with regular speech." },
       { id: 'raaga-music', title: 'Raaga music', desc: 'Learn the grammar of raagas within the Khayaal and Dhrupad styles.' },
-      { id: 'harmony', title: 'Harmony', desc: 'Understand the building blocks of harmony - scales and chords .' },
+      { id: 'harmony', title: 'Harmony', desc: 'Understand the building blocks of harmony - chords and counterpoint.' },
       { id: 'composition', title: 'Composition', desc: 'Learn to turn your intention into organised musical structures.' },
       { id: 'improvisation', title: 'Improvisation', desc: 'Reach peak flow state through spontaneous music.' },
       { id: 'read-music', title: 'Read music', desc: 'Learn to read music like you would read a story.' },
