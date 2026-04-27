@@ -62,7 +62,7 @@ function LessonsPageInner() {
           {[
             { label: 'Collaborative', text: 'A lesson is collaborative. I understand you while you understand the subject.' },
             { label: 'Online', text: 'All lessons are online. Join in from anywhere in the world.' },
-            { label: 'Customisable', text: 'A typical lesson lasts for 1 hour, but the duration and frequency can be adjusted to your requirements.' },
+            { label: 'Customisable', text: 'The duration, frequency and roadmap of lessons can be adjusted to your requirements.' },
           ].map(({ label, text }, i, arr) => (
             <div key={label} style={{ padding: '16px 22px', borderBottom: i < arr.length - 1 ? '1.5px solid rgba(0,0,0,0.12)' : 'none' }}>
               <div style={{ fontFamily: 'var(--font-bebas-neue), sans-serif', fontSize: 18, letterSpacing: 2, color: '#E8473F', marginBottom: 4 }}>
