@@ -32,7 +32,7 @@ export const CATEGORIES = [
     title: 'Unlock Rhythm',
     shortDesc: 'Understand the foundation of every performing art: time.',
     subcategories: [
-      { id: 'rhythmic_intuition', title: 'Rhythmic intuition', desc: 'Develop rhythmic intuition using konnakol - the art of South Indian vocal percussion.' },
+      { id: 'rhythmic-intuition', title: 'Rhythmic intuition', desc: 'Develop rhythmic intuition using konnakol - the art of South Indian vocal percussion.' },
       { id: 'body-percussion', title: 'Body percussion', desc: 'Turn your body and the floor into a unified percussive instrument.' },
       { id: 'rap', title: 'Applying rhythm to rap', desc: 'Learn how the nuances of rhythm can be used as expressive tools in rap.' },
       { id: 'song-lyrics', title: 'Applying rhythm to songs', desc: 'Learn how rhythm affects the perception of a vocal or instrumental melody.' },
