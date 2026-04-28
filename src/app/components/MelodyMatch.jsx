@@ -67,12 +67,14 @@ function initPitchPositions(goal) {
 }
 
 /**
- * Rhythm tab state: rhythmSlots[i] = duration assigned to slot i.
+ * Rhythm tab state: rhythmBlocks[i] = duration block assigned to slot i.
  * Slot i always shows pitch GOAL[i].noteIdx — pitches never move.
  * Initial state: durations sorted ascending (shortest first), ties in melody order.
  */
-function initRhythmSlots(goal) {
-  return [...goal.map(g => g.beats)].sort((a, b) => a - b);
+function initRhythmBlocks(goal) {
+  return goal
+    .map((g, i) => ({ id: `${i}-${g.beats}`, beats: g.beats }))
+    .sort((a, b) => a.beats - b.beats);
 }
 
 /** Compute beat-start for each slot from the duration array. */
@@ -87,26 +89,33 @@ function computeSlotBeatStarts(slots) {
 }
 
 /**
- * Reorder durations in `origSlots` as if slot `dragSlotIdx` were dragged to
+ * Reorder blocks in `currentBlocks` as if `draggedId` were dragged to
  * beat position `dragBeatPos`. Uses centre-of-block insertion logic so other
  * slots slide smoothly out of the way.
  */
-function getDraggedSlots(origSlots, dragSlotIdx, dragBeatPos) {
-  const others = origSlots.map((_, i) => i).filter(i => i !== dragSlotIdx);
-  const dragCenter = dragBeatPos + origSlots[dragSlotIdx] / 2;
+function getDraggedBlocks(currentBlocks, draggedId, dragBeatPos) {
+  const dragged = currentBlocks.find(block => block.id === draggedId);
+  if (!dragged) return { blocks: currentBlocks, newDragSlot: -1 };
+
+  const others = currentBlocks.filter(block => block.id !== draggedId);
+  const dragCenter = dragBeatPos + dragged.beats / 2;
+  const exchangeThreshold = 0.35;
 
   let cursor = 0;
   let insertPos = others.length;
   for (let p = 0; p < others.length; p++) {
-    const center = cursor + origSlots[others[p]] / 2;
-    if (dragCenter < center) { insertPos = p; break; }
-    cursor += origSlots[others[p]];
+    const center = cursor + others[p].beats / 2;
+    if (dragCenter < center + exchangeThreshold) { insertPos = p; break; }
+    cursor += others[p].beats;
   }
 
-  const newOrder = [...others];
-  newOrder.splice(insertPos, 0, dragSlotIdx);
-  // insertPos is the new slot index of the dragged block
-  return { slots: newOrder.map(i => origSlots[i]), newDragSlot: insertPos };
+  const blocks = [...others];
+  blocks.splice(insertPos, 0, dragged);
+  return { blocks, newDragSlot: insertPos };
+}
+
+function sameBlockOrder(a, b) {
+  return a.length === b.length && a.every((block, i) => block.id === b[i].id);
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -120,6 +129,9 @@ export default function MelodyMatch() {
   const playheadRafRef = useRef(null);
   const goalStopRef = useRef(null);
   const mineStopRef = useRef(null);
+  const rhythmAnimRafRef = useRef(null);
+  const rhythmTransitionRef = useRef(null);
+  const rhythmDragPreviewRef = useRef(null);
   const isDraggingRef = useRef(false);
   const draggingIdxRef = useRef(-1); // which block is currently being dragged
 
@@ -129,8 +141,8 @@ export default function MelodyMatch() {
 
   // Per-tab arrangement state
   const [pitchPositions, setPitchPositions] = useState(() => initPitchPositions(MELODIES[0]));
-  // rhythmSlots[i] = duration assigned to slot i (slot i always has pitch GOAL[i].noteIdx)
-  const [rhythmSlots, setRhythmSlots] = useState(() => initRhythmSlots(MELODIES[0]));
+  // rhythmBlocks[i] = duration block assigned to slot i (slot i always has pitch GOAL[i].noteIdx)
+  const [rhythmBlocks, setRhythmBlocks] = useState(() => initRhythmBlocks(MELODIES[0]));
 
   // Per-tab undo history (stack of snapshots)
   const [pitchHistory, setPitchHistory] = useState([]);
@@ -141,18 +153,29 @@ export default function MelodyMatch() {
   const [goalPlaying, setGoalPlaying] = useState(false);
   const [minePlaying, setMinePlaying] = useState(false);
   const [playheadX, setPlayheadX] = useState(-1);
+  const [rhythmAnimTick, setRhythmAnimTick] = useState(0);
+  const [activeRhythmIdx, setActiveRhythmIdx] = useState(-1);
 
   const GOAL = useMemo(() => MELODIES[melodyIdx], [melodyIdx]);
   const GOAL_BEAT_STARTS = useMemo(() => computeBeatStarts(GOAL), [GOAL]);
+  const rhythmSlots = useMemo(() => rhythmBlocks.map(block => block.beats), [rhythmBlocks]);
 
   // ── Audio ──────────────────────────────────────────────────────────────────
 
-  function getAudio() {
-    if (!audioCtxRef.current) {
+  const getAudio = useCallback(() => {
+    if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
       audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
     }
     return audioCtxRef.current;
-  }
+  }, []);
+
+  const unlockAudio = useCallback(() => {
+    const ctx = getAudio();
+    if (ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+    return ctx;
+  }, [getAudio]);
 
   function getPxPerBeat() {
     if (!wrapRef.current) return 40;
@@ -169,14 +192,44 @@ export default function MelodyMatch() {
     setPlayheadX(-1);
   }
 
+  function stopRhythmTransition() {
+    cancelAnimationFrame(rhythmAnimRafRef.current);
+    rhythmTransitionRef.current = null;
+    rhythmDragPreviewRef.current = null;
+  }
+
   function stopAll() {
     stopNodes(goalNodesRef.current);
     stopNodes(mineNodesRef.current);
     stopPlayhead();
+    stopRhythmTransition();
+  }
+
+  function startRhythmTransition(fromBlocks, toBlocks) {
+    cancelAnimationFrame(rhythmAnimRafRef.current);
+    rhythmTransitionRef.current = {
+      fromBlocks,
+      toBlocks,
+      start: performance.now(),
+      duration: 160,
+    };
+
+    function step() {
+      setRhythmAnimTick(t => t + 1);
+      if (!rhythmTransitionRef.current) return;
+      if (performance.now() - rhythmTransitionRef.current.start < rhythmTransitionRef.current.duration) {
+        rhythmAnimRafRef.current = requestAnimationFrame(step);
+      } else {
+        rhythmTransitionRef.current = null;
+        setRhythmAnimTick(t => t + 1);
+      }
+    }
+
+    rhythmAnimRafRef.current = requestAnimationFrame(step);
   }
 
   function playNotePreview(freq) {
-    const ctx = getAudio();
+    const ctx = unlockAudio();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain); gain.connect(ctx.destination);
@@ -190,7 +243,7 @@ export default function MelodyMatch() {
   }
 
   function scheduleItems(items, nodeStore) {
-    const ctx = getAudio();
+    const ctx = unlockAudio();
     const startTime = ctx.currentTime + 0.05;
     let t = startTime;
     const timeline = [];
@@ -317,10 +370,11 @@ export default function MelodyMatch() {
     setGoalPlaying(false);
     setMinePlaying(false);
     setMatchResult(null);
+    setActiveRhythmIdx(-1);
     const nextIdx = (melodyIdx + 1) % MELODIES.length;
     const nextGoal = MELODIES[nextIdx];
     setPitchPositions(initPitchPositions(nextGoal));
-    setRhythmSlots(initRhythmSlots(nextGoal));
+    setRhythmBlocks(initRhythmBlocks(nextGoal));
     setPitchHistory([]);
     setRhythmHistory([]);
     setStatus('New melody — press ▶ Goal to hear it');
@@ -335,7 +389,7 @@ export default function MelodyMatch() {
       const goal = MELODIES[melodyIdx];
       const starts = computeBeatStarts(goal);
       const ppb = getPxPerBeat();
-      const ctx = getAudio();
+      const ctx = unlockAudio();
       const startTime = ctx.currentTime + 0.05;
       let t2 = startTime;
       goal.forEach((g, i) => {
@@ -357,7 +411,7 @@ export default function MelodyMatch() {
       goalStopRef.current = setTimeout(() => setGoalPlaying(false), totalMs + 150);
     }, 100);
     return () => clearTimeout(t);
-  }, [melodyIdx]);
+  }, [melodyIdx, unlockAudio]);
 
   // ── Draw canvas ────────────────────────────────────────────────────────────
 
@@ -404,7 +458,10 @@ export default function MelodyMatch() {
       let blockColor = '#F5C842'; // resting: yellow
       let textColor = '#111';
 
-      if (colorIdx !== undefined && colorIdx === draggingIdxRef.current) {
+      if (
+        colorIdx !== undefined
+        && (colorIdx === draggingIdxRef.current || (currentTab === 'rhythm' && colorIdx === activeRhythmIdx))
+      ) {
         // Being dragged: red
         blockColor = '#E8473F';
         textColor = '#EEE8D0';
@@ -438,16 +495,83 @@ export default function MelodyMatch() {
         );
       });
     } else {
-      const slotStarts = computeSlotBeatStarts(rhythmSlots);
-      rhythmSlots.forEach((dur, i) => {
-        drawBlock(
-          slotStarts[i] * ppb,
-          GOAL[i].noteIdx * ROW_H,
-          dur * ppb,
-          String(slotStarts[i] + 1), // beat number (1-indexed)
-          i,
-        );
-      });
+      const makeRects = (blocks) => {
+        const starts = computeSlotBeatStarts(blocks.map(block => block.beats));
+        return new Map(blocks.map((block, i) => [
+          block.id,
+          {
+            x: starts[i] * ppb,
+            y: GOAL[i].noteIdx * ROW_H,
+            w: block.beats * ppb,
+            label: String(starts[i] + 1),
+            slotIdx: i,
+          },
+        ]));
+      };
+
+      const rhythmTransition = rhythmTransitionRef.current;
+      const rhythmPreview = rhythmDragPreviewRef.current;
+      if (rhythmPreview) {
+        const targetRects = makeRects(rhythmPreview.targetBlocks);
+        const transitionFromRects = rhythmTransition ? makeRects(rhythmTransition.fromBlocks) : null;
+        const transitionToRects = rhythmTransition ? makeRects(rhythmTransition.toBlocks) : null;
+        const rawT = rhythmTransition
+          ? Math.min(1, (performance.now() - rhythmTransition.start) / rhythmTransition.duration)
+          : 1;
+        const t = 1 - Math.pow(1 - rawT, 3);
+
+        rhythmPreview.targetBlocks.forEach((block) => {
+          const target = targetRects.get(block.id);
+          if (block.id === rhythmPreview.draggedId) {
+            drawBlock(
+              rhythmPreview.dragBeatPos * ppb,
+              target.y,
+              target.w,
+              target.label,
+              target.slotIdx,
+            );
+            return;
+          }
+
+          const from = transitionFromRects?.get(block.id) || target;
+          const to = transitionToRects?.get(block.id) || target;
+          drawBlock(
+            from.x + (to.x - from.x) * t,
+            from.y + (to.y - from.y) * t,
+            from.w + (to.w - from.w) * t,
+            to.label,
+            to.slotIdx,
+          );
+        });
+      } else if (rhythmTransition) {
+        const rawT = Math.min(1, (performance.now() - rhythmTransition.start) / rhythmTransition.duration);
+        const t = 1 - Math.pow(1 - rawT, 3);
+        const fromRects = makeRects(rhythmTransition.fromBlocks);
+        const toRects = makeRects(rhythmTransition.toBlocks);
+
+        rhythmTransition.toBlocks.forEach((block) => {
+          const from = fromRects.get(block.id) || toRects.get(block.id);
+          const to = toRects.get(block.id);
+          drawBlock(
+            from.x + (to.x - from.x) * t,
+            from.y + (to.y - from.y) * t,
+            from.w + (to.w - from.w) * t,
+            to.label,
+            to.slotIdx,
+          );
+        });
+      } else {
+        const slotStarts = computeSlotBeatStarts(rhythmSlots);
+        rhythmBlocks.forEach((block, i) => {
+          drawBlock(
+            slotStarts[i] * ppb,
+            GOAL[i].noteIdx * ROW_H,
+            block.beats * ppb,
+            String(slotStarts[i] + 1), // beat number (1-indexed)
+            i,
+          );
+        });
+      }
     }
 
     // Playhead
@@ -459,18 +583,21 @@ export default function MelodyMatch() {
       ctx.moveTo(playheadX - 5, 0); ctx.lineTo(playheadX + 5, 0); ctx.lineTo(playheadX, 8);
       ctx.fill();
     }
-  }, [currentTab, hintsOn, pitchPositions, rhythmSlots, matchResult, playheadX, GOAL, GOAL_BEAT_STARTS]);
+  }, [currentTab, hintsOn, pitchPositions, rhythmBlocks, rhythmSlots, matchResult, playheadX, activeRhythmIdx, GOAL, GOAL_BEAT_STARTS]);
 
   useEffect(() => { drawCanvas(); }, [drawCanvas]);
+  useEffect(() => { drawCanvas(); }, [drawCanvas, rhythmAnimTick]);
   useEffect(() => {
     const handler = () => drawCanvas();
     window.addEventListener('resize', handler);
     return () => window.removeEventListener('resize', handler);
   }, [drawCanvas]);
+  useEffect(() => () => cancelAnimationFrame(rhythmAnimRafRef.current), []);
 
   // ── Game actions ───────────────────────────────────────────────────────────
 
   function checkMatch() {
+    setActiveRhythmIdx(-1);
     if (currentTab === 'pitch') {
       const result = GOAL.map((g, i) => pitchPositions[i] === g.noteIdx);
       setMatchResult(result);
@@ -480,7 +607,7 @@ export default function MelodyMatch() {
         : `${correct} of ${result.length} correct — keep trying!`);
     } else {
       // Each slot's duration should match the goal note's duration
-      const result = rhythmSlots.map((dur, i) => dur === GOAL[i].beats);
+      const result = rhythmBlocks.map((block, i) => block.beats === GOAL[i].beats);
       setMatchResult(result);
       const correct = result.filter(Boolean).length;
       setStatus(correct === result.length
@@ -491,12 +618,14 @@ export default function MelodyMatch() {
 
   function clearUser() {
     setMatchResult(null);
+    setActiveRhythmIdx(-1);
     stopNodes(mineNodesRef.current); stopPlayhead(); setMinePlaying(false);
     if (currentTab === 'pitch') {
       setPitchPositions(initPitchPositions(GOAL));
       setPitchHistory([]);
     } else {
-      setRhythmSlots(initRhythmSlots(GOAL));
+      stopRhythmTransition();
+      setRhythmBlocks(initRhythmBlocks(GOAL));
       setRhythmHistory([]);
     }
     setStatus('Blocks reset — rearrange to match the goal');
@@ -506,6 +635,8 @@ export default function MelodyMatch() {
     if (tab === currentTab) return;
     setCurrentTab(tab);
     setMatchResult(null);
+    setActiveRhythmIdx(-1);
+    stopRhythmTransition();
     stopNodes(mineNodesRef.current); stopPlayhead(); setMinePlaying(false);
     // State of each tab is preserved — no reset on switch
     setStatus(tab === 'pitch'
@@ -515,13 +646,15 @@ export default function MelodyMatch() {
 
   function undoLast() {
     setMatchResult(null);
+    setActiveRhythmIdx(-1);
     if (currentTab === 'pitch' && pitchHistory.length > 0) {
       const prev = pitchHistory[pitchHistory.length - 1];
       setPitchPositions(prev);
       setPitchHistory(h => h.slice(0, -1));
     } else if (currentTab === 'rhythm' && rhythmHistory.length > 0) {
       const prev = rhythmHistory[rhythmHistory.length - 1];
-      setRhythmSlots(prev);
+      startRhythmTransition(rhythmBlocks, prev);
+      setRhythmBlocks(prev);
       setRhythmHistory(h => h.slice(0, -1));
     }
   }
@@ -644,36 +777,62 @@ export default function MelodyMatch() {
 
       isDraggingRef.current = true;
       draggingIdxRef.current = idx;
+      setActiveRhythmIdx(-1);
       if (canvasRef.current) canvasRef.current.style.cursor = 'ew-resize';
 
-      const origSlots = [...rhythmSlots];
+      const origBlocks = [...rhythmBlocks];
+      const origSlots = origBlocks.map(block => block.beats);
       const slotStarts = computeSlotBeatStarts(origSlots);
       const offsetX = x - slotStarts[idx] * ppb; // click offset within block
-      let finalSlots = origSlots;
+      const draggedId = origBlocks[idx].id;
+      let targetBlocks = origBlocks;
+      rhythmDragPreviewRef.current = {
+        draggedId,
+        dragBeatPos: slotStarts[idx],
+        targetBlocks,
+      };
 
       function onMove(ev) {
         if (ev.cancelable) ev.preventDefault();
         const { x: cx } = getCanvasCoords(ev);
         const ppb2 = getPxPerBeat();
         const dragBeatPos = (cx - offsetX) / ppb2;
-        const { slots: newSlots, newDragSlot } = getDraggedSlots(origSlots, idx, dragBeatPos);
-        finalSlots = newSlots;
-        draggingIdxRef.current = newDragSlot; // follow the block to its current slot
+        const { blocks: nextTargetBlocks, newDragSlot } = getDraggedBlocks(origBlocks, draggedId, dragBeatPos);
+
+        if (!sameBlockOrder(nextTargetBlocks, targetBlocks)) {
+          startRhythmTransition(targetBlocks, nextTargetBlocks);
+          targetBlocks = nextTargetBlocks;
+        }
+
+        rhythmDragPreviewRef.current = {
+          draggedId,
+          dragBeatPos,
+          targetBlocks,
+        };
+        draggingIdxRef.current = newDragSlot;
         setMatchResult(null);
-        setRhythmSlots(newSlots);
+        setRhythmAnimTick(t => t + 1);
       }
 
       function onUp() {
         isDraggingRef.current = false;
         draggingIdxRef.current = -1;
+        rhythmDragPreviewRef.current = null;
+        setActiveRhythmIdx(targetBlocks.findIndex(block => block.id === draggedId));
         if (canvasRef.current) canvasRef.current.style.cursor = 'default';
         document.removeEventListener('mousemove', onMove);
         document.removeEventListener('mouseup', onUp);
         document.removeEventListener('touchmove', onMove);
         document.removeEventListener('touchend', onUp);
-        const changed = finalSlots.some((d, i) => d !== origSlots[i]);
+        const changed = !sameBlockOrder(targetBlocks, origBlocks);
         if (changed) {
-          setRhythmHistory(prev => [...prev, origSlots]);
+          cancelAnimationFrame(rhythmAnimRafRef.current);
+          rhythmTransitionRef.current = null;
+          setRhythmBlocks(targetBlocks);
+          setRhythmHistory(prev => [...prev, origBlocks]);
+        } else {
+          stopRhythmTransition();
+          drawCanvas();
         }
       }
 
