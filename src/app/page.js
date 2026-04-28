@@ -13,7 +13,7 @@ export default function Home() {
         {/* Text above video */}
         <div style={{ padding: "20px 24px 16px", textAlign: "center", background: colors.red }}>
           <div style={{ ...styles.sectionTitle, fontFamily: fonts.display, color: colors.cream }}>
-            Hi! I'm Anirudh,{" "}
+            Hi! I&apos;m Anirudh,{" "}
             <span style={{ fontFamily: fonts.mono, fontSize: 14, letterSpacing: 2, fontWeight: 700 }}>aka</span>
             {" "}Trianglehead
           </div>
@@ -31,7 +31,7 @@ export default function Home() {
         {/* Text + buttons below video */}
         <div style={{ padding: "16px 24px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16, background: colors.red }}>
           <div style={{ ...styles.sectionTitle, color: colors.cream }}>
-            ... and I'm on a quest for greater musical fluency.
+            ... and I&apos;m on a quest for greater musical fluency.
           </div>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
             <a href="/bio" className="btn" style={styles.btn}>

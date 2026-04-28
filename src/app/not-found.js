@@ -11,16 +11,16 @@ export default function NotFound() {
       </div>
       
       <p style={{ fontFamily: fonts.serif, fontSize: 16, marginBottom: 40, color: colors.black }}>
-        Oops, that page doesn't exist.
+        Oops, that page doesn&apos;t exist.
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <Link 
           href="/" 
           style={{ 
-            ...styles.button, 
-            backgroundColor: colors.red,
-            textDecoration: 'none'
+            ...styles.btn,
+            background: colors.red,
+            color: colors.cream,
           }}
         >
           Back to home
@@ -29,9 +29,8 @@ export default function NotFound() {
         <Link 
           href="/lessons" 
           style={{ 
-            ...styles.button, 
-            backgroundColor: colors.yellow,
-            textDecoration: 'none'
+            ...styles.btn,
+            background: colors.yellow,
           }}
         >
           Browse lessons
@@ -40,10 +39,9 @@ export default function NotFound() {
         <Link 
           href="/contact" 
           style={{ 
-            ...styles.button, 
-            backgroundColor: colors.black,
+            ...styles.btn,
+            background: colors.black,
             color: colors.cream,
-            textDecoration: 'none'
           }}
         >
           Get in touch

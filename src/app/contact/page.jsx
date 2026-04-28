@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useState, useEffect, Suspense } from 'react';
+import { useState, Suspense } from 'react';
 import { CATEGORIES } from '../lessons/data';
 import { colors, fonts, styles } from '../styles';
 
@@ -31,19 +31,10 @@ const SELECT_STYLE = {
   paddingRight: 36,
 };
 
-function ContactPageInner() {
-  const searchParams = useSearchParams();
-  const categoryParam = searchParams.get('category') || '';
-  const typeParam = searchParams.get('type') || '';
-
+function ContactForm({ initialCategory, initialType }) {
   const [status, setStatus] = useState('idle');
-  const [category, setCategory] = useState(categoryParam);
-  const [type, setType] = useState(typeParam);
-
-  useEffect(() => {
-    if (categoryParam) setCategory(categoryParam);
-    if (typeParam) setType(typeParam);
-  }, [categoryParam, typeParam]);
+  const [category, setCategory] = useState(initialCategory);
+  const [type, setType] = useState(initialType);
 
   const subcategoryOptions = getSubcategoryOptions(category);
   const showSubcategory = category && category !== 'general';
@@ -216,6 +207,20 @@ function ContactPageInner() {
         </form>
       )}
     </div>
+  );
+}
+
+function ContactPageInner() {
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get('category') || '';
+  const typeParam = searchParams.get('type') || '';
+
+  return (
+    <ContactForm
+      key={`${categoryParam}:${typeParam}`}
+      initialCategory={categoryParam}
+      initialType={typeParam}
+    />
   );
 }
 
