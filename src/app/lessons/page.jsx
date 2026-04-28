@@ -47,15 +47,31 @@ function LessonsPageInner() {
         <div style={{ background: colors.cream, border: `2px solid ${colors.black}` }}>
           {[
             { label: 'Collaborative', text: 'A lesson is collaborative. I understand you while you understand the subject.' },
-            { label: 'Online', text: 'All lessons are online. Join in from anywhere in the world.' },
             { label: 'Customisable', text: 'The duration, frequency and roadmap of lessons can be adjusted to your requirements.' },
+            { label: 'Online', text: 'All lessons are online. Join in from anywhere in the world.' },
           ].map(({ label, text }, i, arr) => (
-            <div key={label} style={{ padding: '16px 22px', borderBottom: i < arr.length - 1 ? '1.5px solid rgba(0,0,0,0.12)' : 'none' }}>
-              <div style={{ fontFamily: fonts.display, fontSize: 18, letterSpacing: 2, color: colors.red, marginBottom: 4 }}>
+            <details key={label} style={{ borderBottom: i < arr.length - 1 ? '1.5px solid rgba(0,0,0,0.12)' : 'none' }}>
+              <summary
+                className="lesson-summary"
+                style={{
+                  fontFamily: fonts.display,
+                  fontSize: 18,
+                  letterSpacing: 2,
+                  color: colors.red,
+                  padding: '12px 22px',
+                  cursor: 'pointer',
+                  listStyle: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 16,
+                }}
+              >
                 {label}
-              </div>
-              <p style={{ ...styles.bodyText, color: '#333', margin: 0 }}>{text}</p>
-            </div>
+                <span style={{ fontFamily: fonts.mono, fontSize: 14, fontWeight: 700, letterSpacing: 0, color: colors.black }}>+</span>
+              </summary>
+              <p style={{ ...styles.bodyText, color: '#333', margin: 0, padding: '0 22px 16px' }}>{text}</p>
+            </details>
           ))}
         </div>
       </div>

@@ -39,6 +39,20 @@
   animation: fadeSlideIn 0.2s ease;
 }
 
+.lesson-summary::-webkit-details-marker {
+  display: none;
+}
+.lesson-summary::marker {
+  content: "";
+}
+details[open] > .lesson-summary span {
+  font-size: 0 !important;
+}
+details[open] > .lesson-summary span::after {
+  content: "-";
+  font-size: 14px;
+}
+
 @media (max-width: 620px) {
   .nav-bar {
     flex-wrap: wrap !important;
