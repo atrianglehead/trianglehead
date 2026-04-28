@@ -77,7 +77,7 @@ export default function Home() {
             </div>
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 6 }}>
               <div style={styles.cardTitle}>Decoding Melody</div>
-              <p style={{ ...styles.bodyText, fontSize: 12, margin: 0 }}>
+              <p style={{ ...styles.bodyText, margin: 0 }}>
                 A deep dive into how rhythm, pitch, and loudness come together to create melody.
               </p>
               <div style={styles.readLink}>Read on Substack →</div>
@@ -91,7 +91,7 @@ export default function Home() {
             </div>
             <div>
               <div style={styles.cardTitle}>Scale Primer</div>
-              <p style={{ ...styles.bodyText, fontSize: 12, margin: 0 }}>
+              <p style={{ ...styles.bodyText, margin: 0 }}>
                 An introduction to how pitches combine into scales.
               </p>
               <div style={styles.readLink}>Read on Substack →</div>
@@ -105,7 +105,7 @@ export default function Home() {
             </div>
             <div>
               <div style={styles.cardTitle}>Gati Primer</div>
-              <p style={{ ...styles.bodyText, fontSize: 12, margin: 0 }}>
+              <p style={{ ...styles.bodyText, margin: 0 }}>
                 An introduction to how beats combine to become gatis.
               </p>
               <div style={styles.readLink}>Read on Substack →</div>
@@ -123,7 +123,7 @@ export default function Home() {
             <div style={{ fontFamily: fonts.display, fontSize: 13, letterSpacing: 3, color: colors.black, marginBottom: 6 }}>
               Stay in the loop
             </div>
-            <p style={{ ...styles.bodyText, fontSize: 12, lineHeight: 1.6, margin: "0 0 14px" }}>
+            <p style={{ ...styles.bodyText, margin: "0 0 14px" }}>
               Weekly articles exploring music — delivered to your inbox.
             </p>
             <form
@@ -177,7 +177,7 @@ export default function Home() {
               <a href={`/lessons?category=${cat.id}`} style={{ fontFamily: fonts.display, fontSize: 20, letterSpacing: 1, color: colors.red, lineHeight: 1.1, marginBottom: 8, textDecoration: "none", display: "inline-block", borderBottom: `2px solid ${colors.red}`, paddingBottom: 1 }}>
                 {cat.title} →
               </a>
-              <p style={{ ...styles.bodyText, fontSize: 12, margin: "0 0 16px", flex: 1 }}>
+              <p style={{ ...styles.bodyText, margin: "0 0 16px", flex: 1 }}>
                 {cat.shortDesc}
               </p>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>

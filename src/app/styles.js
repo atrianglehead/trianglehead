@@ -19,14 +19,14 @@ export const styles = {
   // Buttons
   btn: {
     fontFamily: fonts.mono,
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: 700,
     letterSpacing: 1,
     textTransform: 'uppercase',
     background: colors.yellow,
     color: colors.black,
     border: `2px solid ${colors.black}`,
-    padding: '9px 16px',
+    padding: '10px 18px',
     display: 'inline-block',
     textDecoration: 'none',
   },
@@ -64,9 +64,9 @@ export const styles = {
   },
   bodyText: {
     fontFamily: fonts.serif,
-    fontSize: 13,
-    color: colors.mutedText,
-    lineHeight: 1.65,
+    fontSize: 15,
+    color: '#444',
+    lineHeight: 1.7,
   },
   readLink: {
     fontSize: 9,
@@ -102,7 +102,7 @@ export const styles = {
   },
   formInput: {
     fontFamily: fonts.mono,
-    fontSize: 12,
+    fontSize: 14,
     padding: '10px 14px',
     border: `2px solid ${colors.divider}`,
     background: '#fff',

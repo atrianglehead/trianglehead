@@ -40,6 +40,11 @@ export const metadata = {
   },
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${spaceMono.variable} ${bebasNeue.variable}`}>
@@ -47,7 +52,7 @@ export default function RootLayout({ children }) {
         <div
           className="site-wrapper"
           style={{
-            maxWidth: 860,
+            maxWidth: 960,
             margin: "0 auto",
             background: "#F5F2EB",
             fontFamily: "var(--font-space-mono), monospace",

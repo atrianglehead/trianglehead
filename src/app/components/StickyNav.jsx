@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -15,7 +14,6 @@ const navItems = [
 ];
 
 export default function StickyNav() {
-  const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
   function isActive(href) {
@@ -39,32 +37,70 @@ export default function StickyNav() {
     };
   }
 
+  function renderLinks() {
+    return navItems.map((item) => {
+      const isExternal = item.href.startsWith("http");
+      return (
+        <a
+          key={item.label}
+          href={item.href}
+          className="sticky-nav-link"
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "noopener noreferrer" : undefined}
+          style={linkStyle(item.href)}
+        >
+          {item.label}
+        </a>
+      );
+    });
+  }
+
   return (
     <>
       <style>{`
         .sticky-nav-link:hover { border-bottom-color: #111 !important; }
-        .hamburger-btn { display: none; }
+        .mobile-nav-menu { display: none; }
+        .mobile-nav-summary::-webkit-details-marker { display: none; }
+        .mobile-nav-summary::marker { content: ""; }
         .sticky-nav-links { display: flex; gap: 24px; align-items: center; }
         @media (max-width: 620px) {
-          .hamburger-btn { display: flex !important; }
+          .sticky-nav-shell {
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px 16px !important;
+            align-items: center !important;
+          }
           .sticky-nav-links { display: none !important; }
-          .sticky-nav-links.open {
+          .mobile-nav-menu {
+            display: block !important;
+            margin-left: auto;
+          }
+          .mobile-nav-menu[open] {
+            display: block !important;
+          }
+          .mobile-nav-menu[open] .mobile-nav-panel {
             display: flex !important;
+          }
+          .mobile-nav-panel {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
             flex-direction: column;
             align-items: flex-end;
             gap: 14px;
+            box-sizing: border-box;
             padding: 14px 16px;
             background: #F5C842;
+            border-bottom: 2px solid #111;
             border-top: 2px solid #111;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            left: 0;
-            z-index: 100;
+            z-index: 60;
           }
         }
       `}</style>
       <div
+        className="sticky-nav-shell"
         style={{
           position: "sticky",
           top: 0,
@@ -86,51 +122,31 @@ export default function StickyNav() {
           </span>
         </Link>
 
-        {/* Desktop links */}
-        <nav className={`sticky-nav-links${open ? " open" : ""}`}>
-          {navItems.map((item) => {
-            const isExternal = item.href.startsWith("http");
-            return (
-              <a
-                key={item.label}
-                href={item.href}
-                className="sticky-nav-link"
-                target={isExternal ? "_blank" : undefined}
-                rel={isExternal ? "noopener noreferrer" : undefined}
-                style={linkStyle(item.href)}
-                onClick={() => setOpen(false)}
-              >
-                {item.label}
-              </a>
-            );
-          })}
+        <nav className="sticky-nav-links">
+          {renderLinks()}
         </nav>
 
-        {/* Hamburger button (mobile only) */}
-        <button
-          className="hamburger-btn"
-          onClick={() => setOpen((v) => !v)}
-          aria-label={open ? "Close menu" : "Open menu"}
-          style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            padding: 4,
-            display: "none",
-            flexDirection: "column",
-            gap: 5,
-          }}
-        >
-          {open ? (
-            <span style={{ fontSize: 18, fontWeight: 700, color: "#111", lineHeight: 1 }}>✕</span>
-          ) : (
-            <>
-              <span style={{ display: "block", width: 22, height: 2, background: "#111" }} />
-              <span style={{ display: "block", width: 22, height: 2, background: "#111" }} />
-              <span style={{ display: "block", width: 22, height: 2, background: "#111" }} />
-            </>
-          )}
-        </button>
+        <details className="mobile-nav-menu">
+          <summary
+            className="mobile-nav-summary"
+            aria-label="Open menu"
+            style={{
+              cursor: "pointer",
+              padding: 4,
+              display: "flex",
+              flexDirection: "column",
+              gap: 5,
+              listStyle: "none",
+            }}
+          >
+            <span style={{ display: "block", width: 22, height: 2, background: "#111" }} />
+            <span style={{ display: "block", width: 22, height: 2, background: "#111" }} />
+            <span style={{ display: "block", width: 22, height: 2, background: "#111" }} />
+          </summary>
+          <nav className="mobile-nav-panel">
+            {renderLinks()}
+          </nav>
+        </details>
       </div>
     </>
   );

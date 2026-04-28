@@ -54,7 +54,7 @@ function LessonsPageInner() {
               <div style={{ fontFamily: fonts.display, fontSize: 18, letterSpacing: 2, color: colors.red, marginBottom: 4 }}>
                 {label}
               </div>
-              <p style={{ ...styles.bodyText, fontSize: 13, color: '#333', lineHeight: 1.7, margin: 0 }}>{text}</p>
+              <p style={{ ...styles.bodyText, color: '#333', margin: 0 }}>{text}</p>
             </div>
           ))}
         </div>
@@ -79,7 +79,7 @@ function LessonsPageInner() {
               onClick={() => setCategory(cat.id)}
               style={{
                 ...styles.btn,
-                fontSize: 9,
+                fontSize: 10,
                 letterSpacing: 1.5,
                 background: active ? colors.red : '#fff',
                 color: active ? colors.cream : colors.black,
@@ -99,7 +99,7 @@ function LessonsPageInner() {
             onClick={() => router.replace(`/lessons?category=${category}`, { scroll: false })}
             style={{
               ...styles.btn,
-              fontSize: 9,
+              fontSize: 10,
               letterSpacing: 1,
               padding: '6px 12px',
               background: !type ? colors.black : colors.bg,
@@ -115,7 +115,7 @@ function LessonsPageInner() {
               onClick={() => setType(sub.id)}
               style={{
                 ...styles.btn,
-                fontSize: 9,
+                fontSize: 10,
                 letterSpacing: 1,
                 padding: '6px 12px',
                 background: type === sub.id ? colors.black : colors.bg,
@@ -150,15 +150,15 @@ function LessonsPageInner() {
                     <div style={{ ...styles.cardTitle, color: '#fff' }}>
                       {sub.title}
                     </div>
-                    <div style={{ background: colors.cream, border: `1.5px solid ${colors.black}`, padding: '4px 9px', flexShrink: 0, textAlign: 'center' }}>
-                      <div style={{ fontFamily: fonts.mono, fontSize: 8, fontWeight: 700, letterSpacing: 0.5, color: colors.black, whiteSpace: 'nowrap' }}>2150 INR</div>
-                      <div style={{ fontFamily: fonts.mono, fontSize: 7, fontWeight: 700, letterSpacing: 0.5, color: colors.mutedText, whiteSpace: 'nowrap' }}>/ HOUR</div>
+                    <div style={{ background: colors.cream, border: `1.5px solid ${colors.black}`, padding: '7px 11px', flexShrink: 0, textAlign: 'center' }}>
+                      <div style={{ fontFamily: fonts.mono, fontSize: 11, fontWeight: 700, letterSpacing: 0.5, color: colors.black, whiteSpace: 'nowrap' }}>2150 INR</div>
+                      <div style={{ fontFamily: fonts.mono, fontSize: 9, fontWeight: 700, letterSpacing: 0.5, color: colors.mutedText, whiteSpace: 'nowrap' }}>/ HOUR</div>
                     </div>
                   </div>
                 </div>
                 {/* Card body */}
                 <div style={{ padding: '16px 18px 18px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <p style={{ ...styles.bodyText, fontSize: 12, color: '#444', margin: '0 0 14px', flex: 1 }}>
+                  <p style={{ ...styles.bodyText, margin: '0 0 14px', flex: 1 }}>
                     {sub.desc}
                   </p>
                   {cat.id === 'voice' && cat.styles && (
@@ -170,7 +170,7 @@ function LessonsPageInner() {
                       ))}
                     </div>
                   )}
-                  <a href={`/contact?category=${cat.id}&type=${sub.id}`} className="btn" style={{ ...styles.btn, padding: '8px 14px', fontSize: 9, ...styles.btnShadow }}>
+                  <a href={`/contact?category=${cat.id}&type=${sub.id}`} className="btn" style={{ ...styles.btn, padding: '9px 15px', fontSize: 10, ...styles.btnShadow }}>
                     Book a session →
                   </a>
                 </div>
@@ -182,7 +182,7 @@ function LessonsPageInner() {
 
       {/* Bottom CTA */}
       <div style={{ marginTop: 16, paddingTop: 28, borderTop: `2px solid ${colors.divider}` }}>
-        <p style={{ ...styles.bodyText, fontSize: 13, lineHeight: 1.75, margin: '0 0 16px', fontStyle: 'italic' }}>
+        <p style={{ ...styles.bodyText, margin: '0 0 16px', fontStyle: 'italic' }}>
           Reach out with any questions — you don&apos;t need to be ready, just curious.
         </p>
         <a href="/contact" className="btn" style={{ ...styles.btn, padding: '10px 18px' }}>
