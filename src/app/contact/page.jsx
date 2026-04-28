@@ -112,7 +112,7 @@ function ContactForm({ initialCategory, initialType }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
             <span style={styles.dividerLine} />
             <span style={{ ...styles.label, whiteSpace: 'nowrap' }}>
-              Or send a message
+              Book lesson / General Enquiry
             </span>
             <span style={styles.dividerLine} />
           </div>
