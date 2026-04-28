@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, Suspense } from 'react';
 import { CATEGORIES } from '../lessons/data';
+import { colors, fonts, styles } from '../styles';
 
 const CATEGORY_OPTIONS = [
   { value: '', label: 'Select a category' },
@@ -20,31 +21,8 @@ const getSubcategoryOptions = (categoryId) => {
   ];
 };
 
-const INPUT_STYLE = {
-  fontFamily: 'var(--font-space-mono), monospace',
-  fontSize: 12,
-  padding: '10px 14px',
-  border: '2px solid #CCC8BC',
-  background: '#fff',
-  color: '#111',
-  outline: 'none',
-  width: '100%',
-  letterSpacing: 0.5,
-};
-
-const LABEL_STYLE = {
-  fontFamily: 'var(--font-space-mono), monospace',
-  fontSize: 9,
-  fontWeight: 700,
-  letterSpacing: 2,
-  textTransform: 'uppercase',
-  color: '#888',
-  marginBottom: 6,
-  display: 'block',
-};
-
 const SELECT_STYLE = {
-  ...INPUT_STYLE,
+  ...styles.formInput,
   cursor: 'pointer',
   appearance: 'none',
   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23111' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`,
@@ -102,23 +80,23 @@ function ContactPageInner() {
     <div style={{ padding: '40px 32px', maxWidth: 560 }}>
 
       {/* Page title */}
-      <div style={{ fontFamily: 'var(--font-bebas-neue), sans-serif', fontSize: 48, letterSpacing: 2, color: '#111', lineHeight: 1, marginBottom: 32 }}>
+      <div style={{ ...styles.pageTitle, marginBottom: 32 }}>
         Get in touch
       </div>
 
       {/* Contact info cards */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 40 }}>
 
-        <div style={{ border: '2px solid #111', padding: '16px 20px', background: '#fff' }}>
-          <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2.5, textTransform: 'uppercase', color: '#E8473F', marginBottom: 6 }}>Email</div>
-          <a href="mailto:anirudh@trianglehead.in" style={{ fontFamily: 'Georgia, serif', fontSize: 15, color: '#111', textDecoration: 'none', borderBottom: '1.5px solid #111', paddingBottom: 1 }}>
+        <div style={{ ...styles.card, padding: '16px 20px' }}>
+          <div style={{ ...styles.label, letterSpacing: 2.5, color: colors.red, marginBottom: 6 }}>Email</div>
+          <a href="mailto:anirudh@trianglehead.in" style={{ fontFamily: fonts.serif, fontSize: 15, color: colors.black, textDecoration: 'none', borderBottom: `1.5px solid ${colors.black}`, paddingBottom: 1 }}>
             anirudh@trianglehead.in
           </a>
         </div>
 
-        <div style={{ border: '2px solid #111', padding: '16px 20px', background: '#fff' }}>
-          <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2.5, textTransform: 'uppercase', color: '#E8473F', marginBottom: 6 }}>Instagram</div>
-          <a href="https://www.instagram.com/a.trianglehead/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'Georgia, serif', fontSize: 15, color: '#111', textDecoration: 'none', borderBottom: '1.5px solid #111', paddingBottom: 1 }}>
+        <div style={{ ...styles.card, padding: '16px 20px' }}>
+          <div style={{ ...styles.label, letterSpacing: 2.5, color: colors.red, marginBottom: 6 }}>Instagram</div>
+          <a href="https://www.instagram.com/a.trianglehead/" target="_blank" rel="noopener noreferrer" style={{ fontFamily: fonts.serif, fontSize: 15, color: colors.black, textDecoration: 'none', borderBottom: `1.5px solid ${colors.black}`, paddingBottom: 1 }}>
             @a.trianglehead
           </a>
         </div>
@@ -127,20 +105,20 @@ function ContactPageInner() {
 
       {/* Divider */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
-        <span style={{ flex: 1, height: 2, background: '#111', display: 'block' }} />
-        <span style={{ fontFamily: 'var(--font-space-mono), monospace', fontSize: 9, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: '#888', whiteSpace: 'nowrap' }}>
+        <span style={styles.dividerLine} />
+        <span style={{ ...styles.label, whiteSpace: 'nowrap' }}>
           Or send a message
         </span>
-        <span style={{ flex: 1, height: 2, background: '#111', display: 'block' }} />
+        <span style={styles.dividerLine} />
       </div>
 
       {/* Form */}
       {status === 'success' ? (
-        <div style={{ border: '2px solid #111', padding: '32px 24px', background: '#fff', textAlign: 'center' }}>
-          <div style={{ fontFamily: 'var(--font-bebas-neue), sans-serif', fontSize: 32, letterSpacing: 2, color: '#111', marginBottom: 10 }}>
+        <div style={{ ...styles.card, padding: '32px 24px', textAlign: 'center' }}>
+          <div style={{ fontFamily: fonts.display, fontSize: 32, letterSpacing: 2, color: colors.black, marginBottom: 10 }}>
             Message sent!
           </div>
-          <p style={{ fontFamily: 'Georgia, serif', fontSize: 13, color: '#555', lineHeight: 1.7, fontStyle: 'italic' }}>
+          <p style={{ ...styles.bodyText, fontStyle: 'italic' }}>
             Thanks for reaching out. I&apos;ll be in touch soon.
           </p>
         </div>
@@ -151,24 +129,24 @@ function ContactPageInner() {
           <input type="text" name="_gotcha" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
 
           <div>
-            <label style={LABEL_STYLE} htmlFor="name">Name *</label>
-            <input id="name" name="name" type="text" required placeholder="Your name" style={INPUT_STYLE} />
+            <label style={styles.formLabel} htmlFor="name">Name *</label>
+            <input id="name" name="name" type="text" required placeholder="Your name" style={styles.formInput} />
           </div>
 
           <div>
-            <label style={LABEL_STYLE} htmlFor="email">Email *</label>
-            <input id="email" name="email" type="email" required placeholder="your@email.com" style={INPUT_STYLE} />
+            <label style={styles.formLabel} htmlFor="email">Email *</label>
+            <input id="email" name="email" type="email" required placeholder="your@email.com" style={styles.formInput} />
           </div>
 
           <div>
-            <label style={LABEL_STYLE} htmlFor="phone">
+            <label style={styles.formLabel} htmlFor="phone">
               Phone <span style={{ opacity: 0.5 }}>(optional)</span>
             </label>
-            <input id="phone" name="phone" type="tel" placeholder="+91 00000 00000" style={INPUT_STYLE} />
+            <input id="phone" name="phone" type="tel" placeholder="+91 00000 00000" style={styles.formInput} />
           </div>
 
           <div>
-            <label style={LABEL_STYLE} htmlFor="category">I&apos;m interested in *</label>
+            <label style={styles.formLabel} htmlFor="category">I&apos;m interested in *</label>
             <select
               id="category"
               name="category"
@@ -185,7 +163,7 @@ function ContactPageInner() {
 
           {showSubcategory && (
             <div className="subcategory-reveal">
-              <label style={LABEL_STYLE} htmlFor="specific_interest">
+              <label style={styles.formLabel} htmlFor="specific_interest">
                 Specific interest <span style={{ opacity: 0.5 }}>(optional)</span>
               </label>
               <select
@@ -203,16 +181,16 @@ function ContactPageInner() {
           )}
 
           <div>
-            <label style={LABEL_STYLE} htmlFor="message">Message *</label>
+            <label style={styles.formLabel} htmlFor="message">Message *</label>
             <textarea
               id="message" name="message" required rows={5}
               placeholder="Tell me about yourself and when you're generally available."
-              style={{ ...INPUT_STYLE, resize: 'vertical', lineHeight: 1.6 }}
+              style={{ ...styles.formInput, resize: 'vertical', lineHeight: 1.6 }}
             />
           </div>
 
           {status === 'error' && (
-            <p style={{ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, color: '#E8473F' }}>
+            <p style={{ fontFamily: fonts.mono, fontSize: 11, color: colors.red }}>
               Something went wrong. Please try again or email me at anirudh@trianglehead.in
             </p>
           )}
@@ -222,17 +200,14 @@ function ContactPageInner() {
             disabled={status === 'submitting'}
             className="btn"
             style={{
-              fontFamily: 'var(--font-space-mono), monospace',
-              fontSize: 11, fontWeight: 700, letterSpacing: 1,
-              textTransform: 'uppercase',
-              background: status === 'submitting' ? '#CCC8BC' : '#F5C842',
-              color: '#111',
-              border: '2px solid #111',
+              ...styles.btn,
+              fontSize: 11,
               padding: '12px 24px',
+              background: status === 'submitting' ? colors.divider : colors.yellow,
               cursor: status === 'submitting' ? 'default' : 'pointer',
               width: 'fit-content',
               alignSelf: 'flex-start',
-              boxShadow: status === 'submitting' ? 'none' : '3px 3px 0 #111',
+              boxShadow: status === 'submitting' ? 'none' : `3px 3px 0 ${colors.black}`,
             }}
           >
             {status === 'submitting' ? 'Sending...' : 'Send message →'}

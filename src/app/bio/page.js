@@ -1,4 +1,5 @@
 import BioProse from '@/content/bio.mdx'
+import { colors, fonts, styles } from '../styles';
 
 export const metadata = {
   title: "Bio · Trianglehead",
@@ -8,10 +9,10 @@ export const metadata = {
 export default function Bio() {
   return (
     <div style={{ padding: "40px 48px", maxWidth: 680 }}>
-      <div style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 48, letterSpacing: 2, color: "#111", lineHeight: 1, marginBottom: 8 }}>
+      <div style={{ ...styles.pageTitle, marginBottom: 8 }}>
         Anirudh Venkatesh
       </div>
-      <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: 2.5, textTransform: "uppercase", color: "#E8473F", marginBottom: 32 }}>
+      <div style={{ ...styles.label, letterSpacing: 2.5, color: colors.red, marginBottom: 32 }}>
         Musician · Explorer · Educator
       </div>
 
@@ -32,7 +33,7 @@ export default function Bio() {
               href={item.href}
               target={isExternal ? "_blank" : undefined}
               rel={isExternal ? "noopener noreferrer" : undefined}
-              style={{ fontFamily: "var(--font-space-mono), monospace", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", padding: "8px 16px", border: "2px solid #111", color: "#111", textDecoration: "none", background: "transparent" }}
+              style={{ ...styles.btn, background: 'transparent' }}
             >
               {item.label}
             </a>
