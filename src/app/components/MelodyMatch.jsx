@@ -90,28 +90,37 @@ function computeSlotBeatStarts(slots) {
 
 /**
  * Reorder blocks in `currentBlocks` as if `draggedId` were dragged to
- * beat position `dragBeatPos`. Uses centre-of-block insertion logic so other
- * slots slide smoothly out of the way.
+ * beat position `dragBeatPos`. Swaps only with adjacent blocks, using the
+ * dragged block's leading edge so the switch matches what the eye is tracking.
  */
-function getDraggedBlocks(currentBlocks, draggedId, dragBeatPos) {
-  const dragged = currentBlocks.find(block => block.id === draggedId);
-  if (!dragged) return { blocks: currentBlocks, newDragSlot: -1 };
+function getDraggedBlocks(currentBlocks, draggedId, dragBeatPos, direction) {
+  const blocks = [...currentBlocks];
+  let dragSlot = blocks.findIndex(block => block.id === draggedId);
+  if (dragSlot === -1 || !direction) return { blocks: currentBlocks, newDragSlot: dragSlot };
 
-  const others = currentBlocks.filter(block => block.id !== draggedId);
-  const dragCenter = dragBeatPos + dragged.beats / 2;
+  const dragged = blocks[dragSlot];
   const exchangeThreshold = 0.35;
 
-  let cursor = 0;
-  let insertPos = others.length;
-  for (let p = 0; p < others.length; p++) {
-    const center = cursor + others[p].beats / 2;
-    if (dragCenter < center + exchangeThreshold) { insertPos = p; break; }
-    cursor += others[p].beats;
+  if (direction === 'right') {
+    while (dragSlot < blocks.length - 1) {
+      const starts = computeSlotBeatStarts(blocks.map(block => block.beats));
+      const slotRightEdge = starts[dragSlot] + dragged.beats;
+      const dragRightEdge = dragBeatPos + dragged.beats;
+      if (dragRightEdge <= slotRightEdge + exchangeThreshold) break;
+      [blocks[dragSlot], blocks[dragSlot + 1]] = [blocks[dragSlot + 1], blocks[dragSlot]];
+      dragSlot += 1;
+    }
+  } else {
+    while (dragSlot > 0) {
+      const starts = computeSlotBeatStarts(blocks.map(block => block.beats));
+      const slotLeftEdge = starts[dragSlot];
+      if (dragBeatPos >= slotLeftEdge - exchangeThreshold) break;
+      [blocks[dragSlot], blocks[dragSlot - 1]] = [blocks[dragSlot - 1], blocks[dragSlot]];
+      dragSlot -= 1;
+    }
   }
 
-  const blocks = [...others];
-  blocks.splice(insertPos, 0, dragged);
-  return { blocks, newDragSlot: insertPos };
+  return { blocks, newDragSlot: dragSlot };
 }
 
 function sameBlockOrder(a, b) {
@@ -786,6 +795,7 @@ export default function MelodyMatch() {
       const offsetX = x - slotStarts[idx] * ppb; // click offset within block
       const draggedId = origBlocks[idx].id;
       let targetBlocks = origBlocks;
+      let lastDragBeatPos = slotStarts[idx];
       rhythmDragPreviewRef.current = {
         draggedId,
         dragBeatPos: slotStarts[idx],
@@ -797,7 +807,18 @@ export default function MelodyMatch() {
         const { x: cx } = getCanvasCoords(ev);
         const ppb2 = getPxPerBeat();
         const dragBeatPos = (cx - offsetX) / ppb2;
-        const { blocks: nextTargetBlocks, newDragSlot } = getDraggedBlocks(origBlocks, draggedId, dragBeatPos);
+        const direction = dragBeatPos > lastDragBeatPos
+          ? 'right'
+          : dragBeatPos < lastDragBeatPos
+            ? 'left'
+            : null;
+        lastDragBeatPos = dragBeatPos;
+        const { blocks: nextTargetBlocks, newDragSlot } = getDraggedBlocks(
+          targetBlocks,
+          draggedId,
+          dragBeatPos,
+          direction,
+        );
 
         if (!sameBlockOrder(nextTargetBlocks, targetBlocks)) {
           startRhythmTransition(targetBlocks, nextTargetBlocks);
