@@ -912,7 +912,7 @@ export default function MelodyMatch() {
     bannerSub: { fontSize: 14, color: '#333', lineHeight: 1.45, marginTop: 4, fontFamily: 'var(--font-space-mono), monospace' },
     inner: { padding: '20px 20px 24px', background: '#F5C842' },
     gameTitle: { fontSize: 11, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: '#E8473F', marginBottom: 4 },
-    tabsRow: { display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12, flexWrap: 'wrap' },
+    tabsRow: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 12, flexWrap: 'wrap' },
     tabs: { display: 'flex', border: '2.5px solid #111', width: 'fit-content' },
     tab: (active) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', padding: '9px 20px', cursor: 'pointer', background: active ? '#E8473F' : '#fff', color: active ? '#EEE8D0' : '#111', border: 'none', borderRight: '2.5px solid #111' }),
     tabLast: (active) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', padding: '9px 20px', cursor: 'pointer', background: active ? '#E8473F' : '#fff', color: active ? '#EEE8D0' : '#111', border: 'none' }),
@@ -921,7 +921,7 @@ export default function MelodyMatch() {
     helpButton: { width: 28, height: 28, borderRadius: '50%', border: '2px solid #111', background: helpOpen ? '#E8473F' : '#fff', color: helpOpen ? '#EEE8D0' : '#111', fontFamily: 'var(--font-space-mono), monospace', fontSize: 15, fontWeight: 900, cursor: 'pointer', lineHeight: 1 },
     toggleTrack: (on) => ({ width: 36, height: 20, background: on ? '#E8473F' : '#fff', border: '2px solid #111', position: 'relative', transition: 'background 0.15s', flexShrink: 0 }),
     toggleThumb: (on) => ({ position: 'absolute', top: 1, left: on ? 17 : 1, width: 14, height: 14, background: on ? '#EEE8D0' : '#F5C842', border: '1.5px solid #111', transition: 'left 0.15s' }),
-    instructions: { fontSize: 14, color: '#222', fontFamily: 'var(--font-space-mono), monospace', lineHeight: 1.45, marginBottom: 14 },
+    instructions: { fontSize: 14, color: '#222', fontFamily: 'var(--font-space-mono), monospace', lineHeight: 1.45, textAlign: 'center', marginBottom: 14 },
     directionWord: { fontWeight: 900, textTransform: 'uppercase' },
     graphOuter: { border: '2.5px solid #111', background: '#F5F2EB', marginBottom: 8, position: 'relative' },
     graphInner: { display: 'flex' },
@@ -932,18 +932,20 @@ export default function MelodyMatch() {
     canvas: { display: 'block', width: '100%' },
     xAxis: { display: 'flex', marginLeft: 40, borderTop: '2px solid #111', background: '#EDEAE0' },
     xCell: { flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: '#444', fontFamily: 'var(--font-space-mono), monospace', borderRight: '1px solid #D5D1C5', display: 'flex', alignItems: 'center', justifyContent: 'center', height: 28, minWidth: 0, userSelect: 'none' },
-    controls: { display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginTop: 4 },
+    controls: { display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', marginTop: 4 },
     goalBtn: (playing) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '10px 15px', border: playing ? '2px solid #E8473F' : '2px solid #111', cursor: 'pointer', background: playing ? '#E8473F' : '#111', color: '#fff', whiteSpace: 'nowrap' }),
     mineBtn: (playing) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '10px 15px', border: playing ? '2px solid #E8473F' : '2px solid #111', cursor: 'pointer', background: playing ? '#E8473F' : '#fff', color: playing ? '#fff' : '#111', whiteSpace: 'nowrap' }),
     gbtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '10px 15px', border: '2px solid #111', cursor: 'pointer', background: '#fff', color: '#111', whiteSpace: 'nowrap' },
     nextBtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '10px 15px', border: '2px solid #111', cursor: 'pointer', background: '#111', color: '#fff', whiteSpace: 'nowrap' },
-    gameStatus: { fontSize: 13, color: '#222', fontFamily: 'var(--font-space-mono), monospace', fontWeight: 700, lineHeight: 1.45, letterSpacing: 0.5, width: '100%', marginTop: 6 },
+    gameStatus: { fontSize: 13, color: '#222', fontFamily: 'var(--font-space-mono), monospace', fontWeight: 700, lineHeight: 1.45, letterSpacing: 0.5, textAlign: 'center', width: '100%', marginTop: 6 },
     helpOverlay: { position: 'absolute', zIndex: 5, inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, background: 'rgba(245, 242, 235, 0.88)' },
     helpPanel: { width: 'min(640px, 100%)', border: '2.5px solid #111', background: '#F5C842', boxShadow: '5px 5px 0 #111', padding: 10 },
-    helpHead: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 8 },
-    helpTitle: { fontFamily: 'var(--font-bebas-neue), sans-serif', fontSize: 22, letterSpacing: 1.5, color: '#111' },
+    helpHead: { display: 'grid', gridTemplateColumns: '26px 1fr 26px', alignItems: 'center', gap: 12, marginBottom: 8 },
+    helpTitle: { fontFamily: 'var(--font-bebas-neue), sans-serif', fontSize: 22, letterSpacing: 1.5, color: '#111', textAlign: 'center' },
     helpClose: { width: 26, height: 26, border: '2px solid #111', background: '#fff', color: '#111', fontFamily: 'var(--font-space-mono), monospace', fontWeight: 900, cursor: 'pointer' },
-    helpTabs: { display: 'flex', border: '2.5px solid #111', width: 'fit-content', marginBottom: 8 },
+    helpTabs: { display: 'flex', border: '2.5px solid #111', width: 'fit-content', margin: '0 auto 8px' },
+    helpTab: (active) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 9, fontWeight: 700, letterSpacing: 1.4, textTransform: 'uppercase', padding: '6px 14px', cursor: 'pointer', background: active ? '#E8473F' : '#fff', color: active ? '#EEE8D0' : '#111', border: 'none', borderRight: '2px solid #111' }),
+    helpTabLast: (active) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 9, fontWeight: 700, letterSpacing: 1.4, textTransform: 'uppercase', padding: '6px 14px', cursor: 'pointer', background: active ? '#E8473F' : '#fff', color: active ? '#EEE8D0' : '#111', border: 'none' }),
     helpBody: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 },
     helpCard: { border: '2px solid #111', background: '#F5F2EB', padding: 8, minHeight: 148 },
     helpCardTitle: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 10, fontWeight: 900, letterSpacing: 1.3, textTransform: 'uppercase', marginBottom: 6, color: '#111' },
@@ -984,15 +986,15 @@ export default function MelodyMatch() {
       <div style={S.inner}>
         {/* Tabs + Hints toggle */}
         <div style={S.tabsRow}>
-          <div style={S.tabs}>
-            <button style={S.tab(currentTab === 'pitch')} onClick={() => switchTab('pitch')}>Pitch</button>
-            <button style={S.tabLast(currentTab === 'rhythm')} onClick={() => switchTab('rhythm')}>Rhythm</button>
-          </div>
           <div style={S.hintsToggle} onClick={() => setHintsOn(h => !h)}>
             <div style={S.hintsLabel}>Hints</div>
             <div style={S.toggleTrack(hintsOn)}>
               <div style={S.toggleThumb(hintsOn)} />
             </div>
+          </div>
+          <div style={S.tabs}>
+            <button style={S.tab(currentTab === 'pitch')} onClick={() => switchTab('pitch')}>Pitch</button>
+            <button style={S.tabLast(currentTab === 'rhythm')} onClick={() => switchTab('rhythm')}>Rhythm</button>
           </div>
           <button
             type="button"
@@ -1025,12 +1027,13 @@ export default function MelodyMatch() {
             <div style={S.helpOverlay} onClick={() => setHelpOpen(false)}>
               <div style={S.helpPanel} role="dialog" aria-label="Melody Match help" onClick={e => e.stopPropagation()}>
                 <div style={S.helpHead}>
+                  <div />
                   <div style={S.helpTitle}>How To Play</div>
                   <button type="button" style={S.helpClose} onClick={() => setHelpOpen(false)}>X</button>
                 </div>
                 <div style={S.helpTabs}>
-                  <button type="button" style={S.tab(helpTab === 'pitch')} onClick={() => setHelpTab('pitch')}>Pitch</button>
-                  <button type="button" style={S.tabLast(helpTab === 'rhythm')} onClick={() => setHelpTab('rhythm')}>Rhythm</button>
+                  <button type="button" style={S.helpTab(helpTab === 'pitch')} onClick={() => setHelpTab('pitch')}>Pitch</button>
+                  <button type="button" style={S.helpTabLast(helpTab === 'rhythm')} onClick={() => setHelpTab('rhythm')}>Rhythm</button>
                 </div>
 
                 {helpTab === 'pitch' ? (
