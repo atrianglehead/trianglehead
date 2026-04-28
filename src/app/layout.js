@@ -19,6 +19,25 @@ const bebasNeue = Bebas_Neue({
 export const metadata = {
   title: "Trianglehead",
   description: "Exploring musical fluency.",
+  openGraph: {
+    title: "Trianglehead - Exploring musical fluency.",
+    description: "Discover music, interactive learning tools, articles and private lessons with Anirudh Venkatesh.",
+    url: "https://trianglehead.in",
+    type: "website",
+    images: [
+      {
+        url: "https://trianglehead.in/MelodyTriangle.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Trianglehead - Exploring musical fluency.",
+    description: "Discover music, interactive learning tools, articles and private lessons with Anirudh Venkatesh.",
+    images: ["https://trianglehead.in/MelodyTriangle.png"],
+  },
 };
 
 export default function RootLayout({ children }) {
