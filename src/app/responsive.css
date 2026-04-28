@@ -39,6 +39,29 @@
   animation: fadeSlideIn 0.2s ease;
 }
 
+.contact-field:focus {
+  border-color: #111 !important;
+  box-shadow: 3px 3px 0 #111;
+}
+.contact-field-arrival {
+  border-color: #111 !important;
+  box-shadow: 3px 3px 0 #111;
+}
+.contact-page-shell {
+  padding: 40px 32px;
+}
+.contact-panel {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 36px 40px 42px;
+}
+.contact-form-box {
+  padding: 28px;
+}
+.contact-form-box.booking-focus {
+  box-shadow: 4px 4px 0 #111;
+}
+
 .lesson-summary::-webkit-details-marker {
   display: none;
 }
@@ -54,6 +77,16 @@ details[open] > .lesson-summary span::after {
 }
 
 @media (max-width: 620px) {
+  .contact-page-shell {
+    padding: 24px 14px;
+  }
+  .contact-panel {
+    padding: 24px 16px 28px;
+  }
+  .contact-form-box {
+    padding: 16px;
+  }
+
   .nav-bar {
     flex-wrap: wrap !important;
     gap: 10px !important;

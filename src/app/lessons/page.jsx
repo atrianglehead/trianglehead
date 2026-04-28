@@ -186,7 +186,7 @@ function LessonsPageInner() {
                       ))}
                     </div>
                   )}
-                  <a href={`/contact?category=${cat.id}&type=${sub.id}`} className="btn" style={{ ...styles.btn, padding: '9px 15px', fontSize: 10, ...styles.btnShadow }}>
+                  <a href={`/contact?category=${cat.id}&type=${sub.id}#message`} className="btn" style={{ ...styles.btn, padding: '9px 15px', fontSize: 10, ...styles.btnShadow }}>
                     Book a session →
                   </a>
                 </div>

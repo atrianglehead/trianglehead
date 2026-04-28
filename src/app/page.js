@@ -182,7 +182,7 @@ export default function Home() {
               </p>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 <a href={`/lessons?category=${cat.id}`} className="btn" style={{ ...styles.btn, background: '#fff', padding: "9px 14px" }}>Learn more →</a>
-                <a href={`/contact?category=${cat.id}`} className="btn" style={{ ...styles.btn, padding: "9px 14px", ...styles.btnShadow }}>Book a session →</a>
+                <a href={`/contact?category=${cat.id}#message`} className="btn" style={{ ...styles.btn, padding: "9px 14px", ...styles.btnShadow }}>Book a session →</a>
               </div>
             </div>
           ))}
