@@ -201,7 +201,7 @@ function ContactForm({ initialCategory, initialType }) {
               boxShadow: status === 'submitting' ? 'none' : `3px 3px 0 ${colors.black}`,
             }}
           >
-            {status === 'submitting' ? 'Sending...' : 'Send message →'}
+            {status === 'submitting' ? 'Sending...' : 'Send to Anirudh'}
           </button>
 
         </form>

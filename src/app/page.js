@@ -175,12 +175,13 @@ export default function Home() {
           {CATEGORIES.map(cat => (
             <div key={cat.id} style={{ background: '#fff', border: `2px solid ${colors.black}`, padding: "20px", display: "flex", flexDirection: "column" }}>
               <a href={`/lessons?category=${cat.id}`} style={{ fontFamily: fonts.display, fontSize: 20, letterSpacing: 1, color: colors.red, lineHeight: 1.1, marginBottom: 8, textDecoration: "none", display: "inline-block", borderBottom: `2px solid ${colors.red}`, paddingBottom: 1 }}>
-                {cat.title} →
+                {cat.title}
               </a>
               <p style={{ ...styles.bodyText, margin: "0 0 16px", flex: 1 }}>
                 {cat.shortDesc}
               </p>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <a href={`/lessons?category=${cat.id}`} className="btn" style={{ ...styles.btn, background: '#fff', padding: "9px 14px" }}>Learn more →</a>
                 <a href={`/contact?category=${cat.id}`} className="btn" style={{ ...styles.btn, padding: "9px 14px", ...styles.btnShadow }}>Book a session →</a>
               </div>
             </div>

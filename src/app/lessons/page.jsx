@@ -183,7 +183,7 @@ function LessonsPageInner() {
       {/* Bottom CTA */}
       <div style={{ marginTop: 16, paddingTop: 28, borderTop: `2px solid ${colors.divider}` }}>
         <p style={{ ...styles.bodyText, margin: '0 0 16px', fontStyle: 'italic' }}>
-          Reach out with any questions — you don&apos;t need to be ready, just curious.
+          Reach out with any questions. You don&apos;t need to be ready - just curious.
         </p>
         <a href="/contact" className="btn" style={{ ...styles.btn, padding: '10px 18px' }}>
           Get in touch →
