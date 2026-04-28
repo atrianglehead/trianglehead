@@ -148,6 +148,8 @@ export default function MelodyMatch() {
   const [melodyIdx, setMelodyIdx] = useState(0);
   const [currentTab, setCurrentTab] = useState('pitch');
   const [hintsOn, setHintsOn] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
+  const [helpTab, setHelpTab] = useState('pitch');
 
   // Per-tab arrangement state
   const [pitchPositions, setPitchPositions] = useState(() => initPitchPositions(MELODIES[0]));
@@ -736,6 +738,7 @@ export default function MelodyMatch() {
   }
 
   function handleCanvasCursorHover(e) {
+    if (helpOpen) return;
     if (isDraggingRef.current) return;
     const { x, y } = getCanvasCoords(e);
     let cursor = 'default';
@@ -748,6 +751,7 @@ export default function MelodyMatch() {
   }
 
   function handleCanvasPointerDown(e) {
+    if (helpOpen) return;
     if (goalPlaying || minePlaying) return;
     e.preventDefault();
     const { x, y } = getCanvasCoords(e);
@@ -914,11 +918,12 @@ export default function MelodyMatch() {
     tabLast: (active) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', padding: '9px 20px', cursor: 'pointer', background: active ? '#E8473F' : '#fff', color: active ? '#EEE8D0' : '#111', border: 'none' }),
     hintsToggle: { display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', userSelect: 'none' },
     hintsLabel: { fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#111' },
+    helpButton: { width: 28, height: 28, borderRadius: '50%', border: '2px solid #111', background: helpOpen ? '#E8473F' : '#fff', color: helpOpen ? '#EEE8D0' : '#111', fontFamily: 'var(--font-space-mono), monospace', fontSize: 15, fontWeight: 900, cursor: 'pointer', lineHeight: 1 },
     toggleTrack: (on) => ({ width: 36, height: 20, background: on ? '#E8473F' : '#fff', border: '2px solid #111', position: 'relative', transition: 'background 0.15s', flexShrink: 0 }),
     toggleThumb: (on) => ({ position: 'absolute', top: 1, left: on ? 17 : 1, width: 14, height: 14, background: on ? '#EEE8D0' : '#F5C842', border: '1.5px solid #111', transition: 'left 0.15s' }),
     instructions: { fontSize: 14, color: '#222', fontFamily: 'var(--font-space-mono), monospace', lineHeight: 1.45, marginBottom: 14 },
     directionWord: { fontWeight: 900, textTransform: 'uppercase' },
-    graphOuter: { border: '2.5px solid #111', background: '#F5F2EB', marginBottom: 8 },
+    graphOuter: { border: '2.5px solid #111', background: '#F5F2EB', marginBottom: 8, position: 'relative' },
     graphInner: { display: 'flex' },
     yAxis: { width: 40, flexShrink: 0, borderRight: '2px solid #111', display: 'flex', flexDirection: 'column', background: '#EDEAE0' },
     yCell: { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: '#444', fontFamily: 'var(--font-space-mono), monospace', borderBottom: '1px solid #D5D1C5', height: ROW_H, flexShrink: 0, userSelect: 'none' },
@@ -933,6 +938,35 @@ export default function MelodyMatch() {
     gbtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '10px 15px', border: '2px solid #111', cursor: 'pointer', background: '#fff', color: '#111', whiteSpace: 'nowrap' },
     nextBtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '10px 15px', border: '2px solid #111', cursor: 'pointer', background: '#111', color: '#fff', whiteSpace: 'nowrap' },
     gameStatus: { fontSize: 13, color: '#222', fontFamily: 'var(--font-space-mono), monospace', fontWeight: 700, lineHeight: 1.45, letterSpacing: 0.5, width: '100%', marginTop: 6 },
+    helpOverlay: { position: 'absolute', zIndex: 5, inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, background: 'rgba(245, 242, 235, 0.88)' },
+    helpPanel: { width: 'min(640px, 100%)', border: '2.5px solid #111', background: '#F5C842', boxShadow: '5px 5px 0 #111', padding: 10 },
+    helpHead: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 8 },
+    helpTitle: { fontFamily: 'var(--font-bebas-neue), sans-serif', fontSize: 22, letterSpacing: 1.5, color: '#111' },
+    helpClose: { width: 26, height: 26, border: '2px solid #111', background: '#fff', color: '#111', fontFamily: 'var(--font-space-mono), monospace', fontWeight: 900, cursor: 'pointer' },
+    helpTabs: { display: 'flex', border: '2.5px solid #111', width: 'fit-content', marginBottom: 8 },
+    helpBody: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 },
+    helpCard: { border: '2px solid #111', background: '#F5F2EB', padding: 8, minHeight: 148 },
+    helpCardTitle: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 10, fontWeight: 900, letterSpacing: 1.3, textTransform: 'uppercase', marginBottom: 6, color: '#111' },
+    helpGrid: { position: 'relative', height: 112, border: '2px solid #111', background: '#fff', overflow: 'hidden' },
+    helpBlock: (beat, row, beats, extra = {}) => ({
+      position: 'absolute',
+      left: `${beat * 25}%`,
+      top: row,
+      width: `${beats * 25}%`,
+      height: 26,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      border: '2px solid #111',
+      background: '#F5C842',
+      color: '#111',
+      fontFamily: 'var(--font-space-mono), monospace',
+      fontSize: 10,
+      fontWeight: 900,
+      boxSizing: 'border-box',
+      ...extra,
+    }),
+    helpTick: { position: 'absolute', right: 7, bottom: 7, width: 26, height: 26, borderRadius: '50%', border: '2px solid #111', background: '#E8473F', color: '#EEE8D0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, opacity: 0 },
   };
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -960,6 +994,17 @@ export default function MelodyMatch() {
               <div style={S.toggleThumb(hintsOn)} />
             </div>
           </div>
+          <button
+            type="button"
+            style={S.helpButton}
+            aria-label="Open Melody Match help"
+            onClick={() => {
+              setHelpTab(currentTab);
+              setHelpOpen(open => !open);
+            }}
+          >
+            ?
+          </button>
         </div>
 
         <div style={S.instructions}>
@@ -976,6 +1021,72 @@ export default function MelodyMatch() {
 
         {/* Graph */}
         <div style={S.graphOuter}>
+          {helpOpen && (
+            <div style={S.helpOverlay} onClick={() => setHelpOpen(false)}>
+              <div style={S.helpPanel} role="dialog" aria-label="Melody Match help" onClick={e => e.stopPropagation()}>
+                <div style={S.helpHead}>
+                  <div style={S.helpTitle}>How To Play</div>
+                  <button type="button" style={S.helpClose} onClick={() => setHelpOpen(false)}>X</button>
+                </div>
+                <div style={S.helpTabs}>
+                  <button type="button" style={S.tab(helpTab === 'pitch')} onClick={() => setHelpTab('pitch')}>Pitch</button>
+                  <button type="button" style={S.tabLast(helpTab === 'rhythm')} onClick={() => setHelpTab('rhythm')}>Rhythm</button>
+                </div>
+
+                {helpTab === 'pitch' ? (
+                  <div key="pitch-help" className="mm-help-body" style={S.helpBody}>
+                    <div style={S.helpCard}>
+                      <div style={S.helpCardTitle}>Goal</div>
+                      <div className="mm-help-grid" style={S.helpGrid}>
+                        <div style={S.helpBlock(0, 78, 1)}>Sa</div>
+                        <div style={S.helpBlock(1, 12, 2)}>Ga</div>
+                        <div style={S.helpBlock(3, 45, 1)}>Re</div>
+                      </div>
+                    </div>
+                    <div style={S.helpCard}>
+                      <div style={S.helpCardTitle}>Drag UP/DOWN</div>
+                      <div className="mm-help-grid" style={S.helpGrid}>
+                        <div style={S.helpBlock(0, 78, 1)}>Sa</div>
+                        <div className="mm-pitch-wide" style={S.helpBlock(1, 78, 2)}>
+                          Ga <span className="mm-block-arrow">↑</span>
+                        </div>
+                        <div className="mm-pitch-short" style={S.helpBlock(3, 78, 1)}>
+                          Re <span className="mm-block-arrow">↑</span>
+                        </div>
+                        <div className="mm-help-tick" style={S.helpTick}>✓</div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div key="rhythm-help" className="mm-help-body" style={S.helpBody}>
+                    <div style={S.helpCard}>
+                      <div style={S.helpCardTitle}>Goal</div>
+                      <div className="mm-help-grid" style={S.helpGrid}>
+                        <div style={S.helpBlock(0, 78, 1)}>1</div>
+                        <div style={S.helpBlock(1, 12, 2)}>2</div>
+                        <div style={S.helpBlock(3, 45, 1)}>4</div>
+                      </div>
+                    </div>
+                    <div style={S.helpCard}>
+                      <div style={S.helpCardTitle}>Drag LEFT/RIGHT</div>
+                      <div className="mm-help-grid" style={S.helpGrid}>
+                        <div style={S.helpBlock(0, 78, 1)}>1</div>
+                        <div className="mm-rhythm-short" style={S.helpBlock(1, 12, 1)}>
+                          <span className="mm-label-start">2 <span className="mm-block-arrow">→</span></span>
+                          <span className="mm-label-target">4</span>
+                        </div>
+                        <div className="mm-rhythm-long" style={S.helpBlock(2, 45, 2)}>
+                          <span className="mm-label-start">3</span>
+                          <span className="mm-label-target">2</span>
+                        </div>
+                        <div className="mm-help-tick" style={S.helpTick}>✓</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
           <div style={S.graphInner}>
             {/* Y Axis — labels only, not clickable */}
             <div style={{ ...S.yAxis, height: GRAPH_H }}>
@@ -1028,6 +1139,102 @@ export default function MelodyMatch() {
           <div style={S.gameStatus}>{status}</div>
         </div>
       </div>
+      <style>{`
+        .mm-help-grid::before {
+          content: none;
+        }
+
+        .mm-block-arrow {
+          margin-left: 4px;
+          color: #E8473F;
+          font-size: 14px;
+          line-height: 1;
+          animation: mmHelpArrow 4s linear infinite;
+        }
+
+        .mm-label-start,
+        .mm-label-target {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .mm-label-start {
+          animation: mmStartLabel 4s linear infinite;
+        }
+
+        .mm-label-target {
+          animation: mmTargetLabel 4s linear infinite;
+        }
+
+        .mm-pitch-wide {
+          animation: mmPitchWide 4s ease-in-out infinite;
+        }
+
+        .mm-pitch-short {
+          animation: mmPitchShort 4s ease-in-out infinite;
+        }
+
+        .mm-rhythm-short {
+          animation: mmRhythmShort 4s ease-in-out infinite;
+        }
+
+        .mm-rhythm-long {
+          animation: mmRhythmLong 4s ease-in-out infinite;
+        }
+
+        .mm-help-tick {
+          animation: mmHelpTick 4s ease-in-out infinite;
+        }
+
+        @keyframes mmPitchWide {
+          0%, 12.5% { top: 78px; }
+          32%, 82% { top: 12px; }
+          88%, 100% { top: 78px; }
+        }
+
+        @keyframes mmPitchShort {
+          0%, 12.5% { top: 78px; }
+          32%, 82% { top: 45px; }
+          88%, 100% { top: 78px; }
+        }
+
+        @keyframes mmRhythmShort {
+          0%, 12.5% { left: 25%; top: 12px; width: 25%; }
+          32%, 82% { left: 75%; top: 45px; width: 25%; }
+          88%, 100% { left: 25%; top: 12px; width: 25%; }
+        }
+
+        @keyframes mmRhythmLong {
+          0%, 12.5% { left: 50%; top: 45px; width: 50%; }
+          32%, 82% { left: 25%; top: 12px; width: 50%; }
+          88%, 100% { left: 50%; top: 45px; width: 50%; }
+        }
+
+        @keyframes mmHelpTick {
+          0%, 31%, 83%, 100% { opacity: 0; transform: scale(0.8); }
+          32%, 82% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes mmHelpArrow {
+          0%, 12.5% { opacity: 1; }
+          13%, 100% { opacity: 0; }
+        }
+
+        @keyframes mmStartLabel {
+          0%, 31% { opacity: 1; }
+          32%, 82% { opacity: 0; }
+          88%, 100% { opacity: 1; }
+        }
+
+        @keyframes mmTargetLabel {
+          0%, 31% { opacity: 0; }
+          32%, 82% { opacity: 1; }
+          88%, 100% { opacity: 0; }
+        }
+      `}</style>
     </section>
   );
 }
