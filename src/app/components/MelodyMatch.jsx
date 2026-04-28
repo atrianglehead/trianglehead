@@ -136,8 +136,6 @@ export default function MelodyMatch() {
   const goalNodesRef = useRef([]);
   const mineNodesRef = useRef([]);
   const rhythmPreviewNodesRef = useRef([]);
-  const notePreviewTokenRef = useRef(0);
-  const rhythmPreviewTokenRef = useRef(0);
   const playheadRafRef = useRef(null);
   const goalStopRef = useRef(null);
   const mineStopRef = useRef(null);
@@ -152,6 +150,8 @@ export default function MelodyMatch() {
   const [hintsOn, setHintsOn] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [helpTab, setHelpTab] = useState('pitch');
+  const [showSoundUnlock, setShowSoundUnlock] = useState(false);
+  const [soundUnlocked, setSoundUnlocked] = useState(false);
 
   // Per-tab arrangement state
   const [pitchPositions, setPitchPositions] = useState(() => initPitchPositions(MELODIES[0]));
@@ -186,10 +186,20 @@ export default function MelodyMatch() {
   const unlockAudio = useCallback(() => {
     const ctx = getAudio();
     if (ctx.state === 'suspended') {
-      ctx.resume().catch(() => {});
+      ctx.resume().then(() => setSoundUnlocked(true)).catch(() => {});
+    } else {
+      setSoundUnlocked(true);
     }
     return ctx;
   }, [getAudio]);
+
+  useEffect(() => {
+    const pointerQuery = window.matchMedia('(pointer: coarse)');
+    const updateSoundUnlockVisibility = () => setShowSoundUnlock(pointerQuery.matches);
+    updateSoundUnlockVisibility();
+    pointerQuery.addEventListener('change', updateSoundUnlockVisibility);
+    return () => pointerQuery.removeEventListener('change', updateSoundUnlockVisibility);
+  }, []);
 
   function getPxPerBeat() {
     if (!wrapRef.current) return 40;
@@ -202,17 +212,7 @@ export default function MelodyMatch() {
   }
 
   function stopRhythmPreview() {
-    rhythmPreviewTokenRef.current += 1;
     stopNodes(rhythmPreviewNodesRef.current);
-  }
-
-  function runWhenAudioReady(play) {
-    const ctx = getAudio();
-    if (ctx.state === 'suspended') {
-      ctx.resume().then(() => play(ctx)).catch(() => play(ctx));
-      return;
-    }
-    play(ctx);
   }
 
   function stopPlayhead() {
@@ -258,49 +258,51 @@ export default function MelodyMatch() {
   }
 
   function playNotePreview(freq) {
-    const token = notePreviewTokenRef.current + 1;
-    notePreviewTokenRef.current = token;
-
-    runWhenAudioReady((ctx) => {
-      if (token !== notePreviewTokenRef.current) return;
-
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.type = 'sine'; osc.frequency.value = freq;
-      const t = ctx.currentTime + 0.01;
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.35, t + 0.02);
-      gain.gain.setValueAtTime(0.35, t + 0.22);
-      gain.gain.linearRampToValueAtTime(0, t + 0.26);
-      osc.start(t); osc.stop(t + 0.26);
-    });
+    const ctx = unlockAudio();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sine'; osc.frequency.value = freq;
+    const t = ctx.currentTime;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.35, t + 0.02);
+    gain.gain.setValueAtTime(0.35, t + 0.22);
+    gain.gain.linearRampToValueAtTime(0, t + 0.26);
+    osc.start(t); osc.stop(t + 0.26);
   }
 
   function playRhythmSwapPreview(slotIdx, beats) {
     if (slotIdx < 0 || slotIdx >= GOAL.length) return;
     stopRhythmPreview();
-    const token = rhythmPreviewTokenRef.current;
 
-    runWhenAudioReady((ctx) => {
-      if (token !== rhythmPreviewTokenRef.current) return;
+    const ctx = unlockAudio();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const dur = beats * (BEAT_MS / 1000);
+    const t = ctx.currentTime;
 
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const dur = beats * (BEAT_MS / 1000);
-      const t = ctx.currentTime + 0.01;
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = NOTES[GOAL[slotIdx].noteIdx].freq;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.35, t + 0.02);
+    gain.gain.setValueAtTime(0.35, Math.max(t + 0.02, t + dur - 0.05));
+    gain.gain.linearRampToValueAtTime(0, t + dur);
+    osc.start(t);
+    osc.stop(t + dur);
+    rhythmPreviewNodesRef.current.push(osc);
+  }
 
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.type = 'sine';
-      osc.frequency.value = NOTES[GOAL[slotIdx].noteIdx].freq;
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.35, t + 0.02);
-      gain.gain.setValueAtTime(0.35, Math.max(t + 0.02, t + dur - 0.05));
-      gain.gain.linearRampToValueAtTime(0, t + dur);
-      osc.start(t);
-      osc.stop(t + dur);
-      rhythmPreviewNodesRef.current.push(osc);
-    });
+  function enableSound() {
+    const ctx = unlockAudio();
+    const t = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0, t);
+    osc.start(t);
+    osc.stop(t + 0.02);
+    setSoundUnlocked(true);
   }
 
   function scheduleItems(items, nodeStore) {
@@ -949,6 +951,8 @@ export default function MelodyMatch() {
     toggleThumb: (on) => ({ position: 'absolute', top: 1, left: on ? 17 : 1, width: 14, height: 14, background: on ? '#EEE8D0' : '#F5C842', border: '1.5px solid #111', transition: 'left 0.15s' }),
     instructions: { fontSize: 14, color: '#222', fontFamily: 'var(--font-space-mono), monospace', lineHeight: 1.45, textAlign: 'center', marginBottom: 14 },
     directionWord: { fontWeight: 900, textTransform: 'uppercase' },
+    soundUnlockWrap: { display: 'flex', justifyContent: 'center', margin: '-4px 0 14px' },
+    soundUnlockBtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 900, letterSpacing: 1, textTransform: 'uppercase', padding: '9px 13px', border: '2px solid #111', cursor: 'pointer', background: '#111', color: '#EEE8D0', boxShadow: '3px 3px 0 #E8473F' },
     graphOuter: { border: '2.5px solid #111', background: '#F5F2EB', marginBottom: 8, position: 'relative' },
     graphInner: { display: 'flex' },
     yAxis: { width: 40, flexShrink: 0, borderRight: '2px solid #111', display: 'flex', flexDirection: 'column', background: '#EDEAE0' },
@@ -1046,6 +1050,14 @@ export default function MelodyMatch() {
             </>
           )}
         </div>
+
+        {showSoundUnlock && !soundUnlocked && (
+          <div style={S.soundUnlockWrap}>
+            <button type="button" style={S.soundUnlockBtn} onClick={enableSound}>
+              Begin Exploration
+            </button>
+          </div>
+        )}
 
         {/* Graph */}
         <div style={S.graphOuter}>
