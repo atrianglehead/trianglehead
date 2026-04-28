@@ -135,6 +135,7 @@ export default function MelodyMatch() {
   const audioCtxRef = useRef(null);
   const goalNodesRef = useRef([]);
   const mineNodesRef = useRef([]);
+  const rhythmPreviewNodesRef = useRef([]);
   const playheadRafRef = useRef(null);
   const goalStopRef = useRef(null);
   const mineStopRef = useRef(null);
@@ -210,6 +211,7 @@ export default function MelodyMatch() {
   function stopAll() {
     stopNodes(goalNodesRef.current);
     stopNodes(mineNodesRef.current);
+    stopNodes(rhythmPreviewNodesRef.current);
     stopPlayhead();
     stopRhythmTransition();
   }
@@ -249,6 +251,28 @@ export default function MelodyMatch() {
     gain.gain.setValueAtTime(0.35, t + 0.22);
     gain.gain.linearRampToValueAtTime(0, t + 0.26);
     osc.start(t); osc.stop(t + 0.26);
+  }
+
+  function playRhythmSwapPreview(slotIdx, beats) {
+    if (slotIdx < 0 || slotIdx >= GOAL.length) return;
+    stopNodes(rhythmPreviewNodesRef.current);
+
+    const ctx = unlockAudio();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const dur = beats * (BEAT_MS / 1000);
+    const t = ctx.currentTime;
+
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = NOTES[GOAL[slotIdx].noteIdx].freq;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.35, t + 0.02);
+    gain.gain.setValueAtTime(0.35, Math.max(t + 0.02, t + dur - 0.05));
+    gain.gain.linearRampToValueAtTime(0, t + dur);
+    osc.start(t);
+    osc.stop(t + dur);
+    rhythmPreviewNodesRef.current.push(osc);
   }
 
   function scheduleItems(items, nodeStore) {
@@ -310,6 +334,7 @@ export default function MelodyMatch() {
     } else {
       stopNodes(goalNodesRef.current);
       stopNodes(mineNodesRef.current);
+      stopNodes(rhythmPreviewNodesRef.current);
       stopPlayhead();
       clearTimeout(mineStopRef.current);
       setMinePlaying(false);
@@ -337,6 +362,7 @@ export default function MelodyMatch() {
     }
     stopNodes(goalNodesRef.current);
     stopNodes(mineNodesRef.current);
+    stopNodes(rhythmPreviewNodesRef.current);
     stopPlayhead();
     clearTimeout(goalStopRef.current);
     setGoalPlaying(false);
@@ -628,6 +654,7 @@ export default function MelodyMatch() {
   function clearUser() {
     setMatchResult(null);
     setActiveRhythmIdx(-1);
+    stopNodes(rhythmPreviewNodesRef.current);
     stopNodes(mineNodesRef.current); stopPlayhead(); setMinePlaying(false);
     if (currentTab === 'pitch') {
       setPitchPositions(initPitchPositions(GOAL));
@@ -646,6 +673,7 @@ export default function MelodyMatch() {
     setMatchResult(null);
     setActiveRhythmIdx(-1);
     stopRhythmTransition();
+    stopNodes(rhythmPreviewNodesRef.current);
     stopNodes(mineNodesRef.current); stopPlayhead(); setMinePlaying(false);
     // State of each tab is preserved — no reset on switch
     setStatus(tab === 'pitch'
@@ -796,6 +824,7 @@ export default function MelodyMatch() {
       const draggedId = origBlocks[idx].id;
       let targetBlocks = origBlocks;
       let lastDragBeatPos = slotStarts[idx];
+      playRhythmSwapPreview(idx, origBlocks[idx].beats);
       rhythmDragPreviewRef.current = {
         draggedId,
         dragBeatPos: slotStarts[idx],
@@ -821,6 +850,10 @@ export default function MelodyMatch() {
         );
 
         if (!sameBlockOrder(nextTargetBlocks, targetBlocks)) {
+          if (newDragSlot !== draggingIdxRef.current && nextTargetBlocks[newDragSlot]) {
+            const movedBlock = nextTargetBlocks[newDragSlot];
+            playRhythmSwapPreview(newDragSlot, movedBlock.beats);
+          }
           startRhythmTransition(targetBlocks, nextTargetBlocks);
           targetBlocks = nextTargetBlocks;
         }
