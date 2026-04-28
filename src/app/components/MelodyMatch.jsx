@@ -905,7 +905,7 @@ export default function MelodyMatch() {
     section: { border: '2px dashed #111', marginBottom: 0 },
     banner: { background: '#F5F2EB', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 },
     bannerText: { fontSize: 20, fontWeight: 700, color: '#111', fontFamily: 'var(--font-bebas-neue), sans-serif', letterSpacing: 2 },
-    bannerSub: { fontSize: 12, color: '#555', marginTop: 4, fontFamily: 'var(--font-space-mono), monospace' },
+    bannerSub: { fontSize: 14, color: '#333', lineHeight: 1.45, marginTop: 4, fontFamily: 'var(--font-space-mono), monospace' },
     inner: { padding: '20px 20px 24px', background: '#F5C842' },
     gameTitle: { fontSize: 11, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: '#E8473F', marginBottom: 4 },
     tabsRow: { display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12, flexWrap: 'wrap' },
@@ -916,7 +916,8 @@ export default function MelodyMatch() {
     hintsLabel: { fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: '#111' },
     toggleTrack: (on) => ({ width: 36, height: 20, background: on ? '#E8473F' : '#fff', border: '2px solid #111', position: 'relative', transition: 'background 0.15s', flexShrink: 0 }),
     toggleThumb: (on) => ({ position: 'absolute', top: 1, left: on ? 17 : 1, width: 14, height: 14, background: on ? '#EEE8D0' : '#F5C842', border: '1.5px solid #111', transition: 'left 0.15s' }),
-    instructions: { fontSize: 11, color: '#555', fontFamily: 'var(--font-space-mono), monospace', marginBottom: 12 },
+    instructions: { fontSize: 14, color: '#222', fontFamily: 'var(--font-space-mono), monospace', lineHeight: 1.45, marginBottom: 14 },
+    directionWord: { fontWeight: 900, textTransform: 'uppercase' },
     graphOuter: { border: '2.5px solid #111', background: '#F5F2EB', marginBottom: 8 },
     graphInner: { display: 'flex' },
     yAxis: { width: 40, flexShrink: 0, borderRight: '2px solid #111', display: 'flex', flexDirection: 'column', background: '#EDEAE0' },
@@ -931,7 +932,7 @@ export default function MelodyMatch() {
     mineBtn: (playing) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '10px 15px', border: playing ? '2px solid #E8473F' : '2px solid #111', cursor: 'pointer', background: playing ? '#E8473F' : '#fff', color: playing ? '#fff' : '#111', whiteSpace: 'nowrap' }),
     gbtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '10px 15px', border: '2px solid #111', cursor: 'pointer', background: '#fff', color: '#111', whiteSpace: 'nowrap' },
     nextBtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '10px 15px', border: '2px solid #111', cursor: 'pointer', background: '#111', color: '#fff', whiteSpace: 'nowrap' },
-    gameStatus: { fontSize: 10, color: '#333', fontFamily: 'var(--font-space-mono), monospace', letterSpacing: 1, width: '100%', marginTop: 4 },
+    gameStatus: { fontSize: 13, color: '#222', fontFamily: 'var(--font-space-mono), monospace', fontWeight: 700, lineHeight: 1.45, letterSpacing: 0.5, width: '100%', marginTop: 6 },
   };
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -942,7 +943,7 @@ export default function MelodyMatch() {
       <div style={S.banner}>
         <div>
           <div style={S.bannerText}>Melody Match</div>
-          <div style={S.bannerSub}>Listen to the goal melody, then match it — by pitch, or by rhythm.</div>
+          <div style={S.bannerSub}>Listen to the goal melody, then match it — by dragging the blocks to the right places.</div>
         </div>
       </div>
 
@@ -962,9 +963,15 @@ export default function MelodyMatch() {
         </div>
 
         <div style={S.instructions}>
-          {currentTab === 'pitch'
-            ? 'Drag the blocks up/down to match the goal pitch.'
-            : 'Drag the blocks left/right to match the goal rhythm.'}
+          {currentTab === 'pitch' ? (
+            <>
+              Drag the blocks <strong style={S.directionWord}>up/down</strong> to match the goal pitch.
+            </>
+          ) : (
+            <>
+              Drag the blocks <strong style={S.directionWord}>left/right</strong> to match the goal rhythm.
+            </>
+          )}
         </div>
 
         {/* Graph */}
