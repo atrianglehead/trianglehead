@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { useRef } from "react";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -15,6 +16,11 @@ const navItems = [
 
 export default function StickyNav() {
   const pathname = usePathname();
+  const mobileMenuRef = useRef(null);
+
+  function closeMobileMenu() {
+    if (mobileMenuRef.current) mobileMenuRef.current.open = false;
+  }
 
   function isActive(href) {
     if (href.startsWith("http")) return false;
@@ -47,6 +53,7 @@ export default function StickyNav() {
           className="sticky-nav-link"
           target={isExternal ? "_blank" : undefined}
           rel={isExternal ? "noopener noreferrer" : undefined}
+          onClick={closeMobileMenu}
           style={linkStyle(item.href)}
         >
           {item.label}
@@ -114,7 +121,7 @@ export default function StickyNav() {
         }}
       >
         {/* Logo */}
-        <Link href="/" style={{ textDecoration: "none", lineHeight: 1 }}>
+        <Link href="/" onClick={closeMobileMenu} style={{ textDecoration: "none", lineHeight: 1 }}>
           <span style={{ fontFamily: "var(--font-bebas-neue), sans-serif", fontSize: 26, letterSpacing: 2, lineHeight: 1 }}>
             <span style={{ color: "#111" }}>TRI</span>
             <span style={{ color: "#E8473F" }}>ANGLE</span>
@@ -126,7 +133,7 @@ export default function StickyNav() {
           {renderLinks()}
         </nav>
 
-        <details className="mobile-nav-menu">
+        <details ref={mobileMenuRef} className="mobile-nav-menu">
           <summary
             className="mobile-nav-summary"
             aria-label="Open menu"

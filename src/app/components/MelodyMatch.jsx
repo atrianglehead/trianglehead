@@ -136,6 +136,8 @@ export default function MelodyMatch() {
   const goalNodesRef = useRef([]);
   const mineNodesRef = useRef([]);
   const rhythmPreviewNodesRef = useRef([]);
+  const notePreviewTokenRef = useRef(0);
+  const rhythmPreviewTokenRef = useRef(0);
   const playheadRafRef = useRef(null);
   const goalStopRef = useRef(null);
   const mineStopRef = useRef(null);
@@ -199,6 +201,20 @@ export default function MelodyMatch() {
     nodes.length = 0;
   }
 
+  function stopRhythmPreview() {
+    rhythmPreviewTokenRef.current += 1;
+    stopNodes(rhythmPreviewNodesRef.current);
+  }
+
+  function runWhenAudioReady(play) {
+    const ctx = getAudio();
+    if (ctx.state === 'suspended') {
+      ctx.resume().then(() => play(ctx)).catch(() => play(ctx));
+      return;
+    }
+    play(ctx);
+  }
+
   function stopPlayhead() {
     cancelAnimationFrame(playheadRafRef.current);
     setPlayheadX(-1);
@@ -213,7 +229,7 @@ export default function MelodyMatch() {
   function stopAll() {
     stopNodes(goalNodesRef.current);
     stopNodes(mineNodesRef.current);
-    stopNodes(rhythmPreviewNodesRef.current);
+    stopRhythmPreview();
     stopPlayhead();
     stopRhythmTransition();
   }
@@ -242,39 +258,49 @@ export default function MelodyMatch() {
   }
 
   function playNotePreview(freq) {
-    const ctx = unlockAudio();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.type = 'sine'; osc.frequency.value = freq;
-    const t = ctx.currentTime;
-    gain.gain.setValueAtTime(0, t);
-    gain.gain.linearRampToValueAtTime(0.35, t + 0.02);
-    gain.gain.setValueAtTime(0.35, t + 0.22);
-    gain.gain.linearRampToValueAtTime(0, t + 0.26);
-    osc.start(t); osc.stop(t + 0.26);
+    const token = notePreviewTokenRef.current + 1;
+    notePreviewTokenRef.current = token;
+
+    runWhenAudioReady((ctx) => {
+      if (token !== notePreviewTokenRef.current) return;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine'; osc.frequency.value = freq;
+      const t = ctx.currentTime + 0.01;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.35, t + 0.02);
+      gain.gain.setValueAtTime(0.35, t + 0.22);
+      gain.gain.linearRampToValueAtTime(0, t + 0.26);
+      osc.start(t); osc.stop(t + 0.26);
+    });
   }
 
   function playRhythmSwapPreview(slotIdx, beats) {
     if (slotIdx < 0 || slotIdx >= GOAL.length) return;
-    stopNodes(rhythmPreviewNodesRef.current);
+    stopRhythmPreview();
+    const token = rhythmPreviewTokenRef.current;
 
-    const ctx = unlockAudio();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    const dur = beats * (BEAT_MS / 1000);
-    const t = ctx.currentTime;
+    runWhenAudioReady((ctx) => {
+      if (token !== rhythmPreviewTokenRef.current) return;
 
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.type = 'sine';
-    osc.frequency.value = NOTES[GOAL[slotIdx].noteIdx].freq;
-    gain.gain.setValueAtTime(0, t);
-    gain.gain.linearRampToValueAtTime(0.35, t + 0.02);
-    gain.gain.setValueAtTime(0.35, Math.max(t + 0.02, t + dur - 0.05));
-    gain.gain.linearRampToValueAtTime(0, t + dur);
-    osc.start(t);
-    osc.stop(t + dur);
-    rhythmPreviewNodesRef.current.push(osc);
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const dur = beats * (BEAT_MS / 1000);
+      const t = ctx.currentTime + 0.01;
+
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = NOTES[GOAL[slotIdx].noteIdx].freq;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.35, t + 0.02);
+      gain.gain.setValueAtTime(0.35, Math.max(t + 0.02, t + dur - 0.05));
+      gain.gain.linearRampToValueAtTime(0, t + dur);
+      osc.start(t);
+      osc.stop(t + dur);
+      rhythmPreviewNodesRef.current.push(osc);
+    });
   }
 
   function scheduleItems(items, nodeStore) {
@@ -336,7 +362,7 @@ export default function MelodyMatch() {
     } else {
       stopNodes(goalNodesRef.current);
       stopNodes(mineNodesRef.current);
-      stopNodes(rhythmPreviewNodesRef.current);
+      stopRhythmPreview();
       stopPlayhead();
       clearTimeout(mineStopRef.current);
       setMinePlaying(false);
@@ -364,7 +390,7 @@ export default function MelodyMatch() {
     }
     stopNodes(goalNodesRef.current);
     stopNodes(mineNodesRef.current);
-    stopNodes(rhythmPreviewNodesRef.current);
+    stopRhythmPreview();
     stopPlayhead();
     clearTimeout(goalStopRef.current);
     setGoalPlaying(false);
@@ -656,7 +682,7 @@ export default function MelodyMatch() {
   function clearUser() {
     setMatchResult(null);
     setActiveRhythmIdx(-1);
-    stopNodes(rhythmPreviewNodesRef.current);
+    stopRhythmPreview();
     stopNodes(mineNodesRef.current); stopPlayhead(); setMinePlaying(false);
     if (currentTab === 'pitch') {
       setPitchPositions(initPitchPositions(GOAL));
@@ -675,7 +701,7 @@ export default function MelodyMatch() {
     setMatchResult(null);
     setActiveRhythmIdx(-1);
     stopRhythmTransition();
-    stopNodes(rhythmPreviewNodesRef.current);
+    stopRhythmPreview();
     stopNodes(mineNodesRef.current); stopPlayhead(); setMinePlaying(false);
     // State of each tab is preserved — no reset on switch
     setStatus(tab === 'pitch'
