@@ -766,6 +766,7 @@ export default function MelodyMatch() {
   }
 
   function handleCanvasCursorHover(e) {
+    if (showSoundUnlock && !soundUnlocked) return;
     if (helpOpen) return;
     if (isDraggingRef.current) return;
     const { x, y } = getCanvasCoords(e);
@@ -779,6 +780,7 @@ export default function MelodyMatch() {
   }
 
   function handleCanvasPointerDown(e) {
+    if (showSoundUnlock && !soundUnlocked) return;
     if (helpOpen) return;
     if (goalPlaying || minePlaying) return;
     e.preventDefault();
@@ -951,8 +953,8 @@ export default function MelodyMatch() {
     toggleThumb: (on) => ({ position: 'absolute', top: 1, left: on ? 17 : 1, width: 14, height: 14, background: on ? '#EEE8D0' : '#F5C842', border: '1.5px solid #111', transition: 'left 0.15s' }),
     instructions: { fontSize: 14, color: '#222', fontFamily: 'var(--font-space-mono), monospace', lineHeight: 1.45, textAlign: 'center', marginBottom: 14 },
     directionWord: { fontWeight: 900, textTransform: 'uppercase' },
-    soundUnlockWrap: { display: 'flex', justifyContent: 'center', margin: '-4px 0 14px' },
-    soundUnlockBtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 900, letterSpacing: 1, textTransform: 'uppercase', padding: '9px 13px', border: '2px solid #111', cursor: 'pointer', background: '#111', color: '#EEE8D0', boxShadow: '3px 3px 0 #E8473F' },
+    soundUnlockOverlay: { position: 'absolute', zIndex: 4, inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(245, 242, 235, 0.72)' },
+    soundUnlockBtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 12, fontWeight: 900, letterSpacing: 1.2, textTransform: 'uppercase', padding: '12px 18px', border: '2.5px solid #111', cursor: 'pointer', background: '#E8473F', color: '#EEE8D0', boxShadow: '4px 4px 0 #111' },
     graphOuter: { border: '2.5px solid #111', background: '#F5F2EB', marginBottom: 8, position: 'relative' },
     graphInner: { display: 'flex' },
     yAxis: { width: 40, flexShrink: 0, borderRight: '2px solid #111', display: 'flex', flexDirection: 'column', background: '#EDEAE0' },
@@ -1051,16 +1053,15 @@ export default function MelodyMatch() {
           )}
         </div>
 
-        {showSoundUnlock && !soundUnlocked && (
-          <div style={S.soundUnlockWrap}>
-            <button type="button" style={S.soundUnlockBtn} onClick={enableSound}>
-              Begin Exploration
-            </button>
-          </div>
-        )}
-
         {/* Graph */}
         <div style={S.graphOuter}>
+          {showSoundUnlock && !soundUnlocked && (
+            <div style={S.soundUnlockOverlay}>
+              <button type="button" style={S.soundUnlockBtn} onClick={enableSound}>
+                Begin Exploration
+              </button>
+            </div>
+          )}
           {helpOpen && (
             <div style={S.helpOverlay} onClick={() => setHelpOpen(false)}>
               <div style={S.helpPanel} role="dialog" aria-label="Melody Match help" onClick={e => e.stopPropagation()}>
