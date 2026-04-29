@@ -26,9 +26,9 @@ const OBSTACLE_SPACING_BARS = 3;
 const LEVEL_GRID_SIZE = 25;
 const DEFAULT_SYNTH = {
   waveform: 'triangle',
-  detune: 7,
-  harmonic: 0.24,
-  brightness: 3600,
+  detune: 4,
+  harmonic: 0.15,
+  brightness: 4600,
   attack: 0.05,
   release: 0.24,
   delay: 0.14,
@@ -286,7 +286,7 @@ export default function PitchFlight() {
   const [obstacles, setObstacles] = useState([]);
   const [score, setScore] = useState(0);
   const [bestByLevel, setBestByLevel] = useState({});
-  const [synth, setSynth] = useState(DEFAULT_SYNTH);
+  const synth = DEFAULT_SYNTH;
   const activeLevel = selectedLevel;
   const zoneCount = activeLevel.zoneCount || 2;
   const laneNames = LANE_NAMES[zoneCount];
@@ -418,13 +418,6 @@ export default function PitchFlight() {
     if (!drumStartTimeRef.current) return audio.currentTime;
     const beatsElapsed = Math.ceil((audio.currentTime - drumStartTimeRef.current + 0.025) / BEAT_SECONDS);
     return drumStartTimeRef.current + Math.max(0, beatsElapsed) * BEAT_SECONDS;
-  }, []);
-
-  const updateSynth = useCallback((key, value) => {
-    setSynth((current) => ({
-      ...current,
-      [key]: value,
-    }));
   }, []);
 
   const playCue = useCallback((safeLane, level, alignToDrum = false, scheduledStart = null) => {
@@ -1050,72 +1043,6 @@ export default function PitchFlight() {
       padding: '8px 6px',
       whiteSpace: 'normal',
     }),
-    synthPanel: {
-      marginTop: 18,
-      border: `2.5px solid ${colors.black}`,
-      background: '#fff',
-      padding: 14,
-      boxShadow: `4px 4px 0 ${colors.black}`,
-    },
-    synthHeader: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      gap: 10,
-      flexWrap: 'wrap',
-      marginBottom: 12,
-    },
-    synthTitle: {
-      fontFamily: fonts.display,
-      fontSize: 24,
-      letterSpacing: 2,
-      lineHeight: 1,
-      color: colors.black,
-    },
-    synthGrid: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-      gap: 12,
-    },
-    synthControl: {
-      border: `2px solid ${colors.black}`,
-      background: colors.bg,
-      padding: 10,
-      minWidth: 0,
-    },
-    synthLabel: {
-      fontFamily: fonts.mono,
-      fontSize: 9,
-      fontWeight: 700,
-      letterSpacing: 1.4,
-      textTransform: 'uppercase',
-      color: colors.black,
-      display: 'flex',
-      justifyContent: 'space-between',
-      gap: 8,
-      marginBottom: 8,
-    },
-    synthRange: {
-      width: '100%',
-      accentColor: colors.red,
-    },
-    synthSelect: {
-      width: '100%',
-      border: `2px solid ${colors.black}`,
-      background: '#fff',
-      color: colors.black,
-      fontFamily: fonts.mono,
-      fontSize: 12,
-      fontWeight: 700,
-      padding: '8px 9px',
-      outline: 'none',
-    },
-    previewRow: {
-      display: 'flex',
-      gap: 8,
-      flexWrap: 'wrap',
-      justifyContent: 'flex-end',
-    },
   };
 
   return (
@@ -1250,173 +1177,6 @@ export default function PitchFlight() {
             </div>
         </div>
 
-        <div style={S.synthPanel}>
-          <div style={S.synthHeader}>
-            <div style={S.synthTitle}>Synth Lab</div>
-            <div style={S.previewRow}>
-              {laneNames.map((name, laneIdx) => (
-                <button
-                  key={name}
-                  type="button"
-                  style={S.button(false)}
-                  onClick={() => playCue(laneIdx, activeLevel)}
-                >
-                  Preview {laneLabels[laneIdx]}
-                </button>
-              ))}
-              <button type="button" style={S.button(false)} onClick={() => setSynth(DEFAULT_SYNTH)}>
-                Reset
-              </button>
-            </div>
-          </div>
-
-          <div style={S.synthGrid}>
-            <div style={S.synthControl}>
-              <label style={S.synthLabel} htmlFor="pitch-flight-waveform">
-                Waveform <span>{synth.waveform}</span>
-              </label>
-              <select
-                id="pitch-flight-waveform"
-                style={S.synthSelect}
-                value={synth.waveform}
-                onChange={(event) => updateSynth('waveform', event.target.value)}
-              >
-                <option value="sine">sine</option>
-                <option value="triangle">triangle</option>
-                <option value="sawtooth">sawtooth</option>
-                <option value="square">square</option>
-              </select>
-            </div>
-
-            <div style={S.synthControl}>
-              <label style={S.synthLabel} htmlFor="pitch-flight-detune">
-                Detune <span>{synth.detune}c</span>
-              </label>
-              <input
-                id="pitch-flight-detune"
-                type="range"
-                min="0"
-                max="24"
-                step="1"
-                value={synth.detune}
-                style={S.synthRange}
-                onChange={(event) => updateSynth('detune', Number(event.target.value))}
-              />
-            </div>
-
-            <div style={S.synthControl}>
-              <label style={S.synthLabel} htmlFor="pitch-flight-harmonic">
-                Harmonic <span>{synth.harmonic.toFixed(2)}</span>
-              </label>
-              <input
-                id="pitch-flight-harmonic"
-                type="range"
-                min="0"
-                max="0.7"
-                step="0.01"
-                value={synth.harmonic}
-                style={S.synthRange}
-                onChange={(event) => updateSynth('harmonic', Number(event.target.value))}
-              />
-            </div>
-
-            <div style={S.synthControl}>
-              <label style={S.synthLabel} htmlFor="pitch-flight-brightness">
-                Brightness <span>{synth.brightness}Hz</span>
-              </label>
-              <input
-                id="pitch-flight-brightness"
-                type="range"
-                min="900"
-                max="8000"
-                step="100"
-                value={synth.brightness}
-                style={S.synthRange}
-                onChange={(event) => updateSynth('brightness', Number(event.target.value))}
-              />
-            </div>
-
-            <div style={S.synthControl}>
-              <label style={S.synthLabel} htmlFor="pitch-flight-attack">
-                Attack <span>{synth.attack.toFixed(2)}s</span>
-              </label>
-              <input
-                id="pitch-flight-attack"
-                type="range"
-                min="0.01"
-                max="0.35"
-                step="0.01"
-                value={synth.attack}
-                style={S.synthRange}
-                onChange={(event) => updateSynth('attack', Number(event.target.value))}
-              />
-            </div>
-
-            <div style={S.synthControl}>
-              <label style={S.synthLabel} htmlFor="pitch-flight-release">
-                Release <span>{synth.release.toFixed(2)}s</span>
-              </label>
-              <input
-                id="pitch-flight-release"
-                type="range"
-                min="0.05"
-                max="0.8"
-                step="0.01"
-                value={synth.release}
-                style={S.synthRange}
-                onChange={(event) => updateSynth('release', Number(event.target.value))}
-              />
-            </div>
-
-            <div style={S.synthControl}>
-              <label style={S.synthLabel} htmlFor="pitch-flight-delay">
-                Echo <span>{synth.delay.toFixed(2)}</span>
-              </label>
-              <input
-                id="pitch-flight-delay"
-                type="range"
-                min="0"
-                max="0.45"
-                step="0.01"
-                value={synth.delay}
-                style={S.synthRange}
-                onChange={(event) => updateSynth('delay', Number(event.target.value))}
-              />
-            </div>
-
-            <div style={S.synthControl}>
-              <label style={S.synthLabel} htmlFor="pitch-flight-vibrato">
-                Vibrato <span>{synth.vibrato.toFixed(1)}c</span>
-              </label>
-              <input
-                id="pitch-flight-vibrato"
-                type="range"
-                min="0"
-                max="8"
-                step="0.1"
-                value={synth.vibrato}
-                style={S.synthRange}
-                onChange={(event) => updateSynth('vibrato', Number(event.target.value))}
-              />
-            </div>
-
-            <div style={S.synthControl}>
-              <label style={S.synthLabel} htmlFor="pitch-flight-volume">
-                Volume <span>{synth.volume.toFixed(2)}</span>
-              </label>
-              <input
-                id="pitch-flight-volume"
-                type="range"
-                min="0.08"
-                max="0.5"
-                step="0.01"
-                value={synth.volume}
-                style={S.synthRange}
-                onChange={(event) => updateSynth('volume', Number(event.target.value))}
-              />
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
