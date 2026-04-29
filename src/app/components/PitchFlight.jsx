@@ -893,6 +893,24 @@ export default function PitchFlight() {
       borderBottom: laneIdx < zoneCount - 1 ? `2px dashed ${colors.divider}` : 'none',
       background: laneIdx === lane ? 'rgba(245, 200, 66, 0.2)' : 'transparent',
     }),
+    laneLabel: (laneIdx) => ({
+      position: 'absolute',
+      left: 8,
+      top: `${((laneIdx + 0.5) * 100) / zoneCount}%`,
+      transform: 'translateY(-50%)',
+      zIndex: 3,
+      display: 'none',
+      fontFamily: fonts.mono,
+      fontSize: 10,
+      fontWeight: 700,
+      letterSpacing: 1,
+      textTransform: 'uppercase',
+      color: colors.black,
+      background: 'rgba(255, 255, 255, 0.78)',
+      border: `1.5px solid ${colors.black}`,
+      padding: '4px 6px',
+      pointerEvents: 'none',
+    }),
     bird: {
       position: 'absolute',
       left: BIRD_X - BIRD_SIZE / 2,
@@ -1115,6 +1133,11 @@ export default function PitchFlight() {
                 {laneNames.map((name, laneIdx) => (
                   <div key={name} style={S.lane(laneIdx)} />
                 ))}
+                {laneNames.map((name, laneIdx) => (
+                  <div key={`${name}-label`} className="pf-lane-label" style={S.laneLabel(laneIdx)}>
+                    {laneLabels[laneIdx]}
+                  </div>
+                ))}
 
                 {obstacles.map((obstacle) => (
                   <div key={obstacle.id}>
@@ -1191,20 +1214,11 @@ export default function PitchFlight() {
           }
 
           .pf-controls {
-            position: absolute !important;
-            top: 10px !important;
-            right: 10px !important;
-            bottom: 10px !important;
-            width: 58px !important;
-            height: auto !important;
-            z-index: 5 !important;
-            gap: 6px !important;
+            display: none !important;
           }
 
-          .pf-controls button {
-            padding: 6px 4px !important;
-            font-size: 10px !important;
-            background: rgba(255, 255, 255, 0.9) !important;
+          .pf-lane-label {
+            display: block !important;
           }
         }
       `}</style>
