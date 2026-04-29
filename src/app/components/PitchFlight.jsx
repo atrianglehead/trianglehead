@@ -871,6 +871,7 @@ export default function PitchFlight() {
       display: 'flex',
       alignItems: 'stretch',
       gap: 12,
+      position: 'relative',
     },
     field: {
       height: 340,
@@ -1098,7 +1099,6 @@ export default function PitchFlight() {
                 <div style={S.stat}>{activeLevel.title}</div>
                 <div style={S.stat}>Score {score}</div>
                 <div style={S.stat}>Best {best}</div>
-                <div style={S.stat}>Lane {laneLabel}</div>
               </div>
               <div style={S.statRow}>
                 <button type="button" style={S.button(false)} onClick={openLevelSelector}>
@@ -1110,8 +1110,8 @@ export default function PitchFlight() {
               </div>
             </div>
 
-            <div style={S.playArea}>
-              <div ref={fieldRef} style={S.field} onPointerDown={moveToTappedLane}>
+            <div className="pf-play-area" style={S.playArea}>
+              <div ref={fieldRef} className="pf-field" style={S.field} onPointerDown={moveToTappedLane}>
                 {laneNames.map((name, laneIdx) => (
                   <div key={name} style={S.lane(laneIdx)} />
                 ))}
@@ -1162,7 +1162,7 @@ export default function PitchFlight() {
                 </div>
               </div>
 
-              <div style={S.controls}>
+              <div className="pf-controls" style={S.controls}>
                 {laneNames.map((name, laneIdx) => (
                   <button
                     key={name}
@@ -1178,6 +1178,36 @@ export default function PitchFlight() {
         </div>
 
       </div>
+      <style>{`
+        @media (max-width: 620px) {
+          .pf-play-area {
+            display: block !important;
+          }
+
+          .pf-field {
+            width: 100% !important;
+            height: min(64vh, 520px) !important;
+            min-height: 390px !important;
+          }
+
+          .pf-controls {
+            position: absolute !important;
+            top: 10px !important;
+            right: 10px !important;
+            bottom: 10px !important;
+            width: 58px !important;
+            height: auto !important;
+            z-index: 5 !important;
+            gap: 6px !important;
+          }
+
+          .pf-controls button {
+            padding: 6px 4px !important;
+            font-size: 10px !important;
+            background: rgba(255, 255, 255, 0.9) !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
