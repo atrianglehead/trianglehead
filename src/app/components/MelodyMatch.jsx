@@ -663,6 +663,14 @@ export default function MelodyMatch() {
 
   function checkMatch() {
     setActiveRhythmIdx(-1);
+    if (matchResult) {
+      setMatchResult(null);
+      setStatus(currentTab === 'pitch'
+        ? 'Drag blocks up/down to match the goal melody'
+        : 'Drag blocks left/right to match the goal rhythm');
+      return;
+    }
+
     if (currentTab === 'pitch') {
       const result = GOAL.map((g, i) => pitchPositions[i] === g.noteIdx);
       setMatchResult(result);
@@ -968,6 +976,7 @@ export default function MelodyMatch() {
     goalBtn: (playing) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '10px 15px', border: playing ? '2px solid #E8473F' : '2px solid #111', cursor: 'pointer', background: playing ? '#E8473F' : '#111', color: '#fff', whiteSpace: 'nowrap' }),
     mineBtn: (playing) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '10px 15px', border: playing ? '2px solid #E8473F' : '2px solid #111', cursor: 'pointer', background: playing ? '#E8473F' : '#fff', color: playing ? '#fff' : '#111', whiteSpace: 'nowrap' }),
     gbtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '10px 15px', border: '2px solid #111', cursor: 'pointer', background: '#fff', color: '#111', whiteSpace: 'nowrap' },
+    checkBtn: (active) => ({ fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '10px 15px', border: active ? '2px solid #111' : '2px solid #111', cursor: 'pointer', background: active ? '#4CAF76' : '#fff', color: active ? '#fff' : '#111', whiteSpace: 'nowrap' }),
     nextBtn: { fontFamily: 'var(--font-space-mono), monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', padding: '10px 15px', border: '2px solid #111', cursor: 'pointer', background: '#111', color: '#fff', whiteSpace: 'nowrap' },
     gameStatus: { fontSize: 13, color: '#222', fontFamily: 'var(--font-space-mono), monospace', fontWeight: 700, lineHeight: 1.45, letterSpacing: 0.5, textAlign: 'center', width: '100%', marginTop: 6 },
     helpOverlay: { position: 'absolute', zIndex: 5, inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, background: 'rgba(245, 242, 235, 0.88)' },
@@ -1168,7 +1177,9 @@ export default function MelodyMatch() {
           <button style={S.mineBtn(minePlaying)} onClick={toggleMine}>
             {minePlaying ? '■ Mine' : '▶ Mine'}
           </button>
-          <button style={S.gbtn} onClick={checkMatch}>✓ Check</button>
+          <button style={S.checkBtn(Boolean(matchResult))} onClick={checkMatch}>
+            {matchResult ? 'Uncheck' : '✓ Check'}
+          </button>
           <button
             style={{ ...S.gbtn, opacity: hasUndo ? 1 : 0.35, cursor: hasUndo ? 'pointer' : 'default' }}
             onClick={undoLast}

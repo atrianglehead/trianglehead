@@ -1,4 +1,5 @@
 import BioProse from '@/content/bio.mdx'
+import Arrow from '../components/Arrow';
 import { colors, fonts, styles } from '../styles';
 
 export const metadata = {
@@ -21,10 +22,10 @@ export default function Bio() {
       {/* Links */}
       <div style={{ marginTop: 36, display: "flex", flexWrap: "wrap", gap: 10 }}>
         {[
-          { label: "Sound Insight →", href: "https://soundinsight.substack.com/" },
-          { label: "YouTube →", href: "https://www.youtube.com/@trianglehead" },
-          { label: "Lessons →", href: "/lessons" },
-          { label: "Contact →", href: "/contact" },
+          { label: <>Sound Insight<Arrow direction="external" /></>, href: "https://soundinsight.substack.com/" },
+          { label: <>YouTube<Arrow direction="external" /></>, href: "https://www.youtube.com/@trianglehead" },
+          { label: <>Lessons<Arrow /></>, href: "/lessons" },
+          { label: <>Contact<Arrow /></>, href: "/contact" },
         ].map((item) => {
           const isExternal = item.href.startsWith("http");
           return (

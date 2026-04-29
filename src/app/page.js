@@ -1,9 +1,9 @@
 import Image from "next/image";
 import YouTubeEmbed from "./components/YouTubeEmbed";
 import MelodyMatch from "./components/MelodyMatch";
+import Arrow from "./components/Arrow";
 import { CATEGORIES } from "./lessons/data";
 import { colors, fonts, styles } from "./styles";
-
 
 export default function Home() {
   return (
@@ -35,10 +35,10 @@ export default function Home() {
           </div>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
             <a href="/bio" className="btn" style={styles.btn}>
-              My Story →
+              My Story<Arrow />
             </a>
             <a href="https://www.youtube.com/@trianglehead" target="_blank" rel="noopener noreferrer" className="btn" style={styles.btn}>
-              My Videos →
+              My Videos<Arrow direction="external" />
             </a>
           </div>
         </div>
@@ -54,7 +54,7 @@ export default function Home() {
         <MelodyMatch />
         <div style={{ padding: "16px 28px 24px", textAlign: "center" }}>
           <a href="/explorations" className="btn" style={styles.btn}>
-            More Explorations →
+            More Explorations<Arrow />
           </a>
         </div>
       </div>
@@ -80,7 +80,7 @@ export default function Home() {
               <p style={{ ...styles.bodyText, margin: 0 }}>
                 A deep dive into how rhythm, pitch, and loudness come together to create melody.
               </p>
-              <div style={styles.readLink}>Read on Substack →</div>
+              <div style={styles.readLink}>Read on Substack<Arrow direction="external" size={9} /></div>
             </div>
           </a>
 
@@ -94,7 +94,7 @@ export default function Home() {
               <p style={{ ...styles.bodyText, margin: 0 }}>
                 An introduction to how pitches combine into scales.
               </p>
-              <div style={styles.readLink}>Read on Substack →</div>
+              <div style={styles.readLink}>Read on Substack<Arrow direction="external" size={9} /></div>
             </div>
           </a>
 
@@ -108,13 +108,13 @@ export default function Home() {
               <p style={{ ...styles.bodyText, margin: 0 }}>
                 An introduction to how beats combine to become gatis.
               </p>
-              <div style={styles.readLink}>Read on Substack →</div>
+              <div style={styles.readLink}>Read on Substack<Arrow direction="external" size={9} /></div>
             </div>
           </a>
 
           <div style={{ textAlign: "center" }}>
             <a href="https://soundinsight.substack.com/" target="_blank" rel="noopener noreferrer" className="btn" style={styles.btn}>
-              All articles →
+              All articles<Arrow direction="external" />
             </a>
           </div>
 
@@ -165,7 +165,7 @@ export default function Home() {
           And I absolutely love helping others through one-on-one coaching.
         </div>
         <div style={{ textAlign: "center", marginBottom: 20 }}>
-          <a href="https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" target="_blank" rel="noopener noreferrer" className="btn" style={{ ...styles.btn, background: '#fff' }}>Read Reviews →</a>
+          <a href="https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" target="_blank" rel="noopener noreferrer" className="btn" style={{ ...styles.btn, background: '#fff' }}>Read Reviews<Arrow direction="external" /></a>
         </div>
         <div style={{ fontFamily: fonts.display, fontSize: 13, letterSpacing: 3, color: colors.cream, marginBottom: 14, display: "flex", alignItems: "center", gap: 10 }}>
           Private lessons
@@ -181,14 +181,14 @@ export default function Home() {
                 {cat.shortDesc}
               </p>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <a href={`/lessons?category=${cat.id}`} className="btn" style={{ ...styles.btn, background: '#fff', padding: "9px 14px" }}>Learn more →</a>
-                <a href={`/contact?category=${cat.id}#message`} className="btn" style={{ ...styles.btn, padding: "9px 14px", ...styles.btnShadow }}>Book a session →</a>
+                <a href={`/lessons?category=${cat.id}`} className="btn" style={{ ...styles.btn, background: '#fff', padding: "9px 14px" }}>Learn more<Arrow /></a>
+                <a href={`/contact?category=${cat.id}#message`} className="btn" style={{ ...styles.btn, padding: "9px 14px", ...styles.btnShadow }}>Book a session<Arrow /></a>
               </div>
             </div>
           ))}
         </div>
         <div style={{ textAlign: "center", marginTop: 20 }}>
-          <a href="/lessons" className="btn" style={styles.btn}>See all lessons →</a>
+          <a href="/lessons" className="btn" style={styles.btn}>See all lessons<Arrow /></a>
         </div>
       </div>
 

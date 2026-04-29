@@ -2,6 +2,7 @@
 
 import { Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import Arrow from '../components/Arrow';
 import { CATEGORIES } from './data';
 import { colors, fonts, styles } from '../styles';
 
@@ -187,7 +188,7 @@ function LessonsPageInner() {
                     </div>
                   )}
                   <a href={`/contact?category=${cat.id}&type=${sub.id}#message`} className="btn" style={{ ...styles.btn, padding: '9px 15px', fontSize: 10, ...styles.btnShadow }}>
-                    Book a session →
+                    Book a session<Arrow />
                   </a>
                 </div>
               </div>
@@ -202,7 +203,7 @@ function LessonsPageInner() {
           Reach out with any questions. You don&apos;t need to be ready - just curious.
         </p>
         <a href="/contact" className="btn" style={{ ...styles.btn, padding: '10px 18px' }}>
-          Get in touch →
+          Get in touch<Arrow />
         </a>
       </div>
 

@@ -27,7 +27,10 @@ export const styles = {
     color: colors.black,
     border: `2px solid ${colors.black}`,
     padding: '10px 18px',
-    display: 'inline-block',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 5,
+    whiteSpace: 'nowrap',
     textDecoration: 'none',
   },
   btnShadow: {
@@ -69,6 +72,10 @@ export const styles = {
     lineHeight: 1.7,
   },
   readLink: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 5,
+    whiteSpace: 'nowrap',
     fontSize: 9,
     fontWeight: 700,
     color: colors.red,
