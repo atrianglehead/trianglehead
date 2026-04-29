@@ -51,6 +51,17 @@ const BEAT_MS = 420;
 const NOTE_COUNT = NOTES.length;
 const ROW_H = 36;
 const GRAPH_H = NOTE_COUNT * ROW_H;
+const MELODY_MATCH_SYNTH = {
+  waveform: 'triangle',
+  detune: 4,
+  harmonic: 0.15,
+  brightness: 4600,
+  attack: 0.05,
+  release: 0.24,
+  delay: 0.14,
+  vibrato: 0.8,
+  volume: 0.26,
+};
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -125,6 +136,84 @@ function getDraggedBlocks(currentBlocks, draggedId, dragBeatPos, direction) {
 
 function sameBlockOrder(a, b) {
   return a.length === b.length && a.every((block, i) => block.id === b[i].id);
+}
+
+function scheduleSynthNote(audio, freq, start, duration, nodeStore = null) {
+  const synth = MELODY_MATCH_SYNTH;
+  const filter = audio.createBiquadFilter();
+  const masterGain = audio.createGain();
+  const delay = audio.createDelay();
+  const feedback = audio.createGain();
+  const wetGain = audio.createGain();
+  const vibrato = audio.createOscillator();
+  const vibratoGain = audio.createGain();
+  const stopTime = start + duration + 0.04;
+  const sustainUntil = Math.max(start + synth.attack, start + duration - synth.release);
+  const voices = [
+    { detune: 0, gain: 0.74, multiplier: 1 },
+    { detune: synth.detune, gain: 0.44, multiplier: 1 },
+    { detune: -synth.detune, gain: 0.34, multiplier: 1 },
+    { detune: 0, gain: synth.harmonic, multiplier: 2 },
+  ];
+
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(synth.brightness, start);
+  filter.Q.setValueAtTime(0.7, start);
+
+  masterGain.gain.setValueAtTime(0, start);
+  masterGain.gain.linearRampToValueAtTime(synth.volume, start + synth.attack);
+  masterGain.gain.setValueAtTime(synth.volume, sustainUntil);
+  masterGain.gain.linearRampToValueAtTime(0, start + duration);
+
+  delay.delayTime.setValueAtTime(0.18, start);
+  feedback.gain.setValueAtTime(0.18, start);
+  wetGain.gain.setValueAtTime(synth.delay, start);
+
+  vibrato.type = 'sine';
+  vibrato.frequency.setValueAtTime(5.2, start);
+  vibratoGain.gain.setValueAtTime(synth.vibrato, start);
+  vibrato.connect(vibratoGain);
+
+  voices.forEach((voice) => {
+    const osc = audio.createOscillator();
+    const voiceGain = audio.createGain();
+
+    osc.type = synth.waveform;
+    osc.frequency.setValueAtTime(freq * voice.multiplier, start);
+    osc.detune.setValueAtTime(voice.detune, start);
+    vibratoGain.connect(osc.detune);
+
+    voiceGain.gain.setValueAtTime(voice.gain, start);
+    osc.connect(voiceGain);
+    voiceGain.connect(filter);
+    osc.start(start);
+    osc.stop(stopTime);
+    if (nodeStore) {
+      nodeStore.push(osc);
+      osc.onended = () => {
+        const index = nodeStore.indexOf(osc);
+        if (index !== -1) nodeStore.splice(index, 1);
+      };
+    }
+  });
+
+  filter.connect(masterGain);
+  masterGain.connect(audio.destination);
+  masterGain.connect(delay);
+  delay.connect(feedback);
+  feedback.connect(delay);
+  delay.connect(wetGain);
+  wetGain.connect(audio.destination);
+
+  vibrato.start(start);
+  vibrato.stop(stopTime);
+  if (nodeStore) {
+    nodeStore.push(vibrato);
+    vibrato.onended = () => {
+      const index = nodeStore.indexOf(vibrato);
+      if (index !== -1) nodeStore.splice(index, 1);
+    };
+  }
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -259,16 +348,8 @@ export default function MelodyMatch() {
 
   function playNotePreview(freq) {
     const ctx = unlockAudio();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.type = 'sine'; osc.frequency.value = freq;
     const t = ctx.currentTime;
-    gain.gain.setValueAtTime(0, t);
-    gain.gain.linearRampToValueAtTime(0.35, t + 0.02);
-    gain.gain.setValueAtTime(0.35, t + 0.22);
-    gain.gain.linearRampToValueAtTime(0, t + 0.26);
-    osc.start(t); osc.stop(t + 0.26);
+    scheduleSynthNote(ctx, freq, t, 0.32);
   }
 
   function playRhythmSwapPreview(slotIdx, beats) {
@@ -276,21 +357,9 @@ export default function MelodyMatch() {
     stopRhythmPreview();
 
     const ctx = unlockAudio();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
     const dur = beats * (BEAT_MS / 1000);
     const t = ctx.currentTime;
-
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.type = 'sine';
-    osc.frequency.value = NOTES[GOAL[slotIdx].noteIdx].freq;
-    gain.gain.setValueAtTime(0, t);
-    gain.gain.linearRampToValueAtTime(0.35, t + 0.02);
-    gain.gain.setValueAtTime(0.35, Math.max(t + 0.02, t + dur - 0.05));
-    gain.gain.linearRampToValueAtTime(0, t + dur);
-    osc.start(t);
-    osc.stop(t + dur);
-    rhythmPreviewNodesRef.current.push(osc);
+    scheduleSynthNote(ctx, NOTES[GOAL[slotIdx].noteIdx].freq, t, dur, rhythmPreviewNodesRef.current);
   }
 
   function enableSound() {
@@ -314,16 +383,7 @@ export default function MelodyMatch() {
       const dur = item.beats * (BEAT_MS / 1000);
       timeline.push({ audioTime: t, xPx: item.xPx });
       if (item.freq > 0) {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain); gain.connect(ctx.destination);
-        osc.type = 'sine'; osc.frequency.value = item.freq;
-        gain.gain.setValueAtTime(0, t);
-        gain.gain.linearRampToValueAtTime(0.35, t + 0.02);
-        gain.gain.setValueAtTime(0.35, t + dur - 0.05);
-        gain.gain.linearRampToValueAtTime(0, t + dur);
-        osc.start(t); osc.stop(t + dur);
-        nodeStore.push(osc);
+        scheduleSynthNote(ctx, item.freq, t, dur, nodeStore);
       }
       t += dur;
     });
@@ -459,16 +519,7 @@ export default function MelodyMatch() {
       let t2 = startTime;
       goal.forEach((g, i) => {
         const dur = g.beats * (BEAT_MS / 1000);
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain); gain.connect(ctx.destination);
-        osc.type = 'sine'; osc.frequency.value = NOTES[g.noteIdx].freq;
-        gain.gain.setValueAtTime(0, t2);
-        gain.gain.linearRampToValueAtTime(0.35, t2 + 0.02);
-        gain.gain.setValueAtTime(0.35, t2 + dur - 0.05);
-        gain.gain.linearRampToValueAtTime(0, t2 + dur);
-        osc.start(t2); osc.stop(t2 + dur);
-        goalNodesRef.current.push(osc);
+        scheduleSynthNote(ctx, NOTES[g.noteIdx].freq, t2, dur, goalNodesRef.current);
         t2 += dur;
       });
       setGoalPlaying(true);
