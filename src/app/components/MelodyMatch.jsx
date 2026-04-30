@@ -802,6 +802,10 @@ export default function MelodyMatch() {
     };
   }
 
+  function isTouchEvent(e) {
+    return Boolean(e.touches || e.changedTouches);
+  }
+
   /** Pitch tab: find block by x column (column = beat range of that note) */
   function hitTestPitchColumn(x) {
     const ppb = getPxPerBeat();
@@ -859,7 +863,9 @@ export default function MelodyMatch() {
       const origPitches = [...pitchPositions];
       const grabTop = origPitches[idx] * ROW_H;
       const grabbedCurrentBlock = y >= grabTop && y < grabTop + ROW_H;
-      const offsetY = grabbedCurrentBlock ? y - grabTop : ROW_H / 2;
+      const offsetY = isTouchEvent(e)
+        ? ROW_H / 2
+        : grabbedCurrentBlock ? y - grabTop : ROW_H / 2;
 
       // Tapping elsewhere in the column still jumps; dragging the block keeps its grab offset.
       const clickedRow = grabbedCurrentBlock
@@ -920,7 +926,10 @@ export default function MelodyMatch() {
       const origBlocks = [...rhythmBlocks];
       const origSlots = origBlocks.map(block => block.beats);
       const slotStarts = computeSlotBeatStarts(origSlots);
-      const offsetX = x - slotStarts[idx] * ppb; // click offset within block
+      const blockWidth = origBlocks[idx].beats * ppb;
+      const offsetX = isTouchEvent(e)
+        ? blockWidth / 2
+        : x - slotStarts[idx] * ppb; // click offset within block
       const draggedId = origBlocks[idx].id;
       let targetBlocks = origBlocks;
       let lastDragBeatPos = slotStarts[idx];
