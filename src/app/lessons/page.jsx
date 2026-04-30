@@ -103,7 +103,7 @@ function LessonsPageInner() {
                 cursor: 'pointer',
               }}
             >
-              {cat.title}
+              {cat.filterTitle || cat.title}
             </button>
           );
         })}

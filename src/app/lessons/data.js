@@ -2,6 +2,7 @@ export const CATEGORIES = [
   {
     id: 'voice',
     title: 'Free Your Voice',
+    filterTitle: 'Voice',
     shortDesc: 'Use your voice like it was meant to be used — an extension of you in the world.',
     styles: ['Khayaal', 'Dhrupad', 'Pop', 'Rock', 'Bollywood'],
     subcategories: [
@@ -12,6 +13,7 @@ export const CATEGORIES = [
   {
     id: 'instrument',
     title: 'Speak Through Your Instrument',
+    filterTitle: 'Instrument',
     shortDesc: 'Make your instrument an inalienable part of you — like another voice.',
     subcategories: [
       { id: 'electric-guitar', title: 'Electric guitar', desc: 'Learn to play one of the most versatile instruments in existence.' },
@@ -30,6 +32,7 @@ export const CATEGORIES = [
   {
     id: 'rhythm',
     title: 'Unlock Rhythm',
+    filterTitle: 'Rhythm',
     shortDesc: 'Understand the foundation of every performing art: time.',
     subcategories: [
       { id: 'rhythmic-intuition', title: 'Rhythmic intuition', desc: 'Develop rhythmic intuition using konnakol - the art of South Indian vocal percussion.' },
@@ -40,6 +43,7 @@ export const CATEGORIES = [
   {
     id: 'poetry',
     title: 'Express With Poetry',
+    filterTitle: 'Poetry',
     shortDesc: 'Learn how sound and meaning can combine to bring your music to life.',
     subcategories: [
       { id: 'songwriting', title: 'Songwriting', desc: 'Find your poetic voice and learn how to use it in a musical context.' },
@@ -49,6 +53,7 @@ export const CATEGORIES = [
   {
     id: 'music',
     title: 'Understand Music',
+    filterTitle: 'Music',
     shortDesc: "Understand and respond to musical thoughts like you're speaking a language.",
     subcategories: [
       { id: 'ear-training', title: 'Ear training', desc: "Recognise and remember the music that you hear like you do with regular speech." },
