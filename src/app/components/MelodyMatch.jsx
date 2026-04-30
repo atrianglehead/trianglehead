@@ -1027,7 +1027,7 @@ export default function MelodyMatch() {
     yCell: { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: '#444', fontFamily: 'var(--font-space-mono), monospace', borderBottom: '1px solid #D5D1C5', height: ROW_H, flexShrink: 0, userSelect: 'none' },
     yCellSa: { display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 900, color: '#E8473F', fontFamily: 'var(--font-space-mono), monospace', borderBottom: '1px solid #D5D1C5', height: ROW_H, flexShrink: 0, userSelect: 'none' },
     canvasWrap: { flex: 1, overflow: 'hidden', position: 'relative', touchAction: 'none' },
-    canvas: { display: 'block', width: '100%' },
+    canvas: { display: 'block', width: '100%', height: GRAPH_H },
     xAxis: { display: 'flex', marginLeft: 40, borderTop: '2px solid #111', background: '#EDEAE0' },
     xCell: { flex: 1, textAlign: 'center', fontSize: 9, fontWeight: 700, color: '#444', fontFamily: 'var(--font-space-mono), monospace', borderRight: '1px solid #D5D1C5', display: 'flex', alignItems: 'center', justifyContent: 'center', height: 28, minWidth: 0, userSelect: 'none' },
     controls: { display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', marginTop: 4 },
