@@ -511,12 +511,17 @@ export default function Explorations() {
           }
 
           .melody-graph {
-            grid-template-columns: 32px 1fr;
+            grid-template-columns: 24px minmax(0, 1fr);
             height: 100%;
           }
 
           .rhythm-graph {
-            grid-template-columns: 1fr;
+            grid-template-columns: 24px minmax(0, 1fr);
+          }
+
+          .melody-y-axis span,
+          .melody-x-axis span {
+            font-size: 7px;
           }
 
           .melody-block {
