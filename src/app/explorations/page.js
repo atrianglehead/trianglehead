@@ -184,6 +184,11 @@ export default function Explorations() {
           box-shadow: 2px 2px 0 ${colors.black};
         }
 
+        .exploration-card:hover .open-link {
+          background: ${colors.black};
+          color: ${colors.cream};
+        }
+
         .exploration-preview {
           position: relative;
           overflow: hidden;
@@ -472,6 +477,7 @@ export default function Explorations() {
           background: ${colors.yellow};
           color: ${colors.black};
           margin-top: auto;
+          transition: background 0.12s ease, color 0.12s ease;
         }
 
         @media (max-width: 760px) {
