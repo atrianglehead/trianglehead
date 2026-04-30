@@ -9,6 +9,7 @@ import {
   SVARA_X,
   SVARA_SIZE,
   WALL_W,
+  FINISH_LINE_W,
 } from './svara-rising/constants';
 
 export default function SvaraRising() {
@@ -48,7 +49,7 @@ export default function SvaraRising() {
     levelGrid: {
       display: 'grid',
       gridTemplateColumns: 'repeat(5, 48px)',
-      justifyContent: 'center',
+      justifyContent: 'space-between',
       gap: 7,
     },
     levelOverlay: {
@@ -66,14 +67,18 @@ export default function SvaraRising() {
       alignItems: 'center',
       justifyContent: 'center',
       gap: 8,
+      width: '100%',
+      maxWidth: 510,
     },
     levelPanel: {
-      width: 'min(400px, 100%)',
+      flex: '1 1 410px',
+      maxWidth: 410,
       minHeight: 410,
       border: `2.5px solid ${colors.black}`,
       background: colors.yellow,
       boxShadow: `4px 4px 0 ${colors.black}`,
       padding: 14,
+      boxSizing: 'border-box',
     },
     levelPickerTitle: {
       border: `2px solid ${colors.black}`,
@@ -99,7 +104,7 @@ export default function SvaraRising() {
     },
     levelDifficultyLabel: {
       fontFamily: fonts.mono,
-      fontSize: 10,
+      fontSize: 13,
       fontWeight: 900,
       letterSpacing: 1.3,
       textTransform: 'uppercase',
@@ -163,6 +168,12 @@ export default function SvaraRising() {
       gap: 8,
       flexWrap: 'wrap',
     },
+    hudGroup: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8,
+      flexWrap: 'wrap',
+    },
     stat: {
       border: `2px solid ${colors.black}`,
       background: '#fff',
@@ -176,21 +187,29 @@ export default function SvaraRising() {
       minWidth: 88,
       textAlign: 'center',
     },
-    modeButton: (mode, active, disabled) => ({
-      ...styles.btn,
-      background: mode.color,
-      color: mode.id === 'gobble' || mode.id === 'devour' ? colors.cream : colors.black,
-      cursor: disabled ? 'default' : 'pointer',
-      opacity: disabled && !active ? 0.6 : 1,
-      borderRadius: 0,
-      border: active ? `3px solid ${colors.black}` : `2px solid ${colors.black}`,
-      outline: active ? `2px solid ${colors.cream}` : 'none',
-      outlineOffset: -5,
-      boxShadow: 'none',
-      justifyContent: 'center',
-      padding: active ? '7px 6px' : '8px 7px',
-      fontSize: 9,
-    }),
+    modeButton: (mode, active, disabled) => {
+      const darkMode = mode.id === 'gobble' || mode.id === 'devour';
+      const shadowColor = darkMode ? colors.cream : colors.black;
+      return {
+        ...styles.btn,
+        background: mode.color,
+        color: darkMode ? colors.cream : colors.black,
+        cursor: disabled ? 'default' : 'pointer',
+        opacity: disabled && !active ? 0.6 : 1,
+        borderRadius: 0,
+        border: `2px solid ${shadowColor}`,
+        outline: active ? `2px solid ${darkMode ? colors.black : colors.cream}` : 'none',
+        outlineOffset: 0,
+        boxShadow: 'none',
+        transform: 'none',
+        justifyContent: 'center',
+        padding: '10px 9px',
+        fontSize: 11,
+        textDecorationLine: active ? 'underline' : 'none',
+        textUnderlineOffset: 3,
+        textDecorationThickness: 2,
+      };
+    },
     modeStat: {
       border: `2px solid ${colors.black}`,
       background: activeMode.color,
@@ -363,6 +382,28 @@ export default function SvaraRising() {
       boxSizing: 'border-box',
       zIndex: 1,
     }),
+    finishLine: (finishLine) => ({
+      position: 'absolute',
+      left: finishLine.x,
+      top: 0,
+      width: FINISH_LINE_W,
+      height: '100%',
+      zIndex: 2,
+      pointerEvents: 'none',
+    }),
+    finishHoop: (laneIdx) => ({
+      position: 'absolute',
+      left: 5,
+      top: `${((laneIdx + 0.5) * 100) / zoneCount}%`,
+      width: FINISH_LINE_W - 10,
+      height: Math.max(28, Math.min(54, 220 / zoneCount)),
+      transform: 'translateY(-50%)',
+      border: `4px solid ${colors.red}`,
+      borderRadius: '50%',
+      background: 'rgba(245, 200, 66, 0.2)',
+      boxShadow: `inset 0 0 0 3px ${colors.cream}`,
+      boxSizing: 'border-box',
+    }),
     wallStripe: {
       position: 'absolute',
       inset: 8,
@@ -436,6 +477,8 @@ export default function SvaraRising() {
       borderRadius: 0,
       padding: '8px 6px',
       whiteSpace: 'normal',
+      transform: active ? 'translate(2px, 2px)' : 'none',
+      boxShadow: active ? `1px 1px 0 ${colors.black}` : `3px 3px 0 ${colors.black}`,
     }),
   };
 

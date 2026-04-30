@@ -30,7 +30,7 @@ export default function LevelSelector({
           {'<'}
         </button>
         <div style={S.levelPanel}>
-          <div style={S.levelPickerTitle}>Pick a level</div>
+          <div style={S.levelPickerTitle}>Pick a locality</div>
           <div style={S.levelPanelTitle}>Stage {selectedStage + 1}</div>
           <div style={S.levelGrid}>
             {Array.from({ length: LEVELS_PER_STAGE }, (_, index) => {
@@ -47,7 +47,7 @@ export default function LevelSelector({
                   className="sr-level-tile"
                   style={S.levelTile(available, active, completed)}
                   disabled={!available}
-                  aria-label={available ? `Choose level ${levelNumber}` : `Level ${levelNumber} unavailable`}
+                  aria-label={available ? `Choose locality ${levelNumber}` : `Locality ${levelNumber} unavailable`}
                   onClick={() => {
                     if (!level) return;
                     chooseLevel(level);

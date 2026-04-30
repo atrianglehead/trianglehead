@@ -270,6 +270,7 @@ export default function Explorations() {
           position: absolute;
           left: 18px;
           border: 2px solid ${colors.black};
+          box-shadow: 3px 3px 0 ${colors.black};
           min-width: 34px;
           padding: 8px 9px;
           font-family: ${fonts.mono};

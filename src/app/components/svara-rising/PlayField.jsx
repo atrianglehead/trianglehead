@@ -7,6 +7,7 @@ export default function PlayField({
   laneNames,
   laneLabels,
   obstacles,
+  finishLine,
   lane,
   laneLabel,
   activeLevel,
@@ -25,8 +26,8 @@ export default function PlayField({
 }) {
   const completionTitle = showObstaclesUsed ? 'Good job!' : 'Fantastic job!';
   const completionText = showObstaclesUsed
-    ? 'To mark the level as completed, try again in Play Mode.'
-    : `You cleared ${targetScore} hidden obstacles.`;
+    ? 'To mark the locality as completed, try again in Play Mode.'
+    : 'You helped Svara reach the next locality.';
 
   return (
     <div className="sr-play-area" style={S.playArea}>
@@ -70,6 +71,14 @@ export default function PlayField({
           </div>
         ))}
 
+        {finishLine && (
+          <div style={S.finishLine(finishLine)}>
+            {laneNames.map((name, laneIdx) => (
+              <div key={name} style={S.finishHoop(laneIdx)} />
+            ))}
+          </div>
+        )}
+
         <div style={S.svara} aria-label={`Svara in ${laneLabel} lane`}>
           <div style={S.wing} />
           <div style={S.beak} />
@@ -100,7 +109,7 @@ export default function PlayField({
             </p>
             {levelComplete && !showObstaclesUsed && nextLevel ? (
               <button type="button" style={S.button(true)} onClick={goToNextLevel}>
-                Go to level {nextLevel.id}
+                Go to locality {nextLevel.id}
               </button>
             ) : (
               <button type="button" style={S.button(true)} onClick={() => startRun()}>

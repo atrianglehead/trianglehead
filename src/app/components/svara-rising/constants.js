@@ -11,6 +11,7 @@ export const LANE_NAMES = {
 export const SVARA_X = 92;
 export const SVARA_SIZE = 34;
 export const WALL_W = 76;
+export const FINISH_LINE_W = 54;
 export const INITIAL_OBSTACLE_COUNT = 7;
 export const VISIBLE_TUTORIAL_COUNT = 1;
 export const HIDDEN_OBSTACLES_TO_COMPLETE = 25;

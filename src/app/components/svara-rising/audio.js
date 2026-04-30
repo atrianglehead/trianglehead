@@ -68,24 +68,24 @@ export function stopDrum({
   drumBeatIndexRef.current = 0;
 }
 
-function scheduleCueFrequency(param, safeLane, level, start, multiplier = 1, cueSeconds = CUE_SECONDS) {
+function scheduleCueFrequency(param, safeLane, level, start, multiplier = 1, cueSeconds = CUE_SECONDS, noteChangeSeconds = NOTE_CHANGE_SECONDS) {
   const low = level.lowFreq || SA_FREQ;
   const high = level.highFreq || low * level.ratio;
 
   if (level.cueType === 'single-note') {
     param.setValueAtTime(level.cueByLane[safeLane] * multiplier, start);
   } else if (level.cueType === 'sequence') {
-    const switchTime = start + NOTE_CHANGE_SECONDS;
+    const switchTime = start + noteChangeSeconds;
     const sequence = level.cueByLane[safeLane];
     param.setValueAtTime(sequence[0] * multiplier, start);
     param.setValueAtTime(sequence[1] * multiplier, switchTime);
   } else if (level.cueType === 'anchored-two-note') {
-    const switchTime = start + NOTE_CHANGE_SECONDS;
+    const switchTime = start + noteChangeSeconds;
     const base = level.baseFreq || low;
     param.setValueAtTime(base * multiplier, start);
     param.setValueAtTime((safeLane === 0 ? high : low) * multiplier, switchTime);
   } else if (level.cueType === 'two-note') {
-    const switchTime = start + NOTE_CHANGE_SECONDS;
+    const switchTime = start + noteChangeSeconds;
     param.setValueAtTime((safeLane === 0 ? low : high) * multiplier, start);
     param.setValueAtTime((safeLane === 0 ? high : low) * multiplier, switchTime);
   } else {
@@ -264,6 +264,7 @@ export function playCue(safeLane, level, options) {
     mixerRef,
     drumStartTimeRef,
     synth,
+    noteChangeSeconds = NOTE_CHANGE_SECONDS,
   } = options;
   const audio = getCueAudio(cueAudioRef);
   const start = scheduledStart !== null
@@ -310,7 +311,7 @@ export function playCue(safeLane, level, options) {
 
     osc.type = synth.waveform;
     osc.detune.setValueAtTime(voice.detune, start);
-    scheduleCueFrequency(osc.frequency, safeLane, level, start, voice.multiplier, duration);
+    scheduleCueFrequency(osc.frequency, safeLane, level, start, voice.multiplier, duration, noteChangeSeconds);
     vibratoGain.connect(osc.detune);
 
     voiceGain.gain.setValueAtTime(voice.gain, start);

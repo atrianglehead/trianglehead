@@ -17,25 +17,31 @@ export default function Hud({
   return (
     <div style={S.hud}>
       <div style={S.statRow}>
-        <div style={S.lifeStat}>Lives {lives}</div>
-        <div style={S.stat}>Score {score}/{targetScore}</div>
+        <div style={S.hudGroup}>
+          <div style={S.lifeStat}>Lives {lives}</div>
+          <div style={S.stat}>Progress {score}/{targetScore}</div>
+        </div>
         <div style={S.hudSeparator} />
-        <div style={S.modeStat}>{activeMode.label}</div>
-        <div style={S.stat}>{activeLevel.title}</div>
-        <button type="button" style={S.button(true)} onClick={() => startRun()}>
-          {running ? 'Restart' : crashed || levelComplete ? 'Try Again' : 'Start'}
-        </button>
-        <button
-          type="button"
-          style={S.toggleButton(showObstacles, modeSwitchDisabled)}
-          onClick={toggleShowObstacles}
-          disabled={modeSwitchDisabled}
-        >
-          {showObstacles ? 'Practice Mode' : 'Play Mode'}
-        </button>
-        <button type="button" style={S.button(false, true)} onClick={openLevelSelector}>
-          Levels &gt;
-        </button>
+        <div style={S.hudGroup}>
+          <div style={S.modeStat}>{activeMode.label}</div>
+          <div style={S.stat}>{activeLevel.title}</div>
+        </div>
+        <div style={S.hudGroup}>
+          <button type="button" style={S.button(true)} onClick={() => startRun()}>
+            {running ? 'Restart' : crashed || levelComplete ? 'Try Again' : 'Start'}
+          </button>
+          <button
+            type="button"
+            style={S.toggleButton(showObstacles, modeSwitchDisabled)}
+            onClick={toggleShowObstacles}
+            disabled={modeSwitchDisabled}
+          >
+            {showObstacles ? 'Practice Mode' : 'Play Mode'}
+          </button>
+          <button type="button" style={S.button(false, true)} onClick={openLevelSelector}>
+            Localities &gt;
+          </button>
+        </div>
       </div>
     </div>
   );
