@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -21,6 +21,27 @@ export default function StickyNav() {
   function closeMobileMenu() {
     if (mobileMenuRef.current) mobileMenuRef.current.open = false;
   }
+
+  useEffect(() => {
+    function handlePointerDown(event) {
+      const menu = mobileMenuRef.current;
+      if (!menu?.open) return;
+      if (menu.contains(event.target)) return;
+      menu.open = false;
+    }
+
+    function handleKeyDown(event) {
+      if (event.key !== "Escape") return;
+      closeMobileMenu();
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   function isActive(href) {
     if (href.startsWith("http")) return false;
@@ -136,7 +157,7 @@ export default function StickyNav() {
         <details ref={mobileMenuRef} className="mobile-nav-menu">
           <summary
             className="mobile-nav-summary"
-            aria-label="Open menu"
+            aria-label="Toggle menu"
             style={{
               cursor: "pointer",
               padding: 4,
