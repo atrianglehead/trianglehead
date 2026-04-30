@@ -30,23 +30,8 @@ export default function LevelSelector({
           {'<'}
         </button>
         <div style={S.levelPanel}>
+          <div style={S.levelPickerTitle}>Pick a level</div>
           <div style={S.levelPanelTitle}>Stage {selectedStage + 1}</div>
-          <div style={S.levelModeRow}>
-            {GAME_MODES.map((mode) => (
-              <button
-                key={mode.id}
-                type="button"
-                style={S.modeButton(mode, selectedModeId === mode.id, false)}
-                onClick={() => {
-                  setSelectedModeId(mode.id);
-                  setLives(mode.lives);
-                  livesRef.current = mode.lives;
-                }}
-              >
-                {mode.label}
-              </button>
-            ))}
-          </div>
           <div style={S.levelGrid}>
             {Array.from({ length: LEVELS_PER_STAGE }, (_, index) => {
               const levelNumber = stageStartLevel + index;
@@ -72,6 +57,23 @@ export default function LevelSelector({
                 </button>
               );
             })}
+          </div>
+          <div style={S.levelDifficultyLabel}>Difficulty</div>
+          <div style={S.levelModeRow}>
+            {GAME_MODES.map((mode) => (
+              <button
+                key={mode.id}
+                type="button"
+                style={S.modeButton(mode, selectedModeId === mode.id, false)}
+                onClick={() => {
+                  setSelectedModeId(mode.id);
+                  setLives(mode.lives);
+                  livesRef.current = mode.lives;
+                }}
+              >
+                {mode.label}
+              </button>
+            ))}
           </div>
         </div>
         <button

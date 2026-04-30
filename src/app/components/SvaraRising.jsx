@@ -69,11 +69,24 @@ export default function SvaraRising() {
     },
     levelPanel: {
       width: 'min(400px, 100%)',
-      minHeight: 366,
+      minHeight: 410,
       border: `2.5px solid ${colors.black}`,
       background: colors.yellow,
       boxShadow: `4px 4px 0 ${colors.black}`,
       padding: 14,
+    },
+    levelPickerTitle: {
+      border: `2px solid ${colors.black}`,
+      background: '#fff',
+      padding: '9px 12px',
+      fontFamily: fonts.mono,
+      fontSize: 11,
+      fontWeight: 900,
+      letterSpacing: 1.2,
+      textTransform: 'uppercase',
+      color: colors.black,
+      textAlign: 'center',
+      marginBottom: 10,
     },
     levelPanelTitle: {
       fontFamily: fonts.display,
@@ -84,11 +97,21 @@ export default function SvaraRising() {
       marginBottom: 8,
       textAlign: 'center',
     },
+    levelDifficultyLabel: {
+      fontFamily: fonts.mono,
+      fontSize: 10,
+      fontWeight: 900,
+      letterSpacing: 1.3,
+      textTransform: 'uppercase',
+      color: colors.black,
+      textAlign: 'center',
+      marginTop: 14,
+      marginBottom: 7,
+    },
     levelModeRow: {
       display: 'grid',
       gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
       gap: 7,
-      marginBottom: 10,
     },
     stageArrow: (disabled) => ({
       width: 34,
@@ -420,9 +443,9 @@ export default function SvaraRising() {
     <>
       <section style={S.section}>
         <div style={S.banner}>
-          <div style={S.bannerText}>Svara Rising</div>
+          <div style={S.bannerText}>Svarā Rising</div>
           <div style={S.bannerSub}>
-            By recognising the pitches you hear, guide Svara through open windows as she tries to navigate the city skyline.
+            By recognising the pitches you hear, guide Svarā through open windows as she tries to navigate the city skyline.
           </div>
         </div>
 
