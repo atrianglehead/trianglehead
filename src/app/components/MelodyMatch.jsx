@@ -857,9 +857,14 @@ export default function MelodyMatch() {
       if (canvasRef.current) canvasRef.current.style.cursor = 'ns-resize';
 
       const origPitches = [...pitchPositions];
+      const grabTop = origPitches[idx] * ROW_H;
+      const grabbedCurrentBlock = y >= grabTop && y < grabTop + ROW_H;
+      const offsetY = grabbedCurrentBlock ? y - grabTop : ROW_H / 2;
 
-      // Immediately snap to the clicked row
-      const clickedRow = Math.max(0, Math.min(NOTE_COUNT - 1, Math.floor(y / ROW_H)));
+      // Tapping elsewhere in the column still jumps; dragging the block keeps its grab offset.
+      const clickedRow = grabbedCurrentBlock
+        ? origPitches[idx]
+        : Math.max(0, Math.min(NOTE_COUNT - 1, Math.floor(y / ROW_H)));
       const snapped = [...origPitches];
       snapped[idx] = clickedRow;
       setPitchPositions(snapped);
@@ -872,7 +877,7 @@ export default function MelodyMatch() {
       function onMove(ev) {
         if (ev.cancelable) ev.preventDefault();
         const { y: cy } = getCanvasCoords(ev);
-        const newRow = Math.max(0, Math.min(NOTE_COUNT - 1, Math.floor(cy / ROW_H)));
+        const newRow = Math.max(0, Math.min(NOTE_COUNT - 1, Math.floor((cy - offsetY + ROW_H / 2) / ROW_H)));
         if (newRow === lastRow) return;
         lastRow = newRow;
         const next = [...origPitches];
