@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 
+import { styles } from '../styles';
+
 const NOTES = [
   { name: "Sa'", freq: 523.25 },
   { name: 'Ni',  freq: 493.88 },
@@ -997,7 +999,7 @@ export default function MelodyMatch() {
   const S = {
     section: { border: '2px dashed #111', marginBottom: 0 },
     banner: { background: '#F5F2EB', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 },
-    bannerText: { fontSize: 20, fontWeight: 700, color: '#111', fontFamily: 'var(--font-bebas-neue), sans-serif', letterSpacing: 2 },
+    bannerText: { ...styles.pageTitle },
     bannerSub: { fontSize: 14, color: '#333', lineHeight: 1.45, marginTop: 4, fontFamily: 'var(--font-space-mono), monospace' },
     inner: { padding: '20px 20px 24px', background: '#F5C842' },
     gameTitle: { fontSize: 11, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: '#E8473F', marginBottom: 4 },

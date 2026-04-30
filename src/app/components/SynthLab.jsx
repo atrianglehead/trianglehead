@@ -511,10 +511,10 @@ export default function SynthLab() {
       </div>
 
       <div style={{ ...S.grid, marginTop: 10 }}>
-        {mixSlider('cue', 'Pitch Flight cue', 2)}
-        {mixSlider('drone', 'Pitch Flight drone', 5)}
-        {mixSlider('drums', 'Pitch Flight drums', 2)}
-        {mixSlider('result', 'Pitch Flight result', 2)}
+        {mixSlider('cue', 'Svara Rising cue', 2)}
+        {mixSlider('drone', 'Svara Rising drone', 5)}
+        {mixSlider('drums', 'Svara Rising drums', 2)}
+        {mixSlider('result', 'Svara Rising result', 2)}
       </div>
 
       <textarea readOnly value={presetText} style={{ ...S.textarea, marginTop: 10 }} />

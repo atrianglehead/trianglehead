@@ -7,24 +7,19 @@ export default function LevelSelector({
   selectedStage,
   setSelectedStage,
   selectedLevel,
-  setSelectedLevel,
   selectedModeId,
   setSelectedModeId,
-  setShowLevelSelector,
-  setCrashed,
-  setScore,
-  scoreRef,
-  laneRef,
-  setLane,
   livesRef,
   setLives,
-  resetObstacles,
+  chooseLevel,
+  closeLevelSelector,
+  completedLevels,
 }) {
   const stageStartLevel = selectedStage * LEVELS_PER_STAGE + 1;
 
   return (
-    <div style={S.levelOverlay}>
-      <div style={S.levelPager}>
+    <div style={S.levelOverlay} onPointerDown={closeLevelSelector}>
+      <div style={S.levelPager} onPointerDown={(event) => event.stopPropagation()}>
         <button
           type="button"
           style={S.stageArrow(selectedStage === 0)}
@@ -58,25 +53,19 @@ export default function LevelSelector({
               const level = LEVELS.find((item) => item.id === levelNumber);
               const available = Boolean(level);
               const active = selectedLevel?.id === levelNumber;
+              const completed = Boolean(completedLevels[levelNumber]);
 
               return (
                 <button
                   key={levelNumber}
                   type="button"
-                  className="pf-level-tile"
-                  style={S.levelTile(available, active)}
+                  className="sr-level-tile"
+                  style={S.levelTile(available, active, completed)}
                   disabled={!available}
                   aria-label={available ? `Choose level ${levelNumber}` : `Level ${levelNumber} unavailable`}
                   onClick={() => {
                     if (!level) return;
-                    setSelectedLevel(level);
-                    setShowLevelSelector(false);
-                    setCrashed(false);
-                    setScore(0);
-                    scoreRef.current = 0;
-                    laneRef.current = Math.min(1, (level.zoneCount || 2) - 1);
-                    setLane(laneRef.current);
-                    resetObstacles(level);
+                    chooseLevel(level);
                   }}
                 >
                   <span style={S.levelNumber}>{levelNumber}</span>

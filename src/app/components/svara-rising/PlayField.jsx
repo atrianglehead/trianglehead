@@ -13,32 +13,56 @@ export default function PlayField({
   running,
   crashPending,
   crashed,
+  levelComplete,
+  showObstacles,
+  showObstaclesUsed,
   score,
+  targetScore,
   startRun,
+  goToNextLevel,
+  nextLevel,
   moveToLane,
 }) {
+  const completionTitle = showObstaclesUsed ? 'Good job!' : 'Fantastic job!';
+  const completionText = showObstaclesUsed
+    ? 'To mark the level as completed, try again in Play Mode.'
+    : `You cleared ${targetScore} hidden obstacles.`;
+
   return (
-    <div className="pf-play-area" style={S.playArea}>
-      <div ref={fieldRef} className="pf-field" style={S.field} onPointerDown={moveToTappedLane}>
+    <div className="sr-play-area" style={S.playArea}>
+      <div className="sr-controls" style={S.controls}>
+        {laneNames.map((name, laneIdx) => (
+          <button
+            key={name}
+            type="button"
+            style={S.laneButton(lane === laneIdx)}
+            onClick={() => moveToLane(laneIdx)}
+          >
+            {renderPitchLabel(laneLabels[laneIdx])}
+          </button>
+        ))}
+      </div>
+
+      <div ref={fieldRef} className="sr-field" style={S.field} onPointerDown={moveToTappedLane}>
         {laneNames.map((name, laneIdx) => (
           <div key={name} style={S.lane(laneIdx)} />
         ))}
         {laneNames.map((name, laneIdx) => (
-          <div key={`${name}-label`} className="pf-lane-label" style={S.laneLabel(laneIdx)}>
+          <div key={`${name}-label`} className="sr-lane-label" style={S.laneLabel(laneIdx)}>
             {renderPitchLabel(laneLabels[laneIdx])}
           </div>
         ))}
 
         {obstacles.map((obstacle) => (
           <div key={obstacle.id}>
-            {obstacle.revealed && laneNames.map((name, laneIdx) => (
+            {(obstacle.revealed || showObstacles) && laneNames.map((name, laneIdx) => (
               laneIdx === obstacle.safeLane ? null : (
                 <div key={name} style={S.revealedWall(obstacle, laneIdx)}>
                   <div style={S.wallStripe} />
                 </div>
               )
             ))}
-            {obstacle.hidden && (
+            {obstacle.hidden && !showObstacles && (
               <div style={S.cloud(obstacle)}>
                 <div style={S.cloudPuff} />
               </div>
@@ -46,7 +70,7 @@ export default function PlayField({
           </div>
         ))}
 
-        <div style={S.bird} aria-label={`Bird in ${laneLabel} lane`}>
+        <div style={S.svara} aria-label={`Svara in ${laneLabel} lane`}>
           <div style={S.wing} />
           <div style={S.beak} />
           <div style={S.eye} />
@@ -54,9 +78,13 @@ export default function PlayField({
 
         <div style={S.message}>
           <div style={S.messagePanel}>
-            <div style={S.messageTitle}>{crashed ? 'Crashed' : activeLevel.title}</div>
+            <div style={S.messageTitle}>
+              {levelComplete ? completionTitle : crashed ? 'Crashed' : activeLevel.title}
+            </div>
             <p style={S.messageText}>
-              {crashed
+              {levelComplete
+                ? completionText
+                : crashed
                 ? `Run ended at ${score}.`
                 : activeLevel.helpText
                   ? activeLevel.helpText
@@ -70,24 +98,17 @@ export default function PlayField({
                     ? 'Sa then low Sa means bottom. Sa then high Sa means top.'
                   : `The ${activeLevel.interval.toLowerCase()} slide is your decision window: rising means top, falling means bottom.`}
             </p>
-            <button type="button" style={S.button(true)} onClick={() => startRun()}>
-              {crashed ? 'Try Again' : 'Start Run'}
-            </button>
+            {levelComplete && !showObstaclesUsed && nextLevel ? (
+              <button type="button" style={S.button(true)} onClick={goToNextLevel}>
+                Go to level {nextLevel.id}
+              </button>
+            ) : (
+              <button type="button" style={S.button(true)} onClick={() => startRun()}>
+                {crashed || levelComplete ? 'Try Again' : 'Start Run'}
+              </button>
+            )}
           </div>
         </div>
-      </div>
-
-      <div className="pf-controls" style={S.controls}>
-        {laneNames.map((name, laneIdx) => (
-          <button
-            key={name}
-            type="button"
-            style={S.laneButton(lane === laneIdx)}
-            onClick={() => moveToLane(laneIdx)}
-          >
-            {renderPitchLabel(laneLabels[laneIdx])}
-          </button>
-        ))}
       </div>
     </div>
   );

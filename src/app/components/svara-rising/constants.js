@@ -8,11 +8,12 @@ export const LANE_NAMES = {
   8: ['top', 'upper high', 'middle high', 'upper middle', 'lower middle', 'middle low', 'lower low', 'bottom'],
 };
 
-export const BIRD_X = 92;
-export const BIRD_SIZE = 34;
+export const SVARA_X = 92;
+export const SVARA_SIZE = 34;
 export const WALL_W = 76;
 export const INITIAL_OBSTACLE_COUNT = 7;
-export const VISIBLE_TUTORIAL_COUNT = 5;
+export const VISIBLE_TUTORIAL_COUNT = 1;
+export const HIDDEN_OBSTACLES_TO_COMPLETE = 25;
 export const SPEED = 128;
 export const BEAT_SECONDS = 0.3375;
 export const NOTE_CHANGE_SECONDS = BEAT_SECONDS * 2;

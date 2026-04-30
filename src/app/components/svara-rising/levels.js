@@ -817,7 +817,7 @@ export const LEVELS = [
     description: 'Drone-style single-note level.',
   },
   ...[
-    [51, ['Sa', 'ga', 'ma', 'dha', 'Ni', "Sa'"]],
+    [51, ['Sa', 'ga', 'ma', 'dha', 'ni', "Sa'"]],
     [52, ['Sa', 'Ga', 'ma', 'Pa', 'Ni', "Sa'"]],
     [53, ['Sa', 'Re', 'ga', 'Pa', 'Dha', "Sa'"]],
     [54, ['Sa', 're', 'ga', 'Pa', 'dha', "Sa'"]],
