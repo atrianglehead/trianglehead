@@ -3,193 +3,34 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { colors, fonts, styles } from '../styles';
-
-const LANE_NAMES = {
-  2: ['top', 'bottom'],
-  3: ['top', 'middle', 'bottom'],
-  4: ['top', 'upper middle', 'lower middle', 'bottom'],
-};
-const BIRD_X = 92;
-const BIRD_SIZE = 34;
-const WALL_W = 76;
-const INITIAL_OBSTACLE_COUNT = 7;
-const VISIBLE_TUTORIAL_COUNT = 5;
-const SPEED = 128;
-const BEAT_SECONDS = 0.3375;
-const NOTE_CHANGE_SECONDS = BEAT_SECONDS * 2;
-const CUE_START_BEATS_BEFORE_IMPACT = 6;
-const CUE_END_BEFORE_IMPACT_SECONDS = 0.3;
-const CUE_LEAD_SECONDS = CUE_START_BEATS_BEFORE_IMPACT * BEAT_SECONDS;
-const CUE_SECONDS = CUE_LEAD_SECONDS - CUE_END_BEFORE_IMPACT_SECONDS;
-const BAR_SECONDS = BEAT_SECONDS * 4;
-const OBSTACLE_SPACING_BARS = 3;
-const LEVEL_GRID_SIZE = 25;
-const DEFAULT_SYNTH = {
-  waveform: 'triangle',
-  detune: 4,
-  harmonic: 0.15,
-  brightness: 4600,
-  attack: 0.05,
-  release: 0.24,
-  delay: 0.14,
-  vibrato: 0.8,
-  volume: 0.26,
-};
-const CRASH_TONE_SECONDS = 1.1;
-const LOW_TIVRA_MA_FREQ = 155.56;
-const LEVELS = [
-  {
-    id: 1,
-    title: 'Level 1',
-    interval: 'Octave',
-    cueType: 'slide',
-    ratio: 2,
-    description: 'Wide pitch slides.',
-  },
-  {
-    id: 2,
-    title: 'Level 2',
-    interval: 'Fifth',
-    cueType: 'slide',
-    ratio: 1.5,
-    description: 'Smaller pitch slides.',
-  },
-  {
-    id: 3,
-    title: 'Level 3',
-    interval: 'Two notes',
-    cueType: 'two-note',
-    lowFreq: 220,
-    highFreq: 440,
-    description: 'Compare two Sa notes.',
-  },
-  {
-    id: 4,
-    title: 'Level 4',
-    interval: 'From Sa',
-    cueType: 'anchored-two-note',
-    lowFreq: 110,
-    baseFreq: 220,
-    highFreq: 440,
-    description: 'Hear whether Sa moves up or down.',
-  },
-  {
-    id: 5,
-    title: 'Level 5',
-    interval: 'Sa to Pa',
-    cueType: 'anchored-two-note',
-    lowFreq: 164.815,
-    baseFreq: 220,
-    highFreq: 329.63,
-    description: 'Hear whether Pa is above or below Sa.',
-  },
-  {
-    id: 6,
-    title: 'Level 6',
-    interval: 'Sa or Pa',
-    cueType: 'anchored-two-note',
-    lowFreq: 220,
-    baseFreq: 220,
-    highFreq: 329.63,
-    description: 'Low cue repeats Sa. High cue moves to Pa.',
-  },
-  {
-    id: 7,
-    title: 'Level 7',
-    interval: 'Three zones',
-    cueType: 'sequence',
-    zoneCount: 3,
-    cueByLane: {
-      0: [220, 329.63],
-      1: [220, 220],
-      2: [220, 164.815],
-    },
-    description: 'Top, middle, and bottom safe zones.',
-  },
-  {
-    id: 8,
-    title: 'Level 8',
-    interval: 'Dha or Ga',
-    cueType: 'sequence',
-    zoneCount: 3,
-    cueByLane: {
-      0: [220, 277.18],
-      1: [220, 220],
-      2: [220, 185],
-    },
-    description: 'Low Dha, repeated Sa, or Ga.',
-  },
-  {
-    id: 9,
-    title: 'Level 9',
-    interval: 'Ni or Re',
-    cueType: 'sequence',
-    zoneCount: 3,
-    cueByLane: {
-      0: [220, 246.94],
-      1: [220, 220],
-      2: [220, 207.65],
-    },
-    description: 'Low Ni, repeated Sa, or Re.',
-  },
-  {
-    id: 10,
-    title: 'Level 10',
-    interval: 'Sa Pa Sa',
-    cueType: 'sequence',
-    zoneCount: 3,
-    cueByLane: {
-      0: [220, 440],
-      1: [220, 329.63],
-      2: [220, 220],
-    },
-    description: 'Repeated Sa, Pa, or high Sa.',
-  },
-  {
-    id: 11,
-    title: 'Level 11',
-    interval: 'Sa Ga Pa',
-    cueType: 'sequence',
-    zoneCount: 3,
-    laneLabels: ['Pa', 'Ga', 'Sa'],
-    cueByLane: {
-      0: [220, 329.63],
-      1: [220, 277.18],
-      2: [220, 220],
-    },
-    description: 'Repeated Sa, Ga, or Pa.',
-  },
-  {
-    id: 12,
-    title: 'Level 12',
-    interval: 'Sa Re Ga',
-    cueType: 'sequence',
-    zoneCount: 3,
-    laneLabels: ['Ga', 'Re', 'Sa'],
-    cueByLane: {
-      0: [220, 277.18],
-      1: [220, 246.94],
-      2: [220, 220],
-    },
-    description: 'Repeated Sa, Re, or Ga.',
-  },
-  {
-    id: 13,
-    title: 'Level 13',
-    interval: 'Sa Re Ga Pa',
-    cueType: 'sequence',
-    zoneCount: 4,
-    laneLabels: ['Pa', 'Ga', 'Re', 'Sa'],
-    cueByLane: {
-      0: [220, 329.63],
-      1: [220, 277.18],
-      2: [220, 246.94],
-      3: [220, 220],
-    },
-    helpText: 'Sa-Sa means bottom. Sa-Re, Sa-Ga, and Sa-Pa move upward through the higher zones.',
-    description: 'Four zones from Sa to Pa.',
-  },
-];
+import { LEVELS } from './pitch-flight/levels';
+import { GAME_MODES } from './pitch-flight/gameModes';
+import LevelSelector from './pitch-flight/LevelSelector';
+import Hud from './pitch-flight/Hud';
+import PlayField from './pitch-flight/PlayField';
+import { LOW_TIVRA_MA_FREQ, SA_FREQ, LOW_SA_FREQ, LOW_PA_FREQ } from './pitch-flight/notes';
+import {
+  LANE_NAMES,
+  BIRD_X,
+  BIRD_SIZE,
+  WALL_W,
+  INITIAL_OBSTACLE_COUNT,
+  VISIBLE_TUTORIAL_COUNT,
+  SPEED,
+  BEAT_SECONDS,
+  NOTE_CHANGE_SECONDS,
+  CUE_START_BEATS_BEFORE_IMPACT,
+  CUE_END_BEFORE_IMPACT_SECONDS,
+  CUE_LEAD_SECONDS,
+  CUE_SECONDS,
+  BAR_SECONDS,
+  LEVELS_PER_STAGE,
+  DEFAULT_SYNTH,
+  DEFAULT_MIXER,
+  DRONE_DRY_GAIN,
+  DRONE_WET_GAIN,
+  CRASH_TONE_SECONDS,
+} from './pitch-flight/constants';
 
 function shuffle(values) {
   const next = [...values];
@@ -232,45 +73,54 @@ function makeObstacle(id, x, safeLane, hidden = true, impactTime = null) {
   };
 }
 
-function getCueStartTime(impactTime) {
-  return impactTime - CUE_START_BEATS_BEFORE_IMPACT * BEAT_SECONDS;
+function getCueStartTime(impactTime, cueStartBeats = CUE_START_BEATS_BEFORE_IMPACT) {
+  return impactTime - cueStartBeats * BEAT_SECONDS;
 }
 
-function scheduleCueFrequency(param, safeLane, level, start, multiplier = 1) {
-  const low = level.lowFreq || 220;
+function scheduleCueFrequency(param, safeLane, level, start, multiplier = 1, cueSeconds = CUE_SECONDS) {
+  const low = level.lowFreq || SA_FREQ;
   const high = level.highFreq || low * level.ratio;
 
-  if (level.cueType === 'sequence') {
-      const switchTime = start + NOTE_CHANGE_SECONDS;
+  if (level.cueType === 'single-note') {
+    param.setValueAtTime(level.cueByLane[safeLane] * multiplier, start);
+  } else if (level.cueType === 'sequence') {
+    const switchTime = start + NOTE_CHANGE_SECONDS;
     const sequence = level.cueByLane[safeLane];
     param.setValueAtTime(sequence[0] * multiplier, start);
     param.setValueAtTime(sequence[1] * multiplier, switchTime);
   } else if (level.cueType === 'anchored-two-note') {
-      const switchTime = start + NOTE_CHANGE_SECONDS;
+    const switchTime = start + NOTE_CHANGE_SECONDS;
     const base = level.baseFreq || low;
     param.setValueAtTime(base * multiplier, start);
     param.setValueAtTime((safeLane === 0 ? high : low) * multiplier, switchTime);
   } else if (level.cueType === 'two-note') {
-      const switchTime = start + NOTE_CHANGE_SECONDS;
+    const switchTime = start + NOTE_CHANGE_SECONDS;
     param.setValueAtTime((safeLane === 0 ? low : high) * multiplier, start);
     param.setValueAtTime((safeLane === 0 ? high : low) * multiplier, switchTime);
   } else {
     param.setValueAtTime((safeLane === 0 ? low : high) * multiplier, start);
-    param.exponentialRampToValueAtTime((safeLane === 0 ? high : low) * multiplier, start + CUE_SECONDS);
+    param.exponentialRampToValueAtTime((safeLane === 0 ? high : low) * multiplier, start + cueSeconds);
   }
 }
 
 export default function PitchFlight() {
   const fieldRef = useRef(null);
   const rafRef = useRef(null);
+  const updateGameRef = useRef(null);
   const crashTimeoutRef = useRef(null);
+  const lifeFlashTimeoutRef = useRef(null);
   const lastFrameRef = useRef(0);
   const nextIdRef = useRef(3);
   const obstaclesRef = useRef([]);
   const laneRef = useRef(1);
   const scoreRef = useRef(0);
+  const livesRef = useRef(GAME_MODES[0].lives);
   const cueAudioRef = useRef(null);
   const cueNodesRef = useRef([]);
+  const droneNodesRef = useRef([]);
+  const droneDryGainRef = useRef(null);
+  const droneWetGainRef = useRef(null);
+  const mixerRef = useRef(DEFAULT_MIXER);
   const drumTimerRef = useRef(null);
   const drumNodesRef = useRef([]);
   const drumStartTimeRef = useRef(0);
@@ -278,6 +128,8 @@ export default function PitchFlight() {
   const drumBeatIndexRef = useRef(0);
 
   const [selectedLevel, setSelectedLevel] = useState(LEVELS[0]);
+  const [selectedStage, setSelectedStage] = useState(0);
+  const [selectedModeId, setSelectedModeId] = useState(GAME_MODES[0].id);
   const [showLevelSelector, setShowLevelSelector] = useState(true);
   const [running, setRunning] = useState(false);
   const [crashed, setCrashed] = useState(false);
@@ -285,14 +137,22 @@ export default function PitchFlight() {
   const [lane, setLane] = useState(1);
   const [obstacles, setObstacles] = useState([]);
   const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(GAME_MODES[0].lives);
+  const [lifeFlash, setLifeFlash] = useState(false);
   const [bestByLevel, setBestByLevel] = useState({});
   const synth = DEFAULT_SYNTH;
   const activeLevel = selectedLevel;
+  const activeMode = GAME_MODES.find((mode) => mode.id === selectedModeId) || GAME_MODES[0];
+  const obstacleSpacingBars = activeMode.obstacleSpacingBars;
+  const cueStartBeats = activeLevel.cueType === 'single-note'
+    ? activeMode.singleNoteCueStartBeats || activeMode.cueStartBeats
+    : activeMode.cueStartBeats;
+  const cueLeadSeconds = cueStartBeats * BEAT_SECONDS;
+  const cueSeconds = cueLeadSeconds - CUE_END_BEFORE_IMPACT_SECONDS;
   const zoneCount = activeLevel.zoneCount || 2;
   const laneNames = LANE_NAMES[zoneCount];
   const laneLabels = activeLevel.laneLabels || laneNames;
   const best = bestByLevel[activeLevel.id] || 0;
-
   const getCueAudio = useCallback(() => {
     if (!cueAudioRef.current || cueAudioRef.current.state === 'closed') {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -311,6 +171,20 @@ export default function PitchFlight() {
       } catch (error) {}
     });
     cueNodesRef.current = [];
+  }, []);
+
+  const stopDrone = useCallback(() => {
+    droneNodesRef.current.forEach((node) => {
+      try {
+        node.stop();
+      } catch (error) {}
+      try {
+        node.disconnect();
+      } catch (error) {}
+    });
+    droneNodesRef.current = [];
+    droneDryGainRef.current = null;
+    droneWetGainRef.current = null;
   }, []);
 
   const stopDrum = useCallback(() => {
@@ -344,7 +218,7 @@ export default function PitchFlight() {
     filter.type = filterType;
     filter.frequency.setValueAtTime(frequency, time);
     gain.gain.setValueAtTime(0, time);
-    gain.gain.linearRampToValueAtTime(gainValue, time + 0.01);
+    gain.gain.linearRampToValueAtTime(gainValue * mixerRef.current.drums, time + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
 
     source.buffer = buffer;
@@ -367,7 +241,7 @@ export default function PitchFlight() {
     osc.frequency.setValueAtTime(92, time);
     osc.frequency.exponentialRampToValueAtTime(44, time + 0.16);
     gain.gain.setValueAtTime(0, time);
-    gain.gain.linearRampToValueAtTime(0.26, time + 0.01);
+    gain.gain.linearRampToValueAtTime(0.26 * mixerRef.current.drums, time + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2);
 
     osc.connect(gain);
@@ -420,7 +294,67 @@ export default function PitchFlight() {
     return drumStartTimeRef.current + Math.max(0, beatsElapsed) * BEAT_SECONDS;
   }, []);
 
-  const playCue = useCallback((safeLane, level, alignToDrum = false, scheduledStart = null) => {
+  const startDrone = useCallback((level) => {
+    stopDrone();
+    if (level.id < 21) return;
+
+    const audio = getCueAudio();
+    const start = audio.currentTime + 0.03;
+    const dryGain = audio.createGain();
+    const delay = audio.createDelay();
+    const feedback = audio.createGain();
+    const wetGain = audio.createGain();
+    const filter = audio.createBiquadFilter();
+    const voices = [
+      { frequency: SA_FREQ, gain: 0.16 },
+      { frequency: LOW_PA_FREQ, gain: 0.1 },
+      { frequency: LOW_SA_FREQ, gain: 0.13 },
+    ];
+
+    dryGain.gain.setValueAtTime(0, start);
+    dryGain.gain.linearRampToValueAtTime(DRONE_DRY_GAIN * mixerRef.current.drone, start + 0.55);
+    delay.delayTime.setValueAtTime(0.38, start);
+    feedback.gain.setValueAtTime(0.42, start);
+    wetGain.gain.setValueAtTime(DRONE_WET_GAIN * mixerRef.current.drone, start);
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(1400, start);
+    filter.Q.setValueAtTime(0.4, start);
+
+    voices.forEach((voice) => {
+      const osc = audio.createOscillator();
+      const gain = audio.createGain();
+
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(voice.frequency, start);
+      gain.gain.setValueAtTime(voice.gain, start);
+      osc.connect(gain);
+      gain.connect(filter);
+      osc.start(start);
+      droneNodesRef.current.push(osc);
+    });
+
+    filter.connect(dryGain);
+    dryGain.connect(audio.destination);
+    dryGain.connect(delay);
+    delay.connect(feedback);
+    feedback.connect(delay);
+    delay.connect(wetGain);
+    wetGain.connect(audio.destination);
+    droneDryGainRef.current = dryGain;
+    droneWetGainRef.current = wetGain;
+    droneNodesRef.current.push(dryGain, delay, feedback, wetGain, filter);
+  }, [getCueAudio, stopDrone]);
+
+  const flashLifeLoss = useCallback(() => {
+    clearTimeout(lifeFlashTimeoutRef.current);
+    setLifeFlash(false);
+    requestAnimationFrame(() => {
+      setLifeFlash(true);
+      lifeFlashTimeoutRef.current = setTimeout(() => setLifeFlash(false), 420);
+    });
+  }, []);
+
+  const playCue = useCallback((safeLane, level, alignToDrum = false, scheduledStart = null, duration = CUE_SECONDS) => {
     const audio = getCueAudio();
     const start = scheduledStart !== null
       ? Math.max(scheduledStart, audio.currentTime)
@@ -447,13 +381,13 @@ export default function PitchFlight() {
     filter.Q.setValueAtTime(0.7, start);
 
     masterGain.gain.setValueAtTime(0, start);
-    masterGain.gain.linearRampToValueAtTime(synth.volume, start + synth.attack);
-    masterGain.gain.setValueAtTime(synth.volume, start + CUE_SECONDS - synth.release);
-    masterGain.gain.linearRampToValueAtTime(0, start + CUE_SECONDS);
+    masterGain.gain.linearRampToValueAtTime(synth.volume * mixerRef.current.cue, start + synth.attack);
+    masterGain.gain.setValueAtTime(synth.volume * mixerRef.current.cue, start + duration - synth.release);
+    masterGain.gain.linearRampToValueAtTime(0, start + duration);
 
     delay.delayTime.setValueAtTime(0.18, start);
     feedback.gain.setValueAtTime(0.18, start);
-    wetGain.gain.setValueAtTime(synth.delay, start);
+    wetGain.gain.setValueAtTime(synth.delay * mixerRef.current.cue, start);
 
     vibrato.type = 'sine';
     vibrato.frequency.setValueAtTime(5.2, start);
@@ -466,14 +400,14 @@ export default function PitchFlight() {
 
       osc.type = synth.waveform;
       osc.detune.setValueAtTime(voice.detune, start);
-      scheduleCueFrequency(osc.frequency, safeLane, level, start, voice.multiplier);
+      scheduleCueFrequency(osc.frequency, safeLane, level, start, voice.multiplier, duration);
       vibratoGain.connect(osc.detune);
 
       voiceGain.gain.setValueAtTime(voice.gain, start);
       osc.connect(voiceGain);
       voiceGain.connect(filter);
       osc.start(start);
-      osc.stop(start + CUE_SECONDS + 0.04);
+      osc.stop(start + duration + 0.04);
       cueNodesRef.current.push(osc);
       osc.onended = () => {
         cueNodesRef.current = cueNodesRef.current.filter((node) => node !== osc);
@@ -488,7 +422,7 @@ export default function PitchFlight() {
     delay.connect(wetGain);
     wetGain.connect(audio.destination);
     vibrato.start(start);
-    vibrato.stop(start + CUE_SECONDS + 0.04);
+    vibrato.stop(start + duration + 0.04);
     cueNodesRef.current.push(vibrato);
   }, [getCueAudio, getNextDrumBeatTime, synth]);
 
@@ -505,7 +439,7 @@ export default function PitchFlight() {
     filter.type = 'lowpass';
     filter.frequency.setValueAtTime(success ? 4200 : 900, start);
     gain.gain.setValueAtTime(0, start);
-    gain.gain.linearRampToValueAtTime(success ? 0.22 : 0.32, start + 0.015);
+    gain.gain.linearRampToValueAtTime((success ? 0.22 : 0.32) * mixerRef.current.result, start + 0.015);
     gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
 
     osc.connect(filter);
@@ -549,17 +483,17 @@ export default function PitchFlight() {
         impactTime,
       ));
       if (impactTime !== null) {
-        impactTime += OBSTACLE_SPACING_BARS * BAR_SECONDS;
+        impactTime += obstacleSpacingBars * BAR_SECONDS;
         x = birdRight + SPEED * (impactTime - audioStartTime);
       } else {
-        x += SPEED * BAR_SECONDS * OBSTACLE_SPACING_BARS;
+        x += SPEED * BAR_SECONDS * obstacleSpacingBars;
       }
     }
 
     nextIdRef.current = INITIAL_OBSTACLE_COUNT;
     obstaclesRef.current = openingObstacles;
     setObstacles(obstaclesRef.current);
-  }, [selectedLevel]);
+  }, [obstacleSpacingBars, selectedLevel]);
 
   const moveToLane = useCallback((nextLane) => {
     const maxLane = (selectedLevel.zoneCount || 2) - 1;
@@ -583,25 +517,31 @@ export default function PitchFlight() {
     cancelAnimationFrame(rafRef.current);
     clearTimeout(crashTimeoutRef.current);
     stopCueNodes();
+    stopDrone();
     const audio = getCueAudio();
     startDrum(level);
+    startDrone(level);
     setSelectedLevel(level);
     const startLane = Math.min(1, (level.zoneCount || 2) - 1);
     laneRef.current = startLane;
     setLane(startLane);
     setCrashed(false);
     setCrashPending(false);
+    setLifeFlash(false);
     setScore(0);
     scoreRef.current = 0;
+    setLives(activeMode.lives);
+    livesRef.current = activeMode.lives;
     lastFrameRef.current = 0;
     resetObstacles(level, drumStartTimeRef.current || audio.currentTime);
     setRunning(true);
-  }, [activeLevel, getCueAudio, resetObstacles, startDrum, stopCueNodes]);
+  }, [activeLevel, activeMode.lives, getCueAudio, resetObstacles, startDrone, startDrum, stopCueNodes, stopDrone]);
 
   const endRun = useCallback(() => {
     cancelAnimationFrame(rafRef.current);
     clearTimeout(crashTimeoutRef.current);
     stopCueNodes();
+    stopDrone();
     stopDrum();
     setRunning(false);
     setCrashed(true);
@@ -610,21 +550,26 @@ export default function PitchFlight() {
       ...current,
       [activeLevel.id]: Math.max(current[activeLevel.id] || 0, scoreRef.current),
     }));
-  }, [activeLevel.id, stopCueNodes, stopDrum]);
+  }, [activeLevel.id, stopCueNodes, stopDrone, stopDrum]);
 
   const openLevelSelector = useCallback(() => {
     cancelAnimationFrame(rafRef.current);
     clearTimeout(crashTimeoutRef.current);
     stopCueNodes();
+    stopDrone();
     stopDrum();
     setRunning(false);
     setCrashed(false);
     setCrashPending(false);
     setShowLevelSelector(true);
+    setLifeFlash(false);
+    setSelectedStage(Math.floor((activeLevel.id - 1) / LEVELS_PER_STAGE));
     setScore(0);
     scoreRef.current = 0;
+    setLives(activeMode.lives);
+    livesRef.current = activeMode.lives;
     resetObstacles();
-  }, [resetObstacles, stopCueNodes, stopDrum]);
+  }, [activeLevel.id, activeMode.lives, resetObstacles, stopCueNodes, stopDrone, stopDrum]);
 
   const updateGame = useCallback((time) => {
     if (!lastFrameRef.current) lastFrameRef.current = time;
@@ -645,11 +590,11 @@ export default function PitchFlight() {
       const timeToCollision = obstacle.impactTime === null
         ? (nextX - birdRight) / SPEED
         : obstacle.impactTime - audioNow;
-      const cueStartTime = obstacle.impactTime === null ? null : getCueStartTime(obstacle.impactTime);
+      const cueStartTime = obstacle.impactTime === null ? null : getCueStartTime(obstacle.impactTime, cueStartBeats);
       const shouldCue = !obstacle.cued && timeToCollision > 0 && (
         activeLevel.id >= 3 && cueStartTime !== null
           ? audioNow >= cueStartTime - 0.04
-          : timeToCollision <= CUE_LEAD_SECONDS
+          : timeToCollision <= cueLeadSeconds
       );
       const touched = !obstacle.resolved && birdRight > nextX && birdLeft < nextX + WALL_W;
       const safeLane = obstacle.safeLane;
@@ -657,7 +602,7 @@ export default function PitchFlight() {
       const crashTouch = touched && laneRef.current !== safeLane;
 
       if (shouldCue) {
-        playCue(safeLane, activeLevel, false, activeLevel.id >= 3 ? cueStartTime : null);
+        playCue(safeLane, activeLevel, false, activeLevel.id >= 3 ? cueStartTime : null, cueSeconds);
       }
 
       if (safeTouch) {
@@ -682,16 +627,16 @@ export default function PitchFlight() {
     });
 
     const lastObstacle = nextObstacles[nextObstacles.length - 1];
-    if (lastObstacle && lastObstacle.x < fieldWidth + SPEED * BAR_SECONDS * OBSTACLE_SPACING_BARS) {
+    if (lastObstacle && lastObstacle.x < fieldWidth + SPEED * BAR_SECONDS * obstacleSpacingBars) {
       const history = nextObstacles.map((obstacle) => obstacle.safeLane);
       const safeLane = pickSafeLane(history, zoneCount);
       const impactTime = lastObstacle.impactTime === null
         ? null
-        : lastObstacle.impactTime + OBSTACLE_SPACING_BARS * BAR_SECONDS;
+        : lastObstacle.impactTime + obstacleSpacingBars * BAR_SECONDS;
       nextObstacles.push(makeObstacle(
         nextIdRef.current,
         impactTime === null
-          ? lastObstacle.x + SPEED * BAR_SECONDS * OBSTACLE_SPACING_BARS
+          ? lastObstacle.x + SPEED * BAR_SECONDS * obstacleSpacingBars
           : birdRight + (impactTime - audioNow) * SPEED,
         safeLane,
         true,
@@ -708,13 +653,25 @@ export default function PitchFlight() {
     obstaclesRef.current = nextObstacles;
     setObstacles(nextObstacles);
 
+    if (hit && livesRef.current > 1) {
+      const nextLives = livesRef.current - 1;
+      livesRef.current = nextLives;
+      setLives(nextLives);
+      flashLifeLoss();
+      playResultTone(false);
+      hit = false;
+    }
+
     if (hit) {
       cancelAnimationFrame(rafRef.current);
       stopCueNodes();
+      stopDrone();
       stopDrum();
       playResultTone(false);
       setRunning(false);
       setCrashPending(true);
+      livesRef.current = 0;
+      setLives(0);
       setBestByLevel((current) => ({
         ...current,
         [activeLevel.id]: Math.max(current[activeLevel.id] || 0, scoreRef.current),
@@ -726,14 +683,18 @@ export default function PitchFlight() {
       return;
     }
 
-    rafRef.current = requestAnimationFrame(updateGame);
-  }, [activeLevel, endRun, playCue, playResultTone, stopCueNodes, stopDrum, zoneCount]);
+    rafRef.current = requestAnimationFrame((nextTime) => updateGameRef.current?.(nextTime));
+  }, [activeLevel, cueLeadSeconds, cueSeconds, cueStartBeats, flashLifeLoss, obstacleSpacingBars, playCue, playResultTone, stopCueNodes, stopDrone, stopDrum, zoneCount]);
+
+  useEffect(() => {
+    updateGameRef.current = updateGame;
+  }, [updateGame]);
 
   useEffect(() => {
     if (!running) return undefined;
-    rafRef.current = requestAnimationFrame(updateGame);
+    rafRef.current = requestAnimationFrame((time) => updateGameRef.current?.(time));
     return () => cancelAnimationFrame(rafRef.current);
-  }, [running, updateGame]);
+  }, [running]);
 
   useEffect(() => {
     resetObstacles();
@@ -761,10 +722,12 @@ export default function PitchFlight() {
 
   useEffect(() => () => {
     clearTimeout(crashTimeoutRef.current);
+    clearTimeout(lifeFlashTimeoutRef.current);
     stopCueNodes();
+    stopDrone();
     stopDrum();
     cueAudioRef.current?.close().catch(() => {});
-  }, [stopCueNodes, stopDrum]);
+  }, [stopCueNodes, stopDrone, stopDrum]);
 
   const laneLabel = laneNames[lane];
 
@@ -796,8 +759,9 @@ export default function PitchFlight() {
     },
     levelGrid: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(5, minmax(0, 1fr))',
-      gap: 8,
+      gridTemplateColumns: 'repeat(5, 48px)',
+      justifyContent: 'center',
+      gap: 7,
     },
     levelOverlay: {
       position: 'absolute',
@@ -806,34 +770,63 @@ export default function PitchFlight() {
       display: showLevelSelector ? 'flex' : 'none',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: 14,
+      padding: 8,
       background: 'rgba(245, 242, 235, 0.86)',
     },
+    levelPager: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
+    },
     levelPanel: {
-      width: 'min(430px, 100%)',
+      width: 'min(400px, 100%)',
+      minHeight: 366,
       border: `2.5px solid ${colors.black}`,
       background: colors.yellow,
-      boxShadow: `5px 5px 0 ${colors.black}`,
+      boxShadow: `4px 4px 0 ${colors.black}`,
       padding: 14,
     },
     levelPanelTitle: {
       fontFamily: fonts.display,
-      fontSize: 28,
+      fontSize: 24,
       letterSpacing: 2,
       color: colors.black,
       lineHeight: 1,
-      marginBottom: 10,
+      marginBottom: 8,
       textAlign: 'center',
     },
-    levelTile: (available, active) => ({
+    levelModeRow: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+      gap: 7,
+      marginBottom: 10,
+    },
+    stageArrow: (disabled) => ({
+      width: 34,
+      height: 52,
       border: `2.5px solid ${colors.black}`,
+      background: disabled ? '#EDEAE0' : '#fff',
+      color: disabled ? colors.dimText : colors.black,
+      boxShadow: disabled ? 'none' : `3px 3px 0 ${colors.black}`,
+      fontFamily: fonts.display,
+      fontSize: 28,
+      lineHeight: 1,
+      cursor: disabled ? 'default' : 'pointer',
+      padding: 0,
+      flexShrink: 0,
+    }),
+    levelTile: (available, active) => ({
+      border: `2px solid ${colors.black}`,
       background: active ? colors.red : available ? '#fff' : '#EDEAE0',
       color: active ? colors.cream : available ? colors.black : colors.dimText,
-      aspectRatio: '1 / 1',
+      width: 48,
+      height: 48,
       padding: 0,
       cursor: available ? 'pointer' : 'default',
       textAlign: 'center',
-      boxShadow: available ? `3px 3px 0 ${colors.black}` : 'none',
+      boxShadow: available ? `2px 2px 0 ${colors.black}` : 'none',
+      transition: 'transform 0.12s ease, box-shadow 0.12s ease',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -841,7 +834,7 @@ export default function PitchFlight() {
     }),
     levelNumber: {
       fontFamily: fonts.display,
-      fontSize: 30,
+      fontSize: 21,
       letterSpacing: 1,
       lineHeight: 1,
     },
@@ -866,6 +859,48 @@ export default function PitchFlight() {
       color: colors.black,
       minWidth: 88,
       textAlign: 'center',
+    },
+    modeButton: (mode, active, disabled) => ({
+      ...styles.btn,
+      background: mode.color,
+      color: mode.id === 'gobble' || mode.id === 'devour' ? colors.cream : colors.black,
+      cursor: disabled ? 'default' : 'pointer',
+      opacity: disabled && !active ? 0.6 : 1,
+      borderRadius: 0,
+      border: active ? `3px solid ${colors.black}` : `2px solid ${colors.black}`,
+      outline: active ? `2px solid ${colors.cream}` : 'none',
+      outlineOffset: -5,
+      boxShadow: 'none',
+      justifyContent: 'center',
+      padding: active ? '7px 6px' : '8px 7px',
+      fontSize: 9,
+    }),
+    modeStat: {
+      border: `2px solid ${colors.black}`,
+      background: activeMode.color,
+      padding: '8px 11px',
+      fontFamily: fonts.mono,
+      fontSize: 10,
+      fontWeight: 700,
+      letterSpacing: 1,
+      textTransform: 'uppercase',
+      color: activeMode.id === 'gobble' || activeMode.id === 'devour' ? colors.cream : colors.black,
+      minWidth: 88,
+      textAlign: 'center',
+    },
+    lifeStat: {
+      border: `2px solid ${colors.black}`,
+      background: lifeFlash ? colors.red : '#fff',
+      padding: '8px 11px',
+      fontFamily: fonts.mono,
+      fontSize: 10,
+      fontWeight: 700,
+      letterSpacing: 1,
+      textTransform: 'uppercase',
+      color: lifeFlash ? colors.cream : colors.black,
+      minWidth: 88,
+      textAlign: 'center',
+      animation: lifeFlash ? 'pfLifeBlink 0.42s ease' : 'none',
     },
     playArea: {
       display: 'flex',
@@ -1065,143 +1100,90 @@ export default function PitchFlight() {
   };
 
   return (
-    <section style={S.section}>
-      <div style={S.banner}>
-        <div style={S.bannerText}>Pitch Flight</div>
-        <div style={S.bannerSub}>
-          A pitch recognition game: hear the slide, choose the open lane, keep the run alive.
-        </div>
-      </div>
-
-      <div style={S.inner}>
-        <div style={S.gameShell}>
-          <div style={S.levelOverlay}>
-            <div style={S.levelPanel}>
-              <div style={S.levelPanelTitle}>Choose Level</div>
-              <div style={S.levelGrid}>
-                {Array.from({ length: LEVEL_GRID_SIZE }, (_, index) => {
-                  const levelNumber = index + 1;
-                  const level = LEVELS.find((item) => item.id === levelNumber);
-                  const available = Boolean(level);
-                  const active = selectedLevel?.id === levelNumber;
-
-                  return (
-                    <button
-                      key={levelNumber}
-                      type="button"
-                      style={S.levelTile(available, active)}
-                      disabled={!available}
-                      aria-label={available ? `Choose level ${levelNumber}` : `Level ${levelNumber} unavailable`}
-                      onClick={() => {
-                        if (!level) return;
-                        setSelectedLevel(level);
-                        setShowLevelSelector(false);
-                        setCrashed(false);
-                        setScore(0);
-                        scoreRef.current = 0;
-                        laneRef.current = Math.min(1, (level.zoneCount || 2) - 1);
-                        setLane(laneRef.current);
-                        resetObstacles(level);
-                      }}
-                    >
-                      <span style={S.levelNumber}>{levelNumber}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+    <>
+      <section style={S.section}>
+        <div style={S.banner}>
+          <div style={S.bannerText}>Pitch Flight</div>
+          <div style={S.bannerSub}>
+            A pitch recognition game: hear the slide, choose the open lane, keep the run alive.
           </div>
-
-            <div style={S.hud}>
-              <div style={S.statRow}>
-                <div style={S.stat}>{activeLevel.title}</div>
-                <div style={S.stat}>Score {score}</div>
-                <div style={S.stat}>Best {best}</div>
-              </div>
-              <div style={S.statRow}>
-                <button type="button" style={S.button(false)} onClick={openLevelSelector}>
-                  Levels
-                </button>
-                <button type="button" style={S.button(true)} onClick={() => startRun()}>
-                  {running ? 'Restart' : crashed ? 'Try Again' : 'Start'}
-                </button>
-              </div>
-            </div>
-
-            <div className="pf-play-area" style={S.playArea}>
-              <div ref={fieldRef} className="pf-field" style={S.field} onPointerDown={moveToTappedLane}>
-                {laneNames.map((name, laneIdx) => (
-                  <div key={name} style={S.lane(laneIdx)} />
-                ))}
-                {laneNames.map((name, laneIdx) => (
-                  <div key={`${name}-label`} className="pf-lane-label" style={S.laneLabel(laneIdx)}>
-                    {laneLabels[laneIdx]}
-                  </div>
-                ))}
-
-                {obstacles.map((obstacle) => (
-                  <div key={obstacle.id}>
-                    {obstacle.revealed && laneNames.map((name, laneIdx) => (
-                      laneIdx === obstacle.safeLane ? null : (
-                        <div key={name} style={S.revealedWall(obstacle, laneIdx)}>
-                          <div style={S.wallStripe} />
-                        </div>
-                      )
-                    ))}
-                    {obstacle.hidden && (
-                      <div style={S.cloud(obstacle)}>
-                        <div style={S.cloudPuff} />
-                      </div>
-                    )}
-                  </div>
-                ))}
-
-                <div style={S.bird} aria-label={`Bird in ${laneLabel} lane`}>
-                  <div style={S.wing} />
-                  <div style={S.beak} />
-                  <div style={S.eye} />
-                </div>
-
-                <div style={S.message}>
-                  <div style={S.messagePanel}>
-                    <div style={S.messageTitle}>{crashed ? 'Crashed' : activeLevel.title}</div>
-                    <p style={S.messageText}>
-                      {crashed
-                        ? `Run ended at ${score}.`
-                        : activeLevel.helpText
-                          ? activeLevel.helpText
-                        : activeLevel.cueType === 'sequence'
-                          ? 'Sa-Pa means top. Sa-Sa means middle. Sa-low Pa means bottom.'
-                        : activeLevel.cueType === 'two-note'
-                          ? 'High Sa then Sa means bottom. Sa then high Sa means top.'
-                          : activeLevel.cueType === 'anchored-two-note'
-                            ? 'Sa then low Sa means bottom. Sa then high Sa means top.'
-                          : `The ${activeLevel.interval.toLowerCase()} slide is your decision window: rising means top, falling means bottom.`}
-                    </p>
-                    <button type="button" style={S.button(true)} onClick={() => startRun()}>
-                      {crashed ? 'Try Again' : 'Start Run'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pf-controls" style={S.controls}>
-                {laneNames.map((name, laneIdx) => (
-                  <button
-                    key={name}
-                    type="button"
-                    style={S.laneButton(lane === laneIdx)}
-                    onClick={() => moveToLane(laneIdx)}
-                  >
-                    {laneLabels[laneIdx]}
-                  </button>
-                ))}
-              </div>
-            </div>
         </div>
 
-      </div>
+        <div style={S.inner}>
+          <div style={S.gameShell}>
+            <LevelSelector
+              S={S}
+              selectedStage={selectedStage}
+              setSelectedStage={setSelectedStage}
+              selectedLevel={selectedLevel}
+              setSelectedLevel={setSelectedLevel}
+              selectedModeId={selectedModeId}
+              setSelectedModeId={setSelectedModeId}
+              setShowLevelSelector={setShowLevelSelector}
+              setCrashed={setCrashed}
+              setScore={setScore}
+              scoreRef={scoreRef}
+              laneRef={laneRef}
+              setLane={setLane}
+              livesRef={livesRef}
+              setLives={setLives}
+              resetObstacles={resetObstacles}
+            />
+            <Hud
+              S={S}
+              activeLevel={activeLevel}
+              activeMode={activeMode}
+              score={score}
+              lives={lives}
+              best={best}
+              openLevelSelector={openLevelSelector}
+              startRun={startRun}
+              running={running}
+              crashed={crashed}
+            />
+            <PlayField
+              S={S}
+              fieldRef={fieldRef}
+              moveToTappedLane={moveToTappedLane}
+              laneNames={laneNames}
+              laneLabels={laneLabels}
+              obstacles={obstacles}
+              lane={lane}
+              laneLabel={laneLabel}
+              activeLevel={activeLevel}
+              running={running}
+              crashPending={crashPending}
+              crashed={crashed}
+              score={score}
+              startRun={startRun}
+              moveToLane={moveToLane}
+            />
+        </div>
+
+        </div>
+      </section>
       <style>{`
+        .pf-level-tile:not(:disabled):hover {
+          transform: translate(-2px, -2px);
+          box-shadow: 4px 4px 0 ${colors.black} !important;
+        }
+
+        .pf-level-tile:not(:disabled):active {
+          transform: translate(1px, 1px);
+          box-shadow: 1px 1px 0 ${colors.black} !important;
+        }
+
+        @keyframes pfLifeBlink {
+          0%, 100% {
+            background: #fff;
+            color: ${colors.black};
+          }
+          35%, 70% {
+            background: ${colors.red};
+            color: ${colors.cream};
+          }
+        }
+
         @media (max-width: 620px) {
           .pf-play-area {
             display: block !important;
@@ -1222,6 +1204,6 @@ export default function PitchFlight() {
           }
         }
       `}</style>
-    </section>
+    </>
   );
 }
