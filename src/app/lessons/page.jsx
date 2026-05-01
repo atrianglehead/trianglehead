@@ -163,14 +163,8 @@ function LessonsPageInner() {
                   <div style={{ ...styles.label, fontSize: 8, letterSpacing: 2, color: 'rgba(238,232,208,0.7)', marginBottom: 8 }}>
                     {cat.title}
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 10 }}>
-                    <div style={{ ...styles.cardTitle, color: '#fff' }}>
-                      {sub.title}
-                    </div>
-                    <div style={{ background: colors.cream, border: `1.5px solid ${colors.black}`, padding: '7px 11px', flexShrink: 0, textAlign: 'center' }}>
-                      <div style={{ fontFamily: fonts.mono, fontSize: 11, fontWeight: 700, letterSpacing: 0.5, color: colors.black, whiteSpace: 'nowrap' }}>2150 INR</div>
-                      <div style={{ fontFamily: fonts.mono, fontSize: 9, fontWeight: 700, letterSpacing: 0.5, color: colors.mutedText, whiteSpace: 'nowrap' }}>/ HOUR</div>
-                    </div>
+                  <div style={{ ...styles.cardTitle, color: '#fff' }}>
+                    {sub.title}
                   </div>
                 </div>
                 {/* Card body */}
