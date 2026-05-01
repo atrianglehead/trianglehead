@@ -2,19 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import { colors, fonts, styles } from '../styles';
-import LevelSelector from './svara-rising/LevelSelector';
-import Hud from './svara-rising/Hud';
-import PlayField from './svara-rising/PlayField';
-import useSvaraRisingGame from './svara-rising/useSvaraRisingGame';
+import LevelSelector from './laya-rising/LevelSelector';
+import Hud from './laya-rising/Hud';
+import PlayField from './laya-rising/PlayField';
+import useLayaRisingGame from './laya-rising/useLayaRisingGame';
 import {
   SVARA_X,
   SVARA_SIZE,
   WALL_W,
   FINISH_LINE_W,
-} from './svara-rising/constants';
+} from './laya-rising/constants';
 
-export default function SvaraRising() {
-  const game = useSvaraRisingGame();
+export default function LayaRising() {
+  const game = useLayaRisingGame();
   const {
     activeMode,
     crashPending,
@@ -158,11 +158,16 @@ export default function SvaraRising() {
       cursor: available ? 'pointer' : 'default',
       textAlign: 'center',
       boxShadow: completed ? `inset 0 0 0 4px #fff, 2px 2px 0 ${colors.black}` : available ? `2px 2px 0 ${colors.black}` : 'none',
+      boxShadow: active
+        ? `4px 4px 0 ${colors.black}` // Apply hover shadow when active
+        : completed ? `inset 0 0 0 4px #fff, 2px 2px 0 ${colors.black}` : available ? `2px 2px 0 ${colors.black}` : 'none',
+      transform: active ? 'translate(-2px, -2px)' : 'none', // Apply hover transform when active
       transition: 'transform 0.12s ease, box-shadow 0.12s ease',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       opacity: available ? 1 : 0.52,
+      outline: 'none', // Remove default browser focus ring
     }),
     levelNumber: {
       fontFamily: fonts.display,
@@ -572,9 +577,9 @@ export default function SvaraRising() {
     <>
       <section style={S.section}>
         <div style={S.banner}>
-          <div style={S.bannerText}>Svarā Rising</div>
+          <div style={S.bannerText}>Laya Rising</div>
           <div style={S.bannerSub}>
-            By recognising the pitches you hear, guide Svarā through open windows as she tries to navigate the city skyline.
+            By recognising the tempo you hear, guide Laya through open windows as she tries to navigate the city skyline.
           </div>
         </div>
 

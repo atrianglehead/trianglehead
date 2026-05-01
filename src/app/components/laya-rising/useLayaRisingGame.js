@@ -82,6 +82,34 @@ function makeFinishLine(x, impactTime = null) {
   };
 }
 
+function getCueTiming(level, mode) {
+  if (level.cueType === 'tempo-pair') {
+    const modeTiming = level.modeCueTimings?.[mode.id];
+    if (modeTiming) {
+      const secondStartBeatsAfterFirst = modeTiming.secondStartBeatsAfterFirst ?? modeTiming.segmentBeats;
+      return {
+        cueStartBeats: modeTiming.firstStartBeatsBeforeImpact,
+        cueDurationSeconds: modeTiming.firstStartBeatsBeforeImpact * BEAT_SECONDS,
+        cueChangeSeconds: secondStartBeatsAfterFirst * BEAT_SECONDS,
+        obstacleSpacingSeconds: modeTiming.obstacleSpacingBeats
+          ? modeTiming.obstacleSpacingBeats * BEAT_SECONDS
+          : mode.obstacleSpacingBars * BAR_SECONDS,
+      };
+    }
+  }
+
+  const cueStartBeats = level.cueType === 'single-note'
+    ? mode.singleNoteCueStartBeats || mode.cueStartBeats
+    : mode.cueStartBeats;
+
+  return {
+    cueStartBeats,
+    cueDurationSeconds: cueStartBeats * BEAT_SECONDS - CUE_END_BEFORE_IMPACT_SECONDS,
+    cueChangeSeconds: null,
+    obstacleSpacingSeconds: mode.obstacleSpacingBars * BAR_SECONDS,
+  };
+}
+
 export default function useSvaraRisingGame() {
   const fieldRef = useRef(null);
   const rafRef = useRef(null);
@@ -129,12 +157,12 @@ export default function useSvaraRisingGame() {
   const synth = DEFAULT_SYNTH;
   const activeLevel = selectedLevel;
   const activeMode = GAME_MODES.find((mode) => mode.id === selectedModeId) || GAME_MODES[0];
-  const obstacleSpacingBars = activeMode.obstacleSpacingBars;
-  const cueStartBeats = activeLevel.cueType === 'single-note'
-    ? activeMode.singleNoteCueStartBeats || activeMode.cueStartBeats
-    : activeMode.cueStartBeats;
+  const cueTiming = getCueTiming(activeLevel, activeMode);
+  const cueStartBeats = cueTiming.cueStartBeats;
   const cueLeadSeconds = cueStartBeats * BEAT_SECONDS;
-  const cueSeconds = cueLeadSeconds - CUE_END_BEFORE_IMPACT_SECONDS;
+  const cueSeconds = cueTiming.cueDurationSeconds;
+  const cueChangeSeconds = cueTiming.cueChangeSeconds;
+  const obstacleSpacingSeconds = cueTiming.obstacleSpacingSeconds;
   const cueNoteChangeSeconds = (activeMode.noteChangeBeats || 2) * BEAT_SECONDS;
   const zoneCount = activeLevel.zoneCount || 2;
   const laneNames = LANE_NAMES[zoneCount];
@@ -178,10 +206,11 @@ export default function useSvaraRisingGame() {
       alignToDrum,
       scheduledStart,
       duration,
+      cueChangeSeconds,
       noteChangeSeconds: cueNoteChangeSeconds,
       synth,
     });
-  }, [audioRefs, cueNoteChangeSeconds, synth]);
+  }, [audioRefs, cueChangeSeconds, cueNoteChangeSeconds, synth]);
 
   const playResultTone = useCallback((success) => {
     playAudioResultTone(success, audioRefs);
@@ -217,10 +246,10 @@ export default function useSvaraRisingGame() {
         impactTime,
       ));
       if (impactTime !== null) {
-        impactTime += obstacleSpacingBars * BAR_SECONDS;
+        impactTime += obstacleSpacingSeconds;
         x = svaraRight + SPEED * (impactTime - audioStartTime);
       } else {
-        x += SPEED * BAR_SECONDS * obstacleSpacingBars;
+        x += SPEED * obstacleSpacingSeconds;
       }
     }
 
@@ -230,7 +259,7 @@ export default function useSvaraRisingGame() {
     finishLineRef.current = null;
     setObstacles(obstaclesRef.current);
     setFinishLine(null);
-  }, [obstacleSpacingBars, selectedLevel]);
+  }, [obstacleSpacingSeconds, selectedLevel]);
 
   const chooseLevel = useCallback((level) => {
     setSelectedLevel(level);
@@ -333,7 +362,9 @@ export default function useSvaraRisingGame() {
     stopCueNodes();
     stopDrone();
     stopDrum();
-    playResultTone(true);
+    if (activeMode.successTone !== false) {
+      playResultTone(true);
+    }
     setRunning(false);
     setCrashPending(false);
     setCrashed(false);
@@ -344,7 +375,7 @@ export default function useSvaraRisingGame() {
         [activeLevel.id]: true,
       }));
     }
-  }, [activeLevel.id, playResultTone, showObstaclesUsed, stopCueNodes, stopDrone, stopDrum]);
+  }, [activeLevel.id, activeMode.successTone, playResultTone, showObstaclesUsed, stopCueNodes, stopDrone, stopDrum]);
 
   const goToNextLevel = useCallback(() => {
     if (!nextLevel) return;
@@ -435,17 +466,17 @@ export default function useSvaraRisingGame() {
       lastObstacle
       && !nextFinishLine
       && hiddenObstacleCountRef.current < HIDDEN_OBSTACLES_TO_COMPLETE
-      && lastObstacle.x < fieldWidth + SPEED * BAR_SECONDS * obstacleSpacingBars
+      && lastObstacle.x < fieldWidth + SPEED * obstacleSpacingSeconds
     ) {
       const history = nextObstacles.map((obstacle) => obstacle.safeLane);
       const safeLane = pickSafeLane(history, zoneCount);
       const impactTime = lastObstacle.impactTime === null
         ? null
-        : lastObstacle.impactTime + obstacleSpacingBars * BAR_SECONDS;
+        : lastObstacle.impactTime + obstacleSpacingSeconds;
       const nextObstacle = makeObstacle(
         nextIdRef.current,
         impactTime === null
-          ? lastObstacle.x + SPEED * BAR_SECONDS * obstacleSpacingBars
+          ? lastObstacle.x + SPEED * obstacleSpacingSeconds
           : svaraRight + (impactTime - audioNow) * SPEED,
         safeLane,
         true,
@@ -458,10 +489,10 @@ export default function useSvaraRisingGame() {
       if (hiddenObstacleCountRef.current >= HIDDEN_OBSTACLES_TO_COMPLETE) {
         const finishImpactTime = impactTime === null
           ? null
-          : impactTime + obstacleSpacingBars * BAR_SECONDS;
+          : impactTime + obstacleSpacingSeconds;
         nextFinishLine = makeFinishLine(
           finishImpactTime === null
-            ? nextObstacle.x + SPEED * BAR_SECONDS * obstacleSpacingBars
+            ? nextObstacle.x + SPEED * obstacleSpacingSeconds
             : svaraRight + (finishImpactTime - audioNow) * SPEED,
           finishImpactTime,
         );
@@ -473,10 +504,10 @@ export default function useSvaraRisingGame() {
     ) {
       const finishImpactTime = lastObstacle.impactTime === null
         ? null
-        : lastObstacle.impactTime + obstacleSpacingBars * BAR_SECONDS;
+        : lastObstacle.impactTime + obstacleSpacingSeconds;
       nextFinishLine = makeFinishLine(
         finishImpactTime === null
-          ? lastObstacle.x + SPEED * BAR_SECONDS * obstacleSpacingBars
+          ? lastObstacle.x + SPEED * obstacleSpacingSeconds
           : svaraRight + (finishImpactTime - audioNow) * SPEED,
         finishImpactTime,
       );
@@ -528,7 +559,7 @@ export default function useSvaraRisingGame() {
     }
 
     rafRef.current = requestAnimationFrame((nextTime) => updateGameRef.current?.(nextTime));
-  }, [activeLevel, activeMode.successTone, completeLevel, cueLeadSeconds, cueSeconds, cueStartBeats, flashLifeLoss, obstacleSpacingBars, playCue, playResultTone, stopCueNodes, stopDrone, stopDrum, zoneCount]);
+  }, [activeLevel, activeMode.successTone, completeLevel, cueLeadSeconds, cueSeconds, cueStartBeats, flashLifeLoss, obstacleSpacingSeconds, playCue, playResultTone, stopCueNodes, stopDrone, stopDrum, zoneCount]);
 
   useEffect(() => {
     updateGameRef.current = updateGame;
