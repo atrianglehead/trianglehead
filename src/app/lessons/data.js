@@ -31,6 +31,7 @@ export const CATEGORIES = [
       { id: 'melodica', title: 'Melodica' },
       { id: 'drums', title: 'Drums' },
       { id: 'swarmandal', title: 'Swarmandal (Indian Harp)' },
+      { id: 'other', title: 'Other' },
     ],
   },
   {
