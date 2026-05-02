@@ -87,22 +87,6 @@ details[open] > .lesson-summary span::after {
     padding: 16px;
   }
 
-  .nav-bar {
-    flex-wrap: wrap !important;
-    gap: 10px !important;
-    padding: 12px 16px !important;
-  }
-  .nav-links {
-    flex-wrap: wrap !important;
-    gap: 10px !important;
-  }
-  .issue-bar {
-    flex-wrap: wrap !important;
-    row-gap: 4px !important;
-    padding: 6px 16px !important;
-  }
-
-
   /* Footer */
   .footer-bar {
     padding: 12px 16px !important;

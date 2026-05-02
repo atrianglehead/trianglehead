@@ -2,10 +2,11 @@ export const colors = {
   red: '#E8473F',
   yellow: '#F5C842',
   black: '#111',
+  white: '#fff',
   cream: '#EEE8D0',
   bg: '#F5F2EB',
+  panel: '#EDEAE0',
   divider: '#CCC8BC',
-  mutedText: '#555',
   dimText: '#888',
 };
 
@@ -56,6 +57,7 @@ export const styles = {
     fontSize: 22,
     letterSpacing: 1,
     lineHeight: 1.1,
+    color: colors.black,
   },
   label: {
     fontFamily: fonts.mono,
@@ -87,7 +89,7 @@ export const styles = {
   },
   card: {
     border: `2px solid ${colors.black}`,
-    background: '#fff',
+    background: colors.white,
   },
   dividerLine: {
     flex: 1,
@@ -112,7 +114,7 @@ export const styles = {
     fontSize: 14,
     padding: '10px 14px',
     border: `2px solid ${colors.divider}`,
-    background: '#fff',
+    background: colors.white,
     color: colors.black,
     outline: 'none',
     width: '100%',

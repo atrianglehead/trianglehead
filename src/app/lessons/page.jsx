@@ -1,48 +1,190 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Arrow from '../components/Arrow';
 import { CATEGORIES } from './data';
 import { colors, fonts, styles } from '../styles';
+import VoiceDesc from '@/content/lessons/voice.mdx';
+import InstrumentDesc from '@/content/lessons/instrument.mdx';
+import RhythmDesc from '@/content/lessons/rhythm.mdx';
+import PoetryDesc from '@/content/lessons/poetry.mdx';
+import MusicDesc from '@/content/lessons/music.mdx';
+
+const DESCS = {
+  voice: VoiceDesc,
+  instrument: InstrumentDesc,
+  rhythm: RhythmDesc,
+  poetry: PoetryDesc,
+  music: MusicDesc,
+};
 
 function LessonsPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const category = searchParams.get('category') || 'all';
-  const type = searchParams.get('type') || '';
+  const categoryId = searchParams.get('category') || CATEGORIES[0].id;
+  const currentCat = CATEGORIES.find(c => c.id === categoryId) || CATEGORIES[0];
 
-  const currentCat = category === 'all' ? null : CATEGORIES.find(c => c.id === category);
+  const [selectedTypes, setSelectedTypes] = useState([]);
+  const [selectedStyles, setSelectedStyles] = useState([]);
+
+  useEffect(() => {
+    setSelectedTypes([]);
+    setSelectedStyles([]);
+  }, [categoryId]);
 
   const setCategory = (catId) => {
-    if (catId === 'all') {
-      router.replace('/lessons', { scroll: false });
-    } else {
-      router.replace(`/lessons?category=${catId}`, { scroll: false });
-    }
+    router.replace(`/lessons?category=${catId}`, { scroll: false });
   };
 
-  const setType = (typeId) => {
-    const next = type === typeId ? '' : typeId;
-    if (next) {
-      router.replace(`/lessons?category=${category}&type=${next}`, { scroll: false });
-    } else {
-      router.replace(`/lessons?category=${category}`, { scroll: false });
-    }
+  const toggleType = (typeId) => {
+    setSelectedTypes(prev =>
+      prev.includes(typeId) ? prev.filter(id => id !== typeId) : [...prev, typeId]
+    );
   };
 
-  const groups = category === 'all'
-    ? CATEGORIES.map(cat => ({ cat, subs: cat.subcategories }))
-    : currentCat
-      ? [{ cat: currentCat, subs: type ? currentCat.subcategories.filter(s => s.id === type) : currentCat.subcategories }]
-      : [];
+  const toggleStyle = (style) => {
+    setSelectedStyles(prev =>
+      prev.includes(style) ? prev.filter(s => s !== style) : [...prev, style]
+    );
+  };
+
+  const bookingHref = `/contact?category=${currentCat.id}` +
+    (selectedTypes.length > 0 ? `&types=${selectedTypes.join(',')}` : '') +
+    (selectedStyles.length > 0 ? `&styles=${selectedStyles.join(',')}` : '') +
+    '#message';
+
 
   return (
     <>
-      {/* Red top section */}
-      <div style={{ background: colors.red, padding: '28px', borderBottom: `3px solid ${colors.black}` }}>
-        <div style={{ ...styles.sectionTitle, color: '#fff', marginBottom: 20 }}>
+      <style>{`
+        .lesson-chip:hover { background: ${colors.black} !important; color: ${colors.cream} !important; }
+        .lesson-cat-tab:not(.active):hover { background: ${colors.black} !important; color: ${colors.cream} !important; }
+      `}</style>
+
+      <div style={{ padding: '40px 28px' }}>
+
+        {/* Header */}
+        <div style={{ fontFamily: fonts.display, fontSize: 32, letterSpacing: 2, color: colors.black, lineHeight: 1.05, marginBottom: 24 }}>
+          What would you like to learn?
+        </div>
+
+        {/* Category tabs */}
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 36 }}>
+          {CATEGORIES.map(cat => {
+            const active = categoryId === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setCategory(cat.id)}
+                className={`lesson-cat-tab${active ? ' active' : ''}`}
+                style={{
+                  ...styles.btn,
+                  fontSize: 10,
+                  letterSpacing: 1.5,
+                  background: active ? colors.red : colors.yellow,
+                  color: active ? colors.cream : colors.black,
+                  cursor: 'pointer',
+                  transition: 'background 0.15s, color 0.15s',
+                }}
+              >
+                {cat.filterTitle}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Category content */}
+        <div style={{ maxWidth: 620 }}>
+
+          <div style={{ borderLeft: `3px solid ${colors.red}`, paddingLeft: 18, marginBottom: 32 }}>
+            {(() => { const Desc = DESCS[currentCat.id]; return Desc ? <Desc components={{ p: ({ children }) => <p style={{ fontFamily: 'Georgia, serif', fontSize: 15, color: '#444', lineHeight: 1.75, margin: '0 0 10px' }}>{children}</p> }} /> : null; })()}
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+            <div style={{ ...styles.label, fontSize: 12 }}>Areas covered</div>
+            <span style={{ fontFamily: fonts.mono, fontSize: 13, color: colors.dimText, letterSpacing: 0.5 }}>· tap to select (optional)</span>
+          </div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 20 }}>
+            {currentCat.subcategories.map(sub => {
+              const selected = selectedTypes.includes(sub.id);
+              return (
+                <button
+                  key={sub.id}
+                  type="button"
+                  onClick={() => toggleType(sub.id)}
+                  className="lesson-chip"
+                  style={{
+                    fontFamily: fonts.serif,
+                    fontSize: 14,
+                    color: selected ? colors.cream : colors.black,
+                    border: `2px solid ${colors.black}`,
+                    padding: '7px 14px',
+                    background: selected ? colors.red : colors.white,
+                    transition: 'background 0.15s, color 0.15s',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                  }}
+                >
+                  <span style={{ fontFamily: fonts.mono, fontSize: 11, fontWeight: 700, lineHeight: 1 }}>
+                    {selected ? '✓' : '+'}
+                  </span>
+                  {sub.title}
+                </button>
+              );
+            })}
+          </div>
+
+          {currentCat.styles && (
+            <>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                <div style={{ ...styles.label, fontSize: 12 }}>Styles</div>
+                <span style={{ fontFamily: fonts.mono, fontSize: 13, color: colors.dimText, letterSpacing: 0.5 }}>· tap to select (optional)</span>
+              </div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 32 }}>
+                {currentCat.styles.map(s => {
+                  const selected = selectedStyles.includes(s);
+                  return (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => toggleStyle(s)}
+                      className="lesson-chip"
+                      style={{
+                        fontFamily: fonts.serif,
+                        fontSize: 14,
+                        color: selected ? colors.cream : colors.black,
+                        border: `2px solid ${colors.black}`,
+                        padding: '7px 14px',
+                        background: selected ? colors.red : colors.white,
+                        transition: 'background 0.15s, color 0.15s',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 6,
+                      }}
+                    >
+                      <span style={{ fontFamily: fonts.mono, fontSize: 11, fontWeight: 700, lineHeight: 1 }}>
+                        {selected ? '✓' : '+'}
+                      </span>
+                      {s}
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
+
+        </div>
+
+      </div>
+
+      {/* What is a typical lesson like */}
+      <div style={{ background: colors.red, padding: '28px', borderTop: `3px solid ${colors.black}` }}>
+        <div style={{ ...styles.sectionTitle, color: colors.white, marginBottom: 20 }}>
           What is a typical lesson like?
         </div>
         <div style={{ background: colors.cream, border: `2px solid ${colors.black}` }}>
@@ -77,131 +219,48 @@ function LessonsPageInner() {
         </div>
       </div>
 
-    <div style={{ padding: '40px 28px' }}>
-
-      {/* Page header */}
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ fontFamily: fonts.display, fontSize: 32, letterSpacing: 2, color: colors.black, lineHeight: 1.05 }}>
-          What would you like to learn today?
-        </div>
-      </div>
-
-      {/* Category tabs */}
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
-        {[{ id: 'all', title: 'All' }, ...CATEGORIES].map(cat => {
-          const active = category === cat.id;
-          return (
-            <button
-              key={cat.id}
-              onClick={() => setCategory(cat.id)}
-              style={{
-                ...styles.btn,
-                fontSize: 10,
-                letterSpacing: 1.5,
-                background: active ? colors.red : '#fff',
-                color: active ? colors.cream : colors.black,
-                cursor: 'pointer',
-              }}
-            >
-              {cat.filterTitle || cat.title}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Subcategory pills */}
-      {currentCat && (
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 28 }}>
-          <button
-            onClick={() => router.replace(`/lessons?category=${category}`, { scroll: false })}
-            style={{
-              ...styles.btn,
-              fontSize: 10,
-              letterSpacing: 1,
-              padding: '6px 12px',
-              background: !type ? colors.black : colors.bg,
-              color: !type ? colors.cream : colors.black,
-              cursor: 'pointer',
-            }}
-          >
-            All
-          </button>
-          {currentCat.subcategories.map(sub => (
-            <button
-              key={sub.id}
-              onClick={() => setType(sub.id)}
-              style={{
-                ...styles.btn,
-                fontSize: 10,
-                letterSpacing: 1,
-                padding: '6px 12px',
-                background: type === sub.id ? colors.black : colors.bg,
-                color: type === sub.id ? colors.cream : colors.black,
-                cursor: 'pointer',
-              }}
-            >
-              {sub.title}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Card groups */}
-      {groups.map(({ cat, subs }) => (
-        <div key={cat.id} style={{ marginBottom: 36 }}>
-          {category === 'all' && (
-            <div style={{ fontFamily: fonts.display, fontSize: 18, letterSpacing: 2, color: colors.black, marginBottom: 14, display: 'flex', alignItems: 'center', gap: 12 }}>
-              {cat.title}
-              <span style={{ flex: 1, height: 2, background: colors.divider, display: 'block' }} />
-            </div>
-          )}
-          <div className="subcategory-grid">
-            {subs.map(sub => (
-              <div key={`${cat.id}-${sub.id}`} style={{ ...styles.card, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                {/* Red card header */}
-                <div style={{ background: colors.red, padding: '14px 18px', borderBottom: `2px solid ${colors.black}` }}>
-                  <div style={{ ...styles.label, fontSize: 8, letterSpacing: 2, color: 'rgba(238,232,208,0.7)', marginBottom: 8 }}>
-                    {cat.title}
-                  </div>
-                  <div style={{ ...styles.cardTitle, color: '#fff' }}>
-                    {sub.title}
-                  </div>
-                </div>
-                {/* Card body */}
-                <div style={{ padding: '16px 18px 18px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <p style={{ ...styles.bodyText, margin: '0 0 14px', flex: 1 }}>
-                    {sub.desc}
-                  </p>
-                  {cat.id === 'voice' && cat.styles && (
-                    <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 14 }}>
-                      {cat.styles.map(s => (
-                        <span key={s} style={{ ...styles.label, fontSize: 8, letterSpacing: 1, background: colors.bg, border: `1.5px solid ${colors.divider}`, padding: '3px 7px', color: colors.dimText }}>
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  <a href={`/contact?category=${cat.id}&type=${sub.id}#message`} className="btn" style={{ ...styles.btn, padding: '9px 15px', fontSize: 10, ...styles.btnShadow }}>
-                    Book a session<Arrow />
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
-
       {/* Bottom CTA */}
-      <div style={{ marginTop: 16, paddingTop: 28, borderTop: `2px solid ${colors.divider}`, textAlign: 'center' }}>
+      <div style={{ padding: '28px', paddingBottom: 96, textAlign: 'center' }}>
         <p style={{ ...styles.bodyText, margin: '0 0 16px', fontStyle: 'italic' }}>
-          Reach out with any questions. You don&apos;t need to be ready - just curious.
+          Reach out with any questions. You don&apos;t need to be ready — just curious.
         </p>
         <a href="/contact" className="btn" style={{ ...styles.btn, padding: '10px 18px' }}>
           Get in touch<Arrow />
         </a>
       </div>
 
-    </div>
+      {/* Sticky book button */}
+      <div style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: colors.cream,
+        borderTop: `2px solid ${colors.black}`,
+        padding: '12px 28px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 16,
+        zIndex: 50,
+      }}>
+        <div>
+          <div style={{ fontFamily: fonts.display, fontSize: 18, letterSpacing: 1, color: colors.black, lineHeight: 1 }}>
+            {currentCat.title}
+          </div>
+          {(selectedTypes.length > 0 || selectedStyles.length > 0) && (
+            <div style={{ fontFamily: fonts.mono, fontSize: 10, color: colors.dimText, letterSpacing: 0.5, marginTop: 3 }}>
+              {[
+                ...selectedTypes.map(id => currentCat.subcategories.find(s => s.id === id)?.title ?? id),
+                ...selectedStyles,
+              ].join(' · ')}
+            </div>
+          )}
+        </div>
+        <a href={bookingHref} className="btn" style={{ ...styles.btn, ...styles.btnShadow, flexShrink: 0 }}>
+          Book a session<Arrow />
+        </a>
+      </div>
     </>
   );
 }

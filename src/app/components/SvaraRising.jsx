@@ -98,7 +98,7 @@ export default function SvaraRising() {
     },
     levelPickerTitle: {
       border: `2px solid ${colors.black}`,
-      background: '#fff',
+      background: colors.white,
       padding: '9px 12px',
       fontFamily: fonts.mono,
       fontSize: 11,
@@ -138,7 +138,7 @@ export default function SvaraRising() {
       width: 34,
       height: 52,
       border: `2.5px solid ${colors.black}`,
-      background: disabled ? '#EDEAE0' : '#fff',
+      background: disabled ? colors.panel : colors.white,
       color: disabled ? colors.dimText : colors.black,
       boxShadow: disabled ? 'none' : `3px 3px 0 ${colors.black}`,
       fontFamily: fonts.display,
@@ -150,7 +150,7 @@ export default function SvaraRising() {
     }),
     levelTile: (available, active, completed) => ({
       border: `2px solid ${colors.black}`,
-      background: active ? colors.red : completed ? colors.yellow : available ? '#fff' : '#EDEAE0',
+      background: active ? colors.red : completed ? colors.yellow : available ? colors.white : colors.panel,
       color: active ? colors.cream : available ? colors.black : colors.dimText,
       width: 48,
       height: 48,
@@ -197,7 +197,7 @@ export default function SvaraRising() {
     },
     stat: {
       borderRight: `2px solid ${colors.black}`,
-      background: '#fff',
+      background: colors.white,
       padding: '8px 11px',
       fontFamily: fonts.mono,
       fontSize: 10,
@@ -249,7 +249,7 @@ export default function SvaraRising() {
     },
     lifeStat: {
       borderRight: `2px solid ${colors.black}`,
-      background: lifeFlash ? colors.red : '#fff',
+      background: lifeFlash ? colors.red : colors.white,
       padding: '8px 11px',
       fontFamily: fonts.mono,
       fontSize: 10,
@@ -263,7 +263,7 @@ export default function SvaraRising() {
     },
     toggleButton: (active, disabled = false) => ({
       border: `2px solid ${colors.black}`,
-      background: active ? '#fff' : colors.cream,
+      background: active ? colors.white : colors.cream,
       padding: '8px 11px',
       fontFamily: fonts.mono,
       fontSize: 10,
@@ -333,7 +333,7 @@ export default function SvaraRising() {
       fontFamily: fonts.mono,
       fontSize: 10,
       fontWeight: 700,
-      background: '#fff',
+      background: colors.white,
       border: `1.5px solid ${colors.black}`,
       padding: '2px 6px',
       whiteSpace: 'nowrap',
@@ -454,7 +454,7 @@ export default function SvaraRising() {
       top: 18,
       bottom: 18,
       border: `2px solid ${colors.black}`,
-      background: '#fff',
+      background: colors.white,
       boxShadow: `10px 16px 0 #EDEAE0, -7px 54px 0 #fff, 8px 110px 0 #EDEAE0, -5px 178px 0 #fff, 7px 246px 0 #EDEAE0`,
     },
     revealedWall: (obstacle, laneIdx) => ({
@@ -543,7 +543,7 @@ export default function SvaraRising() {
     },
     button: (primary = false, raised = false) => ({
       ...styles.btn,
-      background: primary ? colors.red : '#fff',
+      background: primary ? colors.red : colors.white,
       color: primary ? colors.cream : colors.black,
       cursor: 'pointer',
       boxShadow: primary || raised ? `3px 3px 0 ${colors.black}` : 'none',
@@ -551,7 +551,7 @@ export default function SvaraRising() {
     }),
     laneButton: (active) => ({
       ...styles.btn,
-      background: active ? colors.red : '#fff',
+      background: active ? colors.red : colors.white,
       color: active ? colors.cream : colors.black,
       cursor: 'pointer',
       width: '100%',

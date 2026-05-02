@@ -306,7 +306,7 @@ export default function SynthLab() {
     },
     panel: {
       border: `2px solid ${colors.black}`,
-      background: '#fff',
+      background: colors.white,
       padding: 10,
       minWidth: 0,
     },

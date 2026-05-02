@@ -24,7 +24,7 @@ export default function Home() {
           <YouTubeEmbed
             videoId="4wEZdI7zthU"
             title="Anirudh Venkatesh"
-            thumbnail="/bach_thumbnail.png"
+            thumbnail="/bach_thumbnail.jpg"
           />
         </div>
 
@@ -60,7 +60,7 @@ export default function Home() {
       </div>
 
       {/* Sound Insight */}
-      <div id="sound-insight" style={{ ...styles.section, background: '#EDEAE0', padding: "28px" }}>
+      <div id="sound-insight" style={{ ...styles.section, background: colors.panel, padding: "28px" }}>
           <div style={{ ...styles.sectionTitle, color: colors.black, marginBottom: 20, textAlign: "center" }}>
             I publish weekly articles on musical concepts.
           </div>
@@ -87,7 +87,7 @@ export default function Home() {
           {/* Scale Primer */}
           <a href="https://soundinsight.substack.com/p/scale-framework-primer" target="_blank" rel="noopener noreferrer" style={{ display: "flex", gap: 16, textDecoration: "none", ...styles.card, padding: 14, marginBottom: 18 }}>
             <div style={{ width: 90, height: 90 }}>
-              <Image src="/ScaleDog.png" alt="Scale Primer" width={90} height={90} />
+              <Image src="/ScaleDog.jpg" alt="Scale Primer" width={90} height={90} />
             </div>
             <div>
               <div style={styles.cardTitle}>Scale Primer</div>
@@ -101,7 +101,7 @@ export default function Home() {
           {/* Gati Primer */}
           <a href="https://soundinsight.substack.com/p/gati-primer" target="_blank" rel="noopener noreferrer" style={{ display: "flex", gap: 16, textDecoration: "none", ...styles.card, padding: 14, marginBottom: 18 }}>
             <div style={{ width: 90, height: 90 }}>
-              <Image src="/GatiPuja.png" alt="Gati Primer" width={90} height={90} />
+              <Image src="/GatiPuja.jpg" alt="Gati Primer" width={90} height={90} />
             </div>
             <div>
               <div style={styles.cardTitle}>Gati Primer</div>
@@ -161,11 +161,11 @@ export default function Home() {
 
       {/* Lessons */}
       <div id="learn" style={{ ...styles.section, background: colors.red, padding: "28px" }}>
-        <div style={{ ...styles.sectionTitle, color: '#fff', marginBottom: 8, textAlign: "center" }}>
+        <div style={{ ...styles.sectionTitle, color: colors.white, marginBottom: 8, textAlign: "center" }}>
           And I absolutely love helping others through one-on-one coaching.
         </div>
         <div style={{ textAlign: "center", marginBottom: 20 }}>
-          <a href="https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" target="_blank" rel="noopener noreferrer" className="btn" style={{ ...styles.btn, background: '#fff' }}>Read Reviews<Arrow direction="external" /></a>
+          <a href="https://www.superprof.co.in/learn-from-professional-musician-how-sing-with-your-free-natural-voice.html" target="_blank" rel="noopener noreferrer" className="btn" style={{ ...styles.btn, background: colors.white }}>Read Reviews<Arrow direction="external" /></a>
         </div>
         <div style={{ fontFamily: fonts.display, fontSize: 13, letterSpacing: 3, color: colors.cream, marginBottom: 14, display: "flex", alignItems: "center", gap: 10 }}>
           Private lessons
@@ -173,7 +173,7 @@ export default function Home() {
         </div>
         <div className="lessons-grid">
           {CATEGORIES.map(cat => (
-            <div key={cat.id} style={{ background: '#fff', border: `2px solid ${colors.black}`, padding: "20px", display: "flex", flexDirection: "column" }}>
+            <div key={cat.id} style={{ background: colors.white, border: `2px solid ${colors.black}`, padding: "20px", display: "flex", flexDirection: "column" }}>
               <a href={`/lessons?category=${cat.id}`} style={{ fontFamily: fonts.display, fontSize: 20, letterSpacing: 1, color: colors.red, lineHeight: 1.1, marginBottom: 8, textDecoration: "none", display: "inline-block", borderBottom: `2px solid ${colors.red}`, paddingBottom: 1 }}>
                 {cat.title}
               </a>
@@ -181,7 +181,7 @@ export default function Home() {
                 {cat.shortDesc}
               </p>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <a href={`/lessons?category=${cat.id}`} className="btn" style={{ ...styles.btn, background: '#fff', padding: "9px 14px" }}>Learn more<Arrow /></a>
+                <a href={`/lessons?category=${cat.id}`} className="btn" style={{ ...styles.btn, background: colors.white, padding: "9px 14px" }}>Learn more<Arrow /></a>
                 <a href={`/contact?category=${cat.id}#message`} className="btn" style={{ ...styles.btn, padding: "9px 14px", ...styles.btnShadow }}>Book a session<Arrow /></a>
               </div>
             </div>

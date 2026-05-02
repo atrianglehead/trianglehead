@@ -481,7 +481,7 @@ export default function Explorations() {
           transition: background 0.12s ease, color 0.12s ease;
         }
 
-        @media (max-width: 760px) {
+        @media (max-width: 620px) {
           .explorations-hero {
             grid-template-columns: 1fr;
             gap: 12px;
