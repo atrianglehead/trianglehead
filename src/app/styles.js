@@ -118,6 +118,7 @@ export const styles = {
     color: colors.black,
     outline: 'none',
     width: '100%',
+    boxSizing: 'border-box',
     letterSpacing: 0.5,
   },
 };

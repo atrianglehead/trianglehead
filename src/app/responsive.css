@@ -39,6 +39,10 @@
   animation: fadeSlideIn 0.2s ease;
 }
 
+.contact-field {
+  box-sizing: border-box;
+  max-width: 100%;
+}
 .contact-field:focus {
   border-color: #111 !important;
   box-shadow: 3px 3px 0 #111;
