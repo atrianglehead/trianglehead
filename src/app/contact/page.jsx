@@ -278,7 +278,7 @@ function ContactForm({ initialCategory, initialTypes, initialStyles }) {
                 <textarea
                   className="contact-field"
                   id="message_text" name="message" required rows={5}
-                  placeholder="Please tell me about yourself and when you're generally available to chat."
+                  placeholder="Please tell me about yourself and when you're generally available to chat. I'll get back to you soon :)"
                   style={{ ...styles.formInput, resize: 'vertical', lineHeight: 1.6 }}
                 />
               </div>
