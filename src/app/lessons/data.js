@@ -6,7 +6,7 @@ export const CATEGORIES = [
     shortDesc: 'Use your voice like it was meant to be used — an extension of you in the world.',
     styles: ['Khayaal', 'Dhrupad', 'Pop', 'Rock', 'Bollywood'],
     subcategories: [
-      { id: 'find-voice', title: 'Find your voice', desc: 'Learn the principles that help you sing with your authentic voice.' },
+      { id: 'intention-voice', title: 'Intention and Voice', desc: 'Learn the principles that help you sing with your authentic voice.' },
       { id: 'vocal-strain', title: 'Overcoming vocal strain', desc: 'Using the speaking voice as a foundation, learn how to sing freely and without pain.' },
     ],
   },

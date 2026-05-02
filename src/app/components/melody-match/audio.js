@@ -1,8 +1,24 @@
 import { MELODY_MATCH_SYNTH } from './constants';
 
+// iOS silent switch fix: playing any <audio> element switches the iOS WebView's
+// audio session to AVAudioSessionCategoryPlayback, which bypasses the silent switch
+// for ALL audio in the WebView — including subsequent ctx.destination output.
+function unlockIOSAudio(audioCtx) {
+  try {
+    const dest = audioCtx.createMediaStreamDestination();
+    const src = audioCtx.createBufferSource();
+    src.buffer = audioCtx.createBuffer(1, 1, audioCtx.sampleRate);
+    src.connect(dest);
+    const el = document.createElement('audio');
+    el.srcObject = dest.stream;
+    el.play().then(() => src.start()).catch(() => {});
+  } catch (e) {}
+}
+
 export function getOrCreateAudio(audioCtxRef) {
   if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
     audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    unlockIOSAudio(audioCtxRef.current);
   }
   return audioCtxRef.current;
 }
