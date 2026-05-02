@@ -8,10 +8,23 @@ export function getCueStartTime(impactTime, cueStartBeats) {
   return impactTime - cueStartBeats * BEAT_SECONDS;
 }
 
+function unlockIOSAudio(audioCtx) {
+  try {
+    const dest = audioCtx.createMediaStreamDestination();
+    const src = audioCtx.createBufferSource();
+    src.buffer = audioCtx.createBuffer(1, 1, audioCtx.sampleRate);
+    src.connect(dest);
+    const el = document.createElement('audio');
+    el.srcObject = dest.stream;
+    el.play().then(() => src.start()).catch(() => {});
+  } catch (e) {}
+}
+
 export function getCueAudio(cueAudioRef) {
   if (!cueAudioRef.current || cueAudioRef.current.state === 'closed') {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     cueAudioRef.current = new AudioContextClass();
+    unlockIOSAudio(cueAudioRef.current);
   }
   if (cueAudioRef.current.state === 'suspended') {
     cueAudioRef.current.resume().catch(() => {});
