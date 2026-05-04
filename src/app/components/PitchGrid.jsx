@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
+import { unlockAudioSession } from './unlockAudio';
 
 const COLS = 10;
 const ROWS = 4;
@@ -341,21 +342,10 @@ export default function PitchGrid({ tFrequency = 220, uFrequency = 275 }) {
   }, []);
 
   function unlockAudio() {
+    unlockAudioSession();
     const state = s.current;
-    if (!state.actx) {
-      state.actx = new AudioContext();
-    }
-    if (state.actx.state === 'suspended') {
-      state.actx.resume();
-    }
-    // Play a silent sound — required on iOS to fully unblock the audio path
-    const ctx = state.actx;
-    const t = ctx.currentTime;
-    const osc = ctx.createOscillator();
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0, t);
-    osc.connect(g); g.connect(ctx.destination);
-    osc.start(t); osc.stop(t + 0.02);
+    if (!state.actx) state.actx = new AudioContext();
+    if (state.actx.state === 'suspended') state.actx.resume();
   }
 
   function dismissOverlay() {

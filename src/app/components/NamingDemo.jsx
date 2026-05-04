@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { unlockAudioSession } from './unlockAudio';
 
 function buildReverb(ctx, duration = 1.5, decay = 2) {
   const rate = ctx.sampleRate;
@@ -24,6 +25,7 @@ function CyclingButton({ labels, frequency }) {
   const timerRef = useRef(null);
 
   function tap() {
+    unlockAudioSession();
     if (ctxRef.current) { try { ctxRef.current.close(); } catch {} ctxRef.current = null; }
     clearTimeout(timerRef.current);
 

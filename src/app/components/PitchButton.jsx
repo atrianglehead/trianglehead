@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { unlockAudioSession } from './unlockAudio';
 
 function buildReverb(ctx, duration = 1.5, decay = 2) {
   const rate = ctx.sampleRate;
@@ -33,6 +34,7 @@ export default function PitchButton({
   const timerRef = useRef(null);
 
   function start() {
+    unlockAudioSession();
     const ctx = new AudioContext();
     if (ctx.state === 'suspended') ctx.resume();
     ctxRef.current = ctx;
