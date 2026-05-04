@@ -70,7 +70,7 @@ function ContactForm({ initialCategory, initialTypes, initialStyles }) {
     setStatus('submitting');
     const data = new FormData(e.target);
     try {
-      const res = await fetch(process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT, {
+      const res = await fetch('https://formspree.io/f/xrerdoll', {
         method: 'POST',
         body: data,
         headers: { Accept: 'application/json' },
