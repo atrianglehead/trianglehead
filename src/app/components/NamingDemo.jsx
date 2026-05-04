@@ -28,6 +28,7 @@ function CyclingButton({ labels, frequency }) {
     clearTimeout(timerRef.current);
 
     const ctx = new AudioContext();
+    if (ctx.state === 'suspended') ctx.resume();
     ctxRef.current = ctx;
     const now = ctx.currentTime;
 

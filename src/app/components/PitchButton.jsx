@@ -34,6 +34,7 @@ export default function PitchButton({
 
   function start() {
     const ctx = new AudioContext();
+    if (ctx.state === 'suspended') ctx.resume();
     ctxRef.current = ctx;
     const now = ctx.currentTime;
 

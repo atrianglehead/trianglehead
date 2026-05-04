@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 const COLS = 10;
 const ROWS = 4;
@@ -43,6 +43,7 @@ function synthPitch(actx, frequency) {
 
 export default function PitchGrid({ tFrequency = 220, uFrequency = 275 }) {
   const canvasRef = useRef(null);
+  const [showOverlay, setShowOverlay] = useState(false);
 
   const s = useRef({
     playing: false,
@@ -273,6 +274,8 @@ export default function PitchGrid({ tFrequency = 220, uFrequency = 275 }) {
   }
 
   function onPointerDown(e) {
+    unlockAudio(); // ensure AudioContext is running — must be inside a user gesture
+    if (showOverlay) { setShowOverlay(false); }
     const { x, y } = canvasXY(e);
     const idx = hitBlock(x, y);
     if (idx < 0) return;
@@ -325,12 +328,40 @@ export default function PitchGrid({ tFrequency = 220, uFrequency = 275 }) {
 
   useEffect(() => {
     draw();
+    const q = window.matchMedia('(pointer: coarse)');
+    const update = () => setShowOverlay(q.matches);
+    update();
+    q.addEventListener('change', update);
     return () => {
+      q.removeEventListener('change', update);
       const state = s.current;
       cancelAnimationFrame(state.raf);
       state.actx?.close();
     };
   }, []);
+
+  function unlockAudio() {
+    const state = s.current;
+    if (!state.actx) {
+      state.actx = new AudioContext();
+    }
+    if (state.actx.state === 'suspended') {
+      state.actx.resume();
+    }
+    // Play a silent sound — required on iOS to fully unblock the audio path
+    const ctx = state.actx;
+    const t = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0, t);
+    osc.connect(g); g.connect(ctx.destination);
+    osc.start(t); osc.stop(t + 0.02);
+  }
+
+  function dismissOverlay() {
+    unlockAudio();
+    setShowOverlay(false);
+  }
 
   const labelStyle = {
     fontFamily: 'var(--font-bebas-neue), Impact, sans-serif',
@@ -343,7 +374,7 @@ export default function PitchGrid({ tFrequency = 220, uFrequency = 275 }) {
   };
 
   return (
-    <div style={{ margin: '2em 0', border: '2.5px solid #111', boxShadow: '4px 4px 0 #111' }}>
+    <div style={{ margin: '2em 0', border: '2.5px solid #111', boxShadow: '4px 4px 0 #111', position: 'relative' }}>
       {/* Zone label header */}
       <div style={{ display: 'flex', borderBottom: '2px solid #111' }}>
         <div style={{ ...labelStyle, width: STAGE_PCT, background: '#E8E3D8', color: '#A8A399', borderRight: '2px dashed #A8A399', boxSizing: 'border-box' }}>
@@ -367,6 +398,42 @@ export default function PitchGrid({ tFrequency = 220, uFrequency = 275 }) {
           onPointerCancel={onPointerUp}
         />
       </div>
+
+      {/* Touch overlay — shown on pointer-coarse (phone/tablet) devices only */}
+      {showOverlay && (
+        <div
+          onClick={dismissOverlay}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 10,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(245, 242, 235, 0.72)',
+            cursor: 'pointer',
+          }}
+        >
+          <button
+            type="button"
+            style={{
+              fontFamily: 'var(--font-space-mono), monospace',
+              fontSize: 12,
+              fontWeight: 900,
+              letterSpacing: 1.5,
+              textTransform: 'uppercase',
+              padding: '12px 18px',
+              border: '2.5px solid #111',
+              cursor: 'pointer',
+              background: '#E8473F',
+              color: '#EEE8D0',
+              boxShadow: '4px 4px 0 #111',
+            }}
+          >
+            Tap to Begin
+          </button>
+        </div>
+      )}
     </div>
   );
 }
