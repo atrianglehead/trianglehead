@@ -1,0 +1,68 @@
+import PitchButton from '../../app/components/PitchButton';
+import PitchGrid from '../../app/components/PitchGrid';
+import NamingDemo from '../../app/components/NamingDemo';
+
+Here's the melody we want to understand.
+
+<Audio src="https://media.trianglehead.in/naming-pitches/pitchDecodeEx.m4a" />
+
+A big part of what makes a melody memorable is the set of relationships shared by its elements. Understanding these relationships gives us a better understanding of the melody itself.
+
+In order to get there, it would be helpful to identify all the elements. To keep track of what we identify, names are indispensable. Autocratic surveillance governments will agree with me on this one.
+
+#### The Experience of Pitch
+
+Let's start simple. Here's a sound. Let's name this sound T.
+
+<PitchButton frequency={220} duration={2} label="T" />
+
+Here's a different sound. We'll call this U.
+
+<PitchButton frequency={275} duration={2} label="U" />
+
+I hope you can agree with me that these sounds are different from one another. What makes them different? Pitch.
+
+Try arranging these sounds in different ways using the sound blocks in the grid below. What kind of music can you make with 2 sounds that differ only in pitch?
+
+<PitchGrid tFrequency={220} uFrequency={275} />
+
+Here are some configurations worth exploring in the grid above:
+
+Melody: one block sequenced after another.
+
+Harmony: one block stacked on another.
+
+Identical: blocks of the same type in melody or harmony.
+
+Different: blocks of different types in melody or harmony.
+
+#### Names Clarify Relationships
+
+It's safe to conclude that T and U have different pitches. Is it also possible to rank these pitches? 
+
+In other words, would it make sense to ask if U's pitch is more or less than T's pitch?
+
+The short answer is yes. A longer answer is yes, certainly.
+
+We'll save the nuts and bolts of how that is done for another time. For now, all we need to know is that when people name pitches, those names are (almost always) based on an inherent ordering or ranking scheme. 
+
+In some naming systems, the names even hint at the relationships between pitches.
+
+The good news is that, at the end of the day, they're just names. They have their uses, but the essence of music is in the sound.
+
+Don't believe me? Try playing the sounds below. Their names will change but their sounds will not.
+
+<NamingDemo tFrequency={220} uFrequency={275} />
+
+#### A Rose By Any Other Name
+
+There are many conventional ways to name pitches, but the one we'll be using throughout this series (and the one that I find easiest), is called sargam.
+
+In this system, T and U might be called Sa and Ga respectively. This system of naming is used mostly in the Indian subcontinent. 
+
+There are other ways as well, and they each have their purpose. But for our present purposes, sargam is going to be the most convenient choice.
+
+Let's dive in!
+
+
+**[Next → Relating Pitches](/publication/relating-pitches)**

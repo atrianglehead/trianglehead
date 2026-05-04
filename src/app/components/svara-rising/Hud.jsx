@@ -15,10 +15,10 @@ export default function Hud({
     <div style={S.hud}>
       <div style={S.statRow}>
         <div style={S.statBox}>
-          <div style={S.lifeStat}>Lives {lives}</div>
-          <div style={S.stat}>Progress {score}/{targetScore}</div>
-          <div style={S.modeStat}>{activeMode.label}</div>
-          <div style={{ ...S.stat, borderRight: 'none' }}>{activeLevel.title}</div>
+          <div className="sr-stat-item" style={S.lifeStat}>Lives {lives}</div>
+          <div className="sr-stat-item" style={S.stat}>Progress {score}/{targetScore}</div>
+          <div className="sr-stat-item" style={S.modeStat}>{activeMode.label}</div>
+          <div className="sr-stat-item" style={{ ...S.stat, borderRight: 'none' }}>{activeLevel.title}</div>
         </div>
         <div style={S.hudGroup}>
           <button type="button" style={S.button(true)} onClick={() => startRun()}>

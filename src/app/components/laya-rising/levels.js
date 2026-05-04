@@ -92,4 +92,27 @@ export const LEVELS = [
     helpText: 'Both cues start at base tempo. Three-in-two means Top. Three-in-four means Bottom.',
     description: 'Base tempo followed by either 3/2 or 3/4 tempo.',
   },
+  {
+    id: 6,
+    title: 'Locality 6',
+    interval: 'Three tempos',
+    cueType: 'tempo-pair',
+    zoneCount: 3,
+    laneLabels: ['Top', 'Middle', 'Bottom'],
+    baseTempo: 120,
+    ratio: 2,
+    cueByLaneTempoRatios: {
+      0: [1, 2],
+      1: [1, 1],
+      2: [1, 0.5],
+    },
+    modeCueTimings: {
+      nibble: { firstStartBeatsBeforeImpact: 12, secondStartBeatsAfterFirst: 4 },
+      bite: { firstStartBeatsBeforeImpact: 10, secondStartBeatsAfterFirst: 4 },
+      gobble: { firstStartBeatsBeforeImpact: 6, secondStartBeatsAfterFirst: 2 },
+      devour: { firstStartBeatsBeforeImpact: 4, secondStartBeatsAfterFirst: 2 },
+    },
+    helpText: 'Hear the tempo. Fast (double) means Top. Steady (regular) means Middle. Slow (half) means Bottom.',
+    description: 'Three zones: double tempo, regular tempo, and half tempo.',
+  },
 ];

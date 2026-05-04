@@ -8,3 +8,85 @@ body {
   color: #111;
   font-family: var(--font-space-mono), monospace;
 }
+
+/* Sound Insight post body */
+.post-body {
+  font-family: Georgia, serif;
+  font-size: 17px;
+  line-height: 1.85;
+  color: #3a3a3a;
+}
+
+.post-body p {
+  margin: 0 0 1.4em;
+}
+
+.post-body h4 {
+  font-family: var(--font-bebas-neue), sans-serif;
+  font-size: 26px;
+  letter-spacing: 2px;
+  color: #E8473F;
+  line-height: 1.1;
+  margin: 2.5em 0 0.5em;
+}
+
+.post-body h3 {
+  font-family: var(--font-bebas-neue), sans-serif;
+  font-size: 30px;
+  letter-spacing: 2px;
+  color: #111;
+  margin: 2.5em 0 0.6em;
+}
+
+.post-body strong {
+  font-weight: 700;
+  color: #111;
+}
+
+.post-body em {
+  font-style: italic;
+}
+
+.post-body hr {
+  border: none;
+  border-top: 2px solid #F5C842;
+  margin: 3em 0;
+}
+
+.post-body a {
+  color: #E8473F;
+  text-decoration: none;
+  border-bottom: 1.5px solid #E8473F;
+}
+
+.post-body blockquote {
+  border-left: 4px solid #F5C842;
+  margin: 2em 0;
+  padding: 0 0 0 20px;
+  color: #555;
+  font-style: italic;
+}
+
+.post-body ul,
+.post-body ol {
+  padding-left: 24px;
+  margin: 0 0 1.4em;
+}
+
+.post-body li {
+  margin-bottom: 8px;
+}
+
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 2em auto 0.5em;
+  border: 2px solid #CCC8BC;
+}
+
+.post-body audio {
+  width: 100%;
+  margin: 1.5em 0;
+  display: block;
+}

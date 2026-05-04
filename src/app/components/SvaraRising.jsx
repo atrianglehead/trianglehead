@@ -197,7 +197,7 @@ export default function SvaraRising() {
     },
     stat: {
       borderRight: `2px solid ${colors.black}`,
-      background: colors.white,
+      background: '#fff',
       padding: '8px 11px',
       fontFamily: fonts.mono,
       fontSize: 10,
@@ -680,6 +680,14 @@ export default function SvaraRising() {
           35%, 70% {
             background: ${colors.red};
             color: ${colors.cream};
+          }
+        }
+
+        @media (max-width: 500px) {
+          .sr-stat-item {
+            min-width: 0 !important;
+            padding-left: 6px !important;
+            padding-right: 6px !important;
           }
         }
 
